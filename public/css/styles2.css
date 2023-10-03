@@ -17,9 +17,10 @@ body{
 }
 
 .container{
-    position: relative;
-    width: 256px;
-    height: 256px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -134,12 +135,13 @@ h2{
 .Espacio{
     width: 100%;
     height: 45px;
-    background: aquamarine;
-    border: none;
-    outline: none;
+    background:none ;
+    border-color: aqua;
+    outline-color: aqua;
     border-radius: 40px;
     cursor: pointer;
     font-size: 1em;
-    color: black;
+    color: white;
     font-weight: 600;
+    
 }

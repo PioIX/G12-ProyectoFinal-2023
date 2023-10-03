@@ -1,6 +1,6 @@
 <!-- login.handlebars -->
 <head>
-  <link rel="stylesheet" href="css/styles1.css" />
+  <link rel="stylesheet" href="css/styles2.css" />
 </head>
 
 <h1>Iniciar sesión</h1>
@@ -13,14 +13,12 @@
   <div class="container">
     <div class="login-box">
       <h2>Ingrese</h2>
-      <form action="#">
         <form action="/login" method="post">
-          <input type="email" name="email" placeholder="Correo electrónico" required />
-          <input type="password" name="password" placeholder="Contraseña" required />
-          <button type="submit">Iniciar sesión</button>
+          <input type="email" class="Espacio"  name="email" placeholder="Correo electrónico" required />
+          <input type="password" class="Espacio" name="password" placeholder="Contraseña" required />
+          <button type="submit" class="boton">Iniciar sesión</button>
         </form>
         <div>{{message}}</div>
-      </form>
     </div>
   </div>
   <script src="js/script.js"></script>

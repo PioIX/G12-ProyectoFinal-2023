@@ -96,5 +96,5 @@ app.get("/dashboard", (req, res) => {
 /************************************** */
 app.get("/register", (req, res) => {
   // Agrega aquí la lógica para mostrar la página del dashboard
-  res.render("regsiter");
+  res.render("register");
 });
