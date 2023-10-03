@@ -8,52 +8,22 @@
 </head>
 
 <body>
-    <div class="toggle" id="toggle" onclick="menu-expand()">
-        <i class="fas fa-plus" id="plus"></i>
+    <div class="container">
+        <div class="hexagono1">
+            <div class="heaxagono">
+                <img src="/img/paleta.png" alt="">
+                <h4>Pong</h4>
+            </div>
+            <div class="heaxagono">
+                <img src="/img/piedra papel tijera.png" alt="">
+                <h4>Piedra,papel,tijera</h4>
+            </div>
+            <div class="heaxagono">
+                <img src="/img/ta-te-ti.png" alt="" id="tate">
+                <h4>Ta-te-ti</h4>
+            </div>
+            
+        </div>
     </div>
-    <div class="menu" id="menu">
-        <a href="">
-            <i class="fas fa-camera"></i>
-        </a>
-
-        <a href="">
-            <i class="fas fa-video"></i>
-        </a>
-
-        <a href="">
-            <i class="fas fa-phone-volume"></i>
-        </a>
-
-        <a href="">
-            <i class="fas fa-volume-up"></i>
-        </a>
-
-        <a href="">
-            <i class="fas fa-clock"></i>
-        </a>
-
-        <a href="">
-            <i class="fas fa-address-book"></i>
-        </a>
-    </div>
-
-    <script>
-        var i = 0;
-        function expand()
-        {
-            if(i ==0)
-            {
-                document.getElementById("menu").style.transform ="scale(4)";
-                document.getElementById("plus").style.transform = "rotate(137deg)";
-                i = 1;
-            }
-            else
-            {
-                document.getElementById("menu").style.transform ="scale(0)";
-                document.getElementById("plus").style.transform = "rotate(0deg)";
-                i = 0;
-            }
-        }
-    </script>
 
 </body>
