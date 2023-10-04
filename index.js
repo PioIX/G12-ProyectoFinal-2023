@@ -98,3 +98,17 @@ app.get("/register", (req, res) => {
   // Agrega aquí la lógica para mostrar la página del dashboard
   res.render("register");
 });
+
+// menu desplegable
+
+app.get('/home1', function(req, res)
+{ console.log(req.query); 
+       res.render('home', null);
+        
+});
+
+app.get('/personajes', function(req, res)
+{ console.log(req.query); 
+       res.render('quienesomos', null);
+        
+});
