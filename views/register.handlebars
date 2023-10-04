@@ -1,14 +1,28 @@
 <!-- register.handlebars -->
+<head>
+  <link rel="stylesheet" href="css/styles2.css" />
+</head>
 
-<section class="register">
+<body>
+  <div class="bgAnimation" id="bgAnimation">
+        <div class="backgroundAmim">
+            
+        </div>
+    </div>
+  <section class="register">
+    <div class="container">
+      <div class="login-box">
+      <h2>Registro</h2>
+        <form action="/register" method="post">
+          <input type="email" class="Espacio" name="email" placeholder="Correo electrónico" required />
+          <input type="password" class="Espacio" name="password" placeholder="Contraseña" required />
 
-    <h1>Registro</h1>
-<form action="/register" method="post">
-  <input type="email" name="email" placeholder="Correo electrónico" required />
-  <input type="password" name="password" placeholder="Contraseña" required />
+          <button type="submit" class="boton">Registrarse</button>
+        </form>
+      </div>
+    </div>
+  <div>{{message}}</div>
 
-  <button type="submit">Registrarse</button>
-</form>
-<div>{{message}}</div>
-
-</section>
+  </section>
+  <script src="js/script.js"></script>
+</body>
