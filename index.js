@@ -112,3 +112,21 @@ app.get('/personajes', function(req, res)
        res.render('quienesomos', null);
         
 });
+
+app.get('/po', function(req, res)
+{ console.log(req.query); 
+       res.render('pong', null);
+        
+});
+
+app.get('/piedra', function(req, res)
+{ console.log(req.query); 
+       res.render('piedra,papel,tijera', null);
+        
+});
+
+app.get('/tate', function(req, res)
+{ console.log(req.query); 
+       res.render('te-te-ti', null);
+        
+});
