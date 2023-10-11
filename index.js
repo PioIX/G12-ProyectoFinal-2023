@@ -107,6 +107,12 @@ app.get('/home1', function(req, res)
         
 });
 
+app.get('/wordle', function(req, res)
+{ console.log(req.query); 
+       res.render('wordle', null);
+        
+});
+
 app.get('/personajes', function(req, res)
 { console.log(req.query); 
        res.render('quienesomos', null);
