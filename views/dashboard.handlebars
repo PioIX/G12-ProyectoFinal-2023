@@ -33,22 +33,21 @@
     <div class="container">
         <h1>Seleccione el Juego</h1>
         <div class="hexagono1">
-            <div class="heaxagono">
-                <form action="/papelito" method="get">
-                <button type="submit" class="boton"><img src="/img/paleta.png" alt=""></button>
-                
-                <h4>Pong</h4>
-                </form>
-            </div>
-            <div class="heaxagono">
-                <button type="submit" class="boton"> <img src="/img/piedra papel tijera.png" alt=""></button>
-                
-                <h4>Piedra,papel,tijera</h4>
-            </div>
-            <div class="heaxagono">
-                <button type="submit" class="boton"><img src="/img/ta-te-ti.png" alt="" id="tate"></button>
-                <h4>Ta-te-ti</h4>
-            </div>
+            
+            <form action="/pong" method="get">
+                <button type="submit" class="boton"><div class="heaxagono"><img src="/img/paleta.png" alt=""><h4>Pong</h4></div></button>
+            </form>
+        
+            
+            <form action="/papelito" method="get">
+                <button type="submit" class="boton"><div class="heaxagono"><img src="/img/piedra papel tijera.png" alt=""><h4>Piedra,papel,tijera</h4></div></button>
+            </form>
+            
+            
+            <form action="/tateti" method="get">
+                <button type="submit" class="boton"><div class="heaxagono"><img src="/img/ta-te-ti.png" alt="" id="tate"><h4>Ta-te-ti</h4></div></button>
+            </form>
+            
             
         </div>
     </div>

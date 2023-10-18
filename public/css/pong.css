@@ -1,150 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap'); 
-
-
-*{
-    margin:0;
-    padding:0 ;
-    box-sizing:border-box;
-    font-family:'Pixelify Sans', cursive;
-
+@import url('httpsL//fonts.googleapis.com/css2?family=Poppins&display=swap');
+* {
+    font-family: 'Poppins', sans-serif;
 }
-
-body{
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-
-.container{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+body {
+    text-align: center;
+    background-color:  #12181B;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.container span{
-    position: absolute;
-    left: 0;
-    width: 32px;
-    height: 6px;
-    background: rgb(53, 76, 107);
-    border-radius: 8px;
-    transform-origin: 128px; ;
-    transform: scale(2.2) rotate(calc(var(--i)*(390deg /40)));
-    animation: animateBlink 3s linear infinite;
-}
-
-@keyframes animateBlink{
-    0% {
-    background:aqua
-    }
-    25% {
-        background-color:rgb(53, 76, 107) ;
-    }
-}
-.login-box{
-    position: absolute;
-    width: 400px;
-  
-}
-
-.login-box form{
-    width: 100%;
-    padding: 0 50px;
-
-}
-
-h2{
-    font-size: 2em;
-    color: aquamarine;
-    text-align: center
-
-
-}
-
-.boton{
-    width: 100%;
-    height: 45px;
-    background: aquamarine;
-    border: none;
-    outline: none;
-    border-radius: 40px;
-    cursor: pointer;
-    font-size: 1em;
-    color: black;
-    font-weight: 600;
-
-}
-
-
-
-
-
-.bgAnimation{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
     height: 100vh;
-    display: grid;
-    grid-template-columns: repeat(20,1fr);
-    grid-template-rows: repeat(20,1fr);
-    background: #1d1d1d;
-    filter: saturate(2);
-    overflow: hidden;
-}
-
-.colorBox{
-    z-index: 2;
-    filter: brightness(1.1);
-    transition: 2s ease;
-    position: relative;
-    margin: 2px;
-    background: #1d1d1d;
-}
-
-.colorBox:hover{
-    background: #00bfff;
-    transition-duration: 0s;
-}
-
-.backgroundAmim{
-    position: absolute;
-    top: 0;
-    left: 0;
+    flex-direction: column;
+    position: fixed;
     width: 100%;
-    height: 40px;
-    background: #00bfff;
-    filter: blur(60px);
-    animation: animBack 6s linear infinite;
-}
-
-@keyframes animBack {
-    0%{
-        top: -60px;
-    }
-    100%{
-        top: 120%;
-    }
-}
-
-.Espacio{
-    width: 100%;
-    height: 45px;
-    background:none ;
-    border-color: aqua;
-    outline-color: aqua;
-    border-radius: 40px;
-    cursor: pointer;
-    font-size: 1em;
     color: white;
-    font-weight: 600;
-    margin: 5px;
-    
 }
 
 
@@ -178,7 +46,6 @@ h2{
   width: 60px;
   height: 60px;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.527);;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -190,7 +57,7 @@ h2{
   flex: none;
   width: 100%;
   height: 2px;
-  background: #fff;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -277,7 +144,7 @@ h2{
   
   .menu-wrap .menu > div > div > ul > li {
   list-style: none;
-  color: #fff;
+  color: black;
   font-size: 1.5rem;
   padding: 1rem;
   }

@@ -102,3 +102,19 @@ app.get("/register", (req, res) => {
 app.get("/papelito", (req, res) => {
   res.render("papelito");
 });
+
+app.get("/tateti", (req, res) => {
+  res.render("tateti");
+});
+
+app.get("/pong", (req, res) => {
+  res.render("pong");
+});
+
+app.get("/dashboard", (req, res) => {
+  res.render("dashboard");
+});
+
+app.get("/home", (req, res) => {
+  res.render("home");
+});
