@@ -1,4 +1,9 @@
 const express = require("express");
+const { createServer } = require('node:http');
+const { join } = require('node:path');
+const { Server } = require('socket.io');
+
+
 const exphbs = require("express-handlebars");
 const { initializeApp } = require("firebase/app");
 const {
@@ -9,23 +14,35 @@ const {
   signOut,
   GoogleAuthProvider,
 } = require("firebase/auth");
-
-
 const app = express();
+const server = createServer(app);
+const io = new Server(server);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 const Listen_Port = 3000;
-
+/*
 app.listen(Listen_Port, function () {
   console.log(
     "Servidor NodeJS corriendo en http://localhost:" + Listen_Port + "/"
   );
+});*/
+server.listen(3000, () => {
+  console.log('server running at http://localhost:3000');
 });
+
+
+
+
+
+
+
+
+
+
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -117,4 +134,25 @@ app.get("/dashboard", (req, res) => {
 
 app.get("/home", (req, res) => {
   res.render("home");
+});
+
+
+// web socket tateti//
+io.on('connection', (socket) => {
+  console.log('Un jugador se ha conectado.');
+
+  socket.on('makeMove', (index) => {
+    // Procesa el movimiento del jugador y actualiza el tablero.
+    // Asegúrate de sincronizar este cambio con todos los jugadores.
+    // Puedes usar socket.emit o io.emit según tus necesidades.
+});
+
+  socket.on('resetGame', () => {
+    // Reinicia el juego y notifica a todos los jugadores.
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Un jugador se ha desconectado.');
+    // Aquí puedes manejar la lógica de desconexión si es necesario.
+  });
 });

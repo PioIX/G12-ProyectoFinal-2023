@@ -1,4 +1,5 @@
 window.addEventListener('DOMContentLoaded', () => {
+    const socket=io();
     const tiles = Array.from(document.querySelectorAll('.tile'));
     const playerDisplay = document.querySelector('.display-player');
     const resetButton = document.querySelector('#reset');
@@ -90,15 +91,17 @@ window.addEventListener('DOMContentLoaded', () => {
         playerDisplay.classList.add(`player${currentPlayer}`);
     }
 
-    const userAction = (tile, index) => {
-        if(isValidAction(tile) && isGameActive) {
+    function userAction(tile, index) {
+        if (isValidAction(tile) && isGameActive) {
             tile.innerText = currentPlayer;
             tile.classList.add(`player${currentPlayer}`);
             updateBoard(index);
             handleResultValidation();
             changePlayer();
+            socket.emit('makeMove', index);
         }
     }
+
     
     const resetBoard = () => {
         board = ['', '', '', '', '', '', '', '', ''];
@@ -120,5 +123,12 @@ window.addEventListener('DOMContentLoaded', () => {
         tile.addEventListener('click', () => userAction(tile, index));
     });
 
-    resetButton.addEventListener('click', resetBoard);
+    resetButton.addEventListener('click', () => {
+        resetBoard();
+
+        socket.emit('resetGame');
+    });
 });
+
+
+
