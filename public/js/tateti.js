@@ -128,6 +128,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
         socket.emit('resetGame');
     });
+
+    socket.on('opponentMove', (index) => {
+        const tile = tiles[index];
+        if (isValidAction(tile)) {
+            tile.innerText = currentPlayer === 'X' ? 'O' : 'X';
+            tile.classList.add(`player${currentPlayer === 'X' ? 'O' : 'X'}`);
+            updateBoard(index);
+            handleResultValidation();
+            changePlayer();
+        }
+    });
 });
 
 

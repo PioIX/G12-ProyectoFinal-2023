@@ -142,17 +142,20 @@ io.on('connection', (socket) => {
   console.log('Un jugador se ha conectado.');
 
   socket.on('makeMove', (index) => {
-    // Procesa el movimiento del jugador y actualiza el tablero.
-    // Asegúrate de sincronizar este cambio con todos los jugadores.
-    // Puedes usar socket.emit o io.emit según tus necesidades.
+    console.log('tito')
+    // Emitir el movimiento al oponente
+    socket.broadcast.emit('opponentMove', index);
 });
 
   socket.on('resetGame', () => {
     // Reinicia el juego y notifica a todos los jugadores.
   });
 
-  socket.on('disconnect', () => {
-    console.log('Un jugador se ha desconectado.');
-    // Aquí puedes manejar la lógica de desconexión si es necesario.
+  socket.on('desconectarse', (data) => {
+    console.log('Un jugador se ha desconectado: ', data);
+    //la desconexion .
+    socket.emit("reciboEvento", "Buenas")
   });
+
+  
 });
