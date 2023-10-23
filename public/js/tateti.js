@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const PLAYERO_WON = 'PLAYERO_WON';
     const TIE = 'TIE';
 
-
+    console.log("hola")
     /*
         Indexes within the board
         [0] [1] [2]
@@ -31,6 +31,13 @@ window.addEventListener('DOMContentLoaded', () => {
         [0, 4, 8],
         [2, 4, 6]
     ];
+
+    /*
+    socket.on('joinRoom', (room) => {
+        roomId = room;
+    });
+    */
+
 
     function handleResultValidation() {
         let roundWon = false;
@@ -98,9 +105,14 @@ window.addEventListener('DOMContentLoaded', () => {
             updateBoard(index);
             handleResultValidation();
             changePlayer();
-            socket.emit('makeMove', index);
+            socket.emit('makeMove', { index, roomId });
         }
     }
+    resetButton.addEventListener('click', () => {
+        resetBoard();
+
+        socket.emit('resetGame');
+    });
 
     
     const resetBoard = () => {
@@ -129,16 +141,59 @@ window.addEventListener('DOMContentLoaded', () => {
         socket.emit('resetGame');
     });
 
-    socket.on('opponentMove', (index) => {
-        const tile = tiles[index];
-        if (isValidAction(tile)) {
-            tile.innerText = currentPlayer === 'X' ? 'O' : 'X';
-            tile.classList.add(`player${currentPlayer === 'X' ? 'O' : 'X'}`);
-            updateBoard(index);
-            handleResultValidation();
-            changePlayer();
+    // client-side
+    socket.on("connect", () => {
+        console.log(socket.id);
+        roomId=socket.id
+    });
+
+    socket.on('opponentMove', (data) => {
+        if (data.room === roomId) {
+            const tile = tiles[data.index];
+            if (isValidAction(tile)) {
+                tile.innerText = currentPlayer === 'X' ? 'O' : 'X';
+                tile.classList.add(`player${currentPlayer === 'X' ? 'O' : 'X'}`);
+                updateBoard(data.index);
+                handleResultValidation();
+                changePlayer();
+            }
         }
     });
+
+    socket.on('makeMove', (data) => {
+        const { index, room } = data;
+    
+        if (room !== roomId || !gameRooms[room].isGameActive) {
+            return;
+        }
+    
+        const game = gameRooms[room];
+        const { board, currentPlayer } = game;
+    
+        if (isValidMove(board, index, currentPlayer)) {
+            board[index] = currentPlayer;
+            const roundWon = checkWin(board, currentPlayer);
+    
+            if (roundWon) {
+                io.to(room).emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
+                game.isGameActive = false;
+            } else if (!board.includes('')) {
+                io.to(room).emit('gameOver', { result: 'TIE' });
+                game.isGameActive = false;
+            } else {
+                game.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                io.to(room).emit('opponentMove', { index, currentPlayer: game.currentPlayer });
+            }
+        }
+    });
+    
+    
+    
+    
+    
+    
+    
+    
 });
 
 

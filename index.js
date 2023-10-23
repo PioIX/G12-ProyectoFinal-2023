@@ -137,7 +137,7 @@ app.get("/home", (req, res) => {
 });
 
 
-// web socket tateti//
+
 io.on('connection', (socket) => {
   console.log('Un jugador se ha conectado.');
 
@@ -146,7 +146,7 @@ io.on('connection', (socket) => {
     // Emitir el movimiento al oponente
     socket.broadcast.emit('opponentMove', index);
 });
-
+  /*
   socket.on('resetGame', () => {
     // Reinicia el juego y notifica a todos los jugadores.
   });
@@ -156,6 +156,84 @@ io.on('connection', (socket) => {
     //la desconexion .
     socket.emit("reciboEvento", "Buenas")
   });
+  */
+  const gameRooms = {};
 
+  io.on('connection', (socket) => {
+      console.log('Un jugador se ha conectado.');
+  
+      // Generar un identificador único para la sala
+      const roomId = socket.id;
+  
+      // Unirse a la sala con el identificador único
+      socket.join(roomId);
+  
+      // Crear un nuevo juego para la sala
+      gameRooms[roomId] = {
+          board: ['', '', '', '', '', '', '', '', ''],
+          currentPlayer: 'X',
+          isGameActive: true,
+      };
+  
+      // Emitir un evento personalizado para unirse a la sala
+      socket.emit('joinRoom', roomId);
+  
+      socket.on('makeMove', (data) => {
+          const { index, room } = data;
+  
+          if (room !== roomId || !gameRooms[room].isGameActive) {
+              return;
+          }
+  
+          const game = gameRooms[room];
+          const { board, currentPlayer } = game;
+  
+          if (isValidMove(board, index, currentPlayer)) {
+              board[index] = currentPlayer;
+              const roundWon = checkWin(board, currentPlayer);
+  
+              if (roundWon) {
+                  io.to(room).emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
+                  game.isGameActive = false;
+              } else if (!board.includes('')) {
+                  io.to(room).emit('gameOver', { result: 'TIE' });
+                  game.isGameActive = false;
+              } else {
+                  game.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                  io.to(room).emit('opponentMove', { index, currentPlayer: game.currentPlayer });
+              }
+          }
+      });
+  
+      socket.on('resetGame', () => {
+          gameRooms[roomId] = {
+              board: ['', '', '', '', '', '', '', '', ''],
+              currentPlayer: 'X',
+              isGameActive: true,
+          };
+  
+          io.to(roomId).emit('resetGame');
+      });
+  
+      socket.on('disconnect', () => {
+          console.log('Un jugador se ha desconectado de la sala: ', roomId);
+  
+          // Eliminar la sala y su estado del juego al desconectarse
+          delete gameRooms[roomId];
+      });
+  });
+  
+  function isValidMove(board, index, currentPlayer) {
+      return board[index] === '' && currentPlayer === 'X' || currentPlayer === 'O';
+  }
+  
+  /*
+  function checkWin(board, currentPlayer) {
+      // Implementa la lógica para verificar si un jugador ha ganado
+      // Puedes usar la matriz "winningConditions" del lado del cliente.
+      // Si un jugador gana, devuelve true; de lo contrario, devuelve false.
+  }
+  */
+  // Resto del código del servidor (definición de eventos, etc.)
   
 });
