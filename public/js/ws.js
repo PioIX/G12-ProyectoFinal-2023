@@ -13,6 +13,9 @@ socket.on('reciboEvento', function(msg) {
 
 socket.on('opponentMove', function(msg) {
     console.log(msg)
+    let index = msg.index;
+    let tiles = document.getElementsByClassName("tile");
+    userAction(tiles[index], index);
 });
 
 

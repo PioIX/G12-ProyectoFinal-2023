@@ -1,5 +1,5 @@
-window.addEventListener('DOMContentLoaded', () => {
-    const socket=io();
+let roomId = -1
+
     const tiles = Array.from(document.querySelectorAll('.tile'));
     const playerDisplay = document.querySelector('.display-player');
     const resetButton = document.querySelector('#reset');
@@ -105,7 +105,7 @@ window.addEventListener('DOMContentLoaded', () => {
             updateBoard(index);
             handleResultValidation();
             changePlayer();
-            socket.emit('makeMove', { index, roomId });
+            socket.emit('makeMove', { index: index, roomId: roomId });
         }
     }
     resetButton.addEventListener('click', () => {
@@ -141,10 +141,20 @@ window.addEventListener('DOMContentLoaded', () => {
         socket.emit('resetGame');
     });
 
-    // client-side
     socket.on("connect", () => {
-        console.log(socket.id);
-        roomId=socket.id
+        console.log("Me conecte al socket");
+        
+    });
+
+    socket.on('unirseSala', (data) => {
+        if (roomId === -1) {
+            roomId = data.sala
+        }
+        console.log("Room: ", roomId)
+    });
+
+    socket.on('mensaje', (data) => {
+        console.log("Mensaje: ", data)
     });
 
     socket.on('opponentMove', (data) => {
@@ -192,9 +202,7 @@ window.addEventListener('DOMContentLoaded', () => {
     
     
     
-    
-    
-});
+
 
 
 
