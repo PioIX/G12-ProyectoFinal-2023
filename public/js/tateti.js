@@ -102,20 +102,32 @@ let client = -1
                 turnos=false
                 updateBoard(index);
                 handleResultValidation();
-                changePlayer();
+                socket.emit('makeMove', { index: index, roomId: roomId, });
+                if(currentPlayer==='X'){
+                    currentPlayer='O'
+                }else{
+                    currentPlayer='X'
+                }
+                
+        }
+        }else{ 
+            if (isValidAction(tile) && isGameActive) {
+                tile.innerText = currentPlayer;
+                tile.classList.add(`player${currentPlayer}`);
+                turnos=false
+                updateBoard(index);
+                handleResultValidation();
                 socket.emit('makeMove', { index: index, roomId: roomId });
+                if(currentPlayer==='X'){
+                    currentPlayer='O'
+                }else{
+                    currentPlayer='X'
+                }
+                }
+            }
         }
-    }
-        if (isValidAction(tile) && isGameActive) {
-            tile.innerText = currentPlayer;
-            tile.classList.add(`player${currentPlayer}`);
-            updateBoard(index);
-            handleResultValidation();
-            changePlayer();
-            socket.emit('makeMove', { index: index, roomId: roomId });
-        }
-    }
-    resetButton.addEventListener('click', () => {
+    
+        resetButton.addEventListener('click', () => {
         resetBoard();
 
         socket.emit('resetGame');
@@ -126,10 +138,6 @@ let client = -1
         board = ['', '', '', '', '', '', '', '', ''];
         isGameActive = true;
         announcer.classList.add('hide');
-
-        if (currentPlayer === 'O') {
-            changePlayer();
-        }
 
         tiles.forEach(tile => {
             tile.innerText = '';
@@ -150,30 +158,26 @@ let client = -1
 
     socket.on("connect", () => {
         console.log("Me conecte al socket");
+        console.log(turnos)
         
     });
 
     socket.on('unirseSala', (data) => {
-        if (roomId === -1) {
+
             roomId = data.sala
+            console.log(data)
             if (data.client == 1) {
                 client = 'X'
             } else {
                 client = 'O'
             }
-        }
+
         console.log("Room: ", roomId)
     });
-
-    const changePlayer = () => {
-        playerDisplay.classList.remove(`player${currentPlayer}`);
-        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        playerDisplay.innerText = currentPlayer;
-        playerDisplay.classList.add(`player${currentPlayer}`);
-    }
     socket.on('mensaje', (data) => {
         if (data.client!=client) {
             turnos=true
+            console.log("hola")
         }
         console.log("Mensaje: ", data)
     });
@@ -186,7 +190,6 @@ let client = -1
                 tile.classList.add(`player${currentPlayer === 'X' ? 'O' : 'X'}`);
                 updateBoard(data.index);
                 handleResultValidation();
-                changePlayer();
             }
         }
     });

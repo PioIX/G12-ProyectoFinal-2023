@@ -147,8 +147,10 @@ io.on('connection', (socket) => {
     socket.join('faconeta');
 
     // Verificar si ya hay un jugador en la sala
-    const room = io.sockets.adapter.rooms['faconeta'];
-    const numClients = room ? room.length : 0;
+    const room = io.sockets.adapter.rooms.get('faconeta');
+    const numClients = room ? room.size -1: 0;
+    console.log(room)
+    console.log(numClients)
     
     socket.emit('unirseSala', {sala: 'faconeta', client: numClients})
   
@@ -170,16 +172,11 @@ io.on('connection', (socket) => {
     socket.emit('joinRoom', 'faconeta');
   
     socket.on('makeMove', (data) => {
-        const { index, roomId } = data;
+        const { index, roomId, client } = data;
       
         console.log("Recibi un movimiento")
 
-        if (roomId !== 'faconeta') {
-            return;
-        }
-
-        console.log("Recibi un movimiento")
-        socket.emit('mensaje', { result: 'Llega 1' });
+        socket.emit('mensaje', { result: 'Llega 1', client: client });
         io.to('faconeta').emit('mensaje', { result: 'Llega' });
   
         const game = gameRooms['faconeta'];
