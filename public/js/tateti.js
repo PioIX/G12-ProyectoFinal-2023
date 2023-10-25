@@ -1,4 +1,6 @@
+let turnos=true 
 let roomId = -1
+let client = -1
 
     const tiles = Array.from(document.querySelectorAll('.tile'));
     const playerDisplay = document.querySelector('.display-player');
@@ -91,14 +93,19 @@ let roomId = -1
         board[index] = currentPlayer;
     }
 
-    const changePlayer = () => {
-        playerDisplay.classList.remove(`player${currentPlayer}`);
-        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        playerDisplay.innerText = currentPlayer;
-        playerDisplay.classList.add(`player${currentPlayer}`);
-    }
-
+  
     function userAction(tile, index) {
+        if (turnos==true){
+            if (isValidAction(tile) && isGameActive) {
+                tile.innerText = currentPlayer;
+                tile.classList.add(`player${currentPlayer}`);
+                turnos=false
+                updateBoard(index);
+                handleResultValidation();
+                changePlayer();
+                socket.emit('makeMove', { index: index, roomId: roomId });
+        }
+    }
         if (isValidAction(tile) && isGameActive) {
             tile.innerText = currentPlayer;
             tile.classList.add(`player${currentPlayer}`);
@@ -149,11 +156,25 @@ let roomId = -1
     socket.on('unirseSala', (data) => {
         if (roomId === -1) {
             roomId = data.sala
+            if (data.client == 1) {
+                client = 'X'
+            } else {
+                client = 'O'
+            }
         }
         console.log("Room: ", roomId)
     });
 
+    const changePlayer = () => {
+        playerDisplay.classList.remove(`player${currentPlayer}`);
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        playerDisplay.innerText = currentPlayer;
+        playerDisplay.classList.add(`player${currentPlayer}`);
+    }
     socket.on('mensaje', (data) => {
+        if (data.client!=client) {
+            turnos=true
+        }
         console.log("Mensaje: ", data)
     });
 
@@ -182,9 +203,9 @@ let roomId = -1
     
         if (isValidMove(board, index, currentPlayer)) {
             board[index] = currentPlayer;
-            const roundWon = checkWin(board, currentPlayer);
+            const roundGanada = checkWin(board, currentPlayer);
     
-            if (roundWon) {
+            if (roundGanada) {
                 io.to(room).emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
                 game.isGameActive = false;
             } else if (!board.includes('')) {

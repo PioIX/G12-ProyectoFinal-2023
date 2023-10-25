@@ -145,11 +145,12 @@ io.on('connection', (socket) => {
   
     // Unirse a la sala "faconeta"
     socket.join('faconeta');
-    socket.emit('unirseSala', {sala: 'faconeta'})
-  
+
     // Verificar si ya hay un jugador en la sala
     const room = io.sockets.adapter.rooms['faconeta'];
     const numClients = room ? room.length : 0;
+    
+    socket.emit('unirseSala', {sala: 'faconeta', client: numClients})
   
     if (numClients === 2) {
         // La sala ya tiene dos jugadores, no se permite un tercer jugador.
