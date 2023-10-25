@@ -169,7 +169,7 @@ io.on('connection', (socket) => {
     };
   
     // Emitir un evento personalizado para unirse a la sala
-    socket.emit('joinRoom', 'faconeta');
+    socket.emit('joinRoom', 'faconeta');// join room es de otra forma: socket.join(room)
   
     socket.on('makeMove', (data) => {
         const { index, roomId, client } = data;
@@ -236,7 +236,44 @@ function checkWin(board, currentPlayer) {
   return false; // No hay un ganador
 }
 
+/////PIEDRA PAPEL TIJERA APARTIR DE ACA ABAJO////
 
+io.on('connection1', (socket) => {
+  console.log('Un jugador se ha conectado.');
+
+  // Unirse a la sala "faconeta"
+  socket.join('rivotril');
+
+  // Verificar si ya hay un jugador en la sala
+  const room1 = io.sockets.adapter.rooms['rivotril'];
+  const numClients1 = room1 ? room1.length : 0;
+  
+  socket.emit('unirseSala1', {sala: 'rivotril', client: numClients1})
+
+  if (numClients1 === 2) {
+      // La sala ya tiene dos jugadores, no se permite un tercer jugador.
+      socket.emit('roomFull', 'La sala está llena. Por favor, intenta más tarde.');
+      socket.disconnect();
+      return;
+  }
+});
+
+
+let rooms1 = {};
+socket.on('makeMove', (data) => {
+  const roomId1 = data.roomId1;
+  const move = data.move;
+  const room = rooms1[roomId1];
+  console.log("Recibi un movimiento")
+      socket.emit('mensaje1', { result: 'Llega 1' });
+      io.to('rivotril').emit('mensaje1', { result: 'Llega' });
+
+  io.to(roomId1).emit('gameUpdate', {
+      msjBatalla: msjBatalla, 
+      imgJugador: imgJugador,
+      imgPc: imgPc,
+  });
+});
 
 
 

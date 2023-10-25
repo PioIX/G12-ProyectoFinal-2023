@@ -111,3 +111,27 @@ function addImagenes(){
 
 
 window.addEventListener('load', iniciar);
+
+socket.on('roomJoined', (roomId1) => {
+});
+
+btnPiedra.addEventListener('click', () => {
+    makeMove('Piedra');
+});
+
+function makeMove(move) {
+    const roomId1 = 'rivotril';
+    socket.emit('makeMove1', { roomId1, move });
+}
+
+socket.on('gameUpdate', (data) => {
+    msjBatalla.innerHTML = data.msjBatalla;
+});
+
+socket.on('mensaje1', (data) => {
+    if (data.client!=client) {
+    }
+    console.log("Mensaje: ", data)
+});
+
+window.addEventListener('load', iniciar);

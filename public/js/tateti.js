@@ -95,7 +95,7 @@ let client = -1
 
   
     function userAction(tile, index) {
-        if (turnos==true){
+        if (turnos){
             if (isValidAction(tile) && isGameActive) {
                 tile.innerText = currentPlayer;
                 tile.classList.add(`player${currentPlayer}`);
@@ -110,7 +110,7 @@ let client = -1
                 }
                 
         }
-        }else{ 
+        }else{ /*
             if (isValidAction(tile) && isGameActive) {
                 tile.innerText = currentPlayer;
                 tile.classList.add(`player${currentPlayer}`);
@@ -124,7 +124,7 @@ let client = -1
                     currentPlayer='X'
                 }
                 }
-            }
+            */}
         }
     
         resetButton.addEventListener('click', () => {
@@ -165,6 +165,7 @@ let client = -1
     socket.on('unirseSala', (data) => {
 
             roomId = data.sala
+            
             console.log(data)
             if (data.client == 1) {
                 client = 'X'
@@ -175,11 +176,8 @@ let client = -1
         console.log("Room: ", roomId)
     });
     socket.on('mensaje', (data) => {
-        if (data.client!=client) {
-            turnos=true
-            console.log("hola")
-        }
-        console.log("Mensaje: ", data)
+        
+       
     });
 
     socket.on('opponentMove', (data) => {
@@ -196,10 +194,6 @@ let client = -1
 
     socket.on('makeMove', (data) => {
         const { index, room } = data;
-    
-        if (room !== roomId || !gameRooms[room].isGameActive) {
-            return;
-        }
     
         const game = gameRooms[room];
         const { board, currentPlayer } = game;
@@ -219,6 +213,12 @@ let client = -1
                 io.to(room).emit('opponentMove', { index, currentPlayer: game.currentPlayer });
             }
         }
+        if (data.client!=client) {
+            turnos=true
+            
+            console.log("hola")
+        }
+        console.log("Mensaje: ", data)
     });
     
     
