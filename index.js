@@ -17,7 +17,15 @@ const {
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
+var session = require('express-session')
 
+const sessionMiddleware = session({
+  secret: "changeit",
+  resave: true,
+  saveUninitialized: true,
+});
+app.use(sessionMiddleware)
+io.engine.use(sessionMiddleware);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
@@ -33,14 +41,6 @@ app.listen(Listen_Port, function () {
 server.listen(3000, () => {
   console.log('server running at http://localhost:3000');
 });
-
-
-
-
-
-
-
-
 
 
 
@@ -60,6 +60,7 @@ const auth = getAuth(appFirebase);
 const authService = require("./authService");
 
 app.get("/", (req, res) => {
+  req.session.client = -1
   res.render("home");
 });
 
@@ -141,6 +142,7 @@ const gameRooms = {};
 
 
 io.on('connection', (socket) => {
+    const req = socket.request;
     console.log('Un jugador se ha conectado.');
   
     // Unirse a la sala "faconeta"
@@ -151,8 +153,13 @@ io.on('connection', (socket) => {
     const numClients = room ? room.size -1: 0;
     console.log(room)
     console.log(numClients)
+
+    if (req.session.client == -1) {
+      req.session.client = numClients
+      req.session.save() 
+    }
     
-    socket.emit('unirseSala', {sala: 'faconeta', client: numClients})
+    socket.emit('unirseSala', {sala: 'faconeta', client: req.session.client})
   
     if (numClients === 2) {
         // La sala ya tiene dos jugadores, no se permite un tercer jugador.
@@ -237,44 +244,3 @@ function checkWin(board, currentPlayer) {
 }
 
 /////PIEDRA PAPEL TIJERA APARTIR DE ACA ABAJO////
-
-io.on('connection1', (socket) => {
-  console.log('Un jugador se ha conectado.');
-
-  // Unirse a la sala "faconeta"
-  socket.join('rivotril');
-
-  // Verificar si ya hay un jugador en la sala
-  const room1 = io.sockets.adapter.rooms['rivotril'];
-  const numClients1 = room1 ? room1.length : 0;
-  
-  socket.emit('unirseSala1', {sala: 'rivotril', client: numClients1})
-
-  if (numClients1 === 2) {
-      // La sala ya tiene dos jugadores, no se permite un tercer jugador.
-      socket.emit('roomFull', 'La sala está llena. Por favor, intenta más tarde.');
-      socket.disconnect();
-      return;
-  }
-});
-
-
-let rooms1 = {};
-socket.on('makeMove', (data) => {
-  const roomId1 = data.roomId1;
-  const move = data.move;
-  const room = rooms1[roomId1];
-  console.log("Recibi un movimiento")
-      socket.emit('mensaje1', { result: 'Llega 1' });
-      io.to('rivotril').emit('mensaje1', { result: 'Llega' });
-
-  io.to(roomId1).emit('gameUpdate', {
-      msjBatalla: msjBatalla, 
-      imgJugador: imgJugador,
-      imgPc: imgPc,
-  });
-});
-
-
-
-

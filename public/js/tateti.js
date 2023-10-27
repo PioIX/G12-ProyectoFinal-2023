@@ -95,7 +95,7 @@ let client = -1
 
   
     function userAction(tile, index) {
-        if (turnos){
+        if (turnos=true){
             if (isValidAction(tile) && isGameActive) {
                 tile.innerText = currentPlayer;
                 tile.classList.add(`player${currentPlayer}`);
@@ -197,28 +197,25 @@ let client = -1
     
         const game = gameRooms[room];
         const { board, currentPlayer } = game;
-    
-        if (isValidMove(board, index, currentPlayer)) {
-            board[index] = currentPlayer;
-            const roundGanada = checkWin(board, currentPlayer);
-    
-            if (roundGanada) {
-                io.to(room).emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
-                game.isGameActive = false;
-            } else if (!board.includes('')) {
-                io.to(room).emit('gameOver', { result: 'TIE' });
-                game.isGameActive = false;
-            } else {
-                game.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                io.to(room).emit('opponentMove', { index, currentPlayer: game.currentPlayer });
+        if (data.currentPlayer==currentPlayer) {
+            turnos=true
+            if (isValidMove(board, index, currentPlayer)) {
+                board[index] = currentPlayer;
+                const roundGanada = checkWin(board, currentPlayer);
+        
+                if (roundGanada) {
+                    io.to(room).emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
+                    game.isGameActive = false;
+                } else if (!board.includes('')) {
+                    io.to(room).emit('gameOver', { result: 'TIE' });
+                    game.isGameActive = false;
+                } else {
+                    game.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                    io.to(room).emit('opponentMove', { index, currentPlayer: game.currentPlayer });
+                }
             }
         }
-        if (data.client!=client) {
-            turnos=true
             
-            console.log("hola")
-        }
-        console.log("Mensaje: ", data)
     });
     
     
