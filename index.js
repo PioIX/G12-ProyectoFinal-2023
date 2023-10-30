@@ -137,6 +137,15 @@ app.get("/home", (req, res) => {
 });
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+/*
+>>>>>>> Stashed changes
 const gameRooms = {};
 
 
@@ -214,6 +223,7 @@ function isValidMove(board, index, currentPlayer) {
     return board[index] === '' && (currentPlayer === 'X' || currentPlayer === 'O');
 }
 
+<<<<<<< Updated upstream
 function checkWin(board, currentPlayer) {
   const winningConditions = [
       [0, 1, 2],
@@ -278,3 +288,95 @@ socket.on('makeMove', (data) => {
 
 
 
+=======
+*/
+const path = require('path');
+const rooms = {};
+
+app.use(express.static(path.join(__dirname, 'client')));
+
+
+
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+
+    socket.on('crearJuego', () => {
+        const idSala = hacerid(6);
+        rooms[idSala] = {};
+        socket.join(idSala);
+        socket.emit("nuevoJuego", {idSala: idSala})
+    });
+
+    socket.on('unirseJuego', (data) => {
+        if(rooms[data.idSala] != null) {
+            socket.join(data.idSala);
+            socket.to(data.idSala).emit("Jugadores conectados", {});
+            socket.emit("Jugadores conectados");
+        }
+    })
+
+    socket.on("j1eleccion",(data)=>{
+        let rspopcion = data.rspopcion;
+        rooms[data.idSala].j1eleccion = rspopcion;
+        socket.to(data.roomUniqueId).emit("j1eleccion",{rspopcion : data.rspopcion});
+        if(rooms[data.idSala]. j2eleccion!= null) {
+            declararGanador(data.idSala);
+        }
+    });
+
+    socket.on("j2eleccion",(data)=>{
+      let rspopcion = data.rspopcion;
+      rooms[data.idSala].j2eleccion = rspopcion;
+      socket.to(data.roomUniqueId).emit("j2eleccion",{rspopcion : data.rspopcion});
+      if(rooms[data.idSala]. j1eleccion!= null) {
+          declararGanador(data.idSala);
+      }
+  });
+});
+
+function declararGanador(idSala) {
+    let j1eleccion = rooms[idSala].j1eleccion;
+    let j2eleccion = rooms[idSala].j2eleccion;
+    let ganador = null;
+    if (j1eleccion === j2eleccion) {
+        ganador = "empate ";
+    } else if (j1eleccion == "papel") {
+        if (j2eleccion == "tijera") {
+            ganador = "j2";
+        } else {
+            ganador = "j1";
+        }
+    } else if (j1eleccion == "roca") {
+        if (j2eleccion == "papel") {
+            ganador = "j2";
+        } else {
+            ganador = "j1";
+        }
+    } else if (j1eleccion == "tijera") {
+        if (j2eleccion == "roca") {
+            ganador = "j2";
+        } else {
+            ganador = "j1";
+        }
+    }
+    io.sockets.to(idSala).emit("resultado", {
+        ganador: ganador
+    });
+    rooms[idSala].j1eleccion = null;
+    rooms[idSala].j2eleccion = null;
+}
+
+
+function hacerid(length) {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+>>>>>>> Stashed changes

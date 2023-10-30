@@ -1,86 +1,81 @@
-const seccionBatalla = document.getElementById('campo-batalla');
-const msjBatalla = document.getElementById('msj-batalla');
-const imgAtaqueJugador = document.getElementById('img-ataque-jugador');
-const imgAtaquePc = document.getElementById('img-ataque-pc');
-const btnPiedra = document.getElementById('btn-piedra');
-const btnPapel = document.getElementById('btn-papel');
-const btnTijeras = document.getElementById('btn-tijeras');
 
-let opcionJugador;
-let opcionPc;
-let imgJugador;
-let imgPc;
+const socket = io();
+let idSala=null;
+let jugador1=false;
 
-
-const imagenes = [
-    {
-        name: "Piedra",
-        url: "img/Piedra.PNG" 
-    },
-    {
-        name: "Papel",
-        url: "img/Papel.PNG" 
-    },
-    {
-        name: "Tijeras",
-        url: "img/Tijeras.PNG" 
-    }
-];
-
-
-
-function iniciar(){
-    seccionBatalla.style.display = 'none';
-};
-
-btnPiedra.addEventListener('click', function(){
-    opcionJugador = "Piedra";
-    opPc();
-});
-
-btnPapel.addEventListener('click', function(){
-    opcionJugador = "Papel";
-    opPc();
-});
-
-btnTijeras.addEventListener('click', function(){
-    opcionJugador = "Tijeras";
-    opPc();
-})
-
-
-function opPc(){
-    var aleaorio = nAleatorio();
-
-    if(aleaorio == 0){
-        opcionPc = "Piedra";
-    }else if(aleaorio == 1){
-        opcionPc = "Papel";
-    }else if(aleaorio == 2){
-        opcionPc = "Tijeras"
-    };
-
-    batalla();
-
-};
-
-function batalla(){
-    if(opcionJugador == opcionPc){
-        msjBatalla.innerHTML = "Empate";
-    }else if(opcionJugador == "Piedra" && opcionPc == "Tijeras"){
-        msjBatalla.innerHTML = "Ganaste!";
-    }else if(opcionJugador == "Papel" && opcionPc == "Piedra"){
-        msjBatalla.innerHTML = "Ganaste!";
-    }else if(opcionJugador == "Tijeras" && opcionPc == "Papel"){
-        msjBatalla.innerHTML = "Ganaste!";
-    }else{
-        msjBatalla.innerHTML = "Perdiste :(";
-    };
-
-    addImagenes();
-
+function crearJuego() {
+    jugador1=true;
+    socket.emit('crearJuego');
 }
 
+function unirseJuego() {
+    idSala=document.getElementById("crearId").value;
+    socket.emit('unirseJuego',{idSala: idSala});
+}
+
+socket.on("nuevoJuego",(data)=>{
+    idSala=data.idSala;
+    document.getElementById('inicio').style.display='none';
+    document.getElementById('juego').style.display='block';
+    document.getElementById('espera').innerHTML= "Espera por un jugador.Pasale su codigo ",{idSala};
+
+});
+
+socket.on("Jugadores conectados"), () => {
+    document.getElementById('inicio').style.display = 'none';
+    document.getElementById('juego').style.display = 'none';
+    document.getElementById('espera').style.display = 'flex';
+}
+
+socket.on("j1eleccion",(data)=>{
+    if(!jugador1) {
+        opcionRival(data);
+    }
+});
+
+socket.on("j2eleccion",(data)=>{
+    if(!jugador1) {
+        opcionRival(data);
+    }
+});
+
+socket.on("resultado",(data)=>{
+    let ganadortexto = '';
+    if(data.ganador != 'empate') {
+        if(data.ganador == 'j1' && jugador1) {
+            ganadortexto = 'Ganaste panflin';
+        } else if(data.ganador == 'j1') {
+            ganadortexto = 'Perdiste panflin';
+        } else if(data.ganador == 'j2' && !jugador1) {
+            ganadortexto = 'Ganaste panflin';
+        } else if(data.ganador == 'j2') {
+            ganadortexto = 'Perdiste panflin';
+        }
+    } else {
+        ganadortexto = `It's a draw`;
+    }
+    document.getElementById('Estadooponente').style.display = 'none';
+    document.getElementById('rivalboton').style.display = 'block';
+    document.getElementById('Ganador').innerHTML = ganadortexto;
+});
+
+
+
+function opcion (rspopcion){
+    const eleccion= jugador1 ? "j1eleccion" : "j2eleccion";
+    socket.emit(eleccion,{
+        rspopcion: rspopcion,
+        idSala: idSala
+    });
+    let eleccionBoton = document.createElement('button');
+    eleccionBoton.style.display = 'block';
+    eleccionBoton.classList.add(rspopcion.toString().toLowerCase());
+    eleccionBoton.innerText = rspopcion;
+    ocument.getElementById('jugador1').innerHTML = "";
+    document.getElementById('jugador2').appendChild(eleccionBoton);
+}
+
+<<<<<<< Updated upstream
 
 function nAleatorio(){
     let n = Math.floor(Math.random() * 3);
@@ -135,3 +130,14 @@ socket.on('mensaje1', (data) => {
 });
 
 window.addEventListener('load', iniciar);
+=======
+function opcionRival(data){
+    document.getElementById('Estadooponente').innerHTML = "Opponent made a choice";
+    let rivalboton = document.createElement('button');
+    rivalboton.id='rivalboton'
+    rivalboton.classList.add(data.rspopcion.toString().toLowerCase());
+    rivalboton.style.display = 'none';
+    rivalboton.innerText = data.rspopcion;
+    document.getElementById('jugador2').appendChild(rivalboton);
+}   
+>>>>>>> Stashed changes

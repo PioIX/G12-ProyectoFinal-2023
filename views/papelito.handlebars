@@ -1,33 +1,42 @@
+
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/curita.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/app.js"></script>
     <title>Piedra | Papel | Tijeras</title>
 </head>
 <body>
-    <header>
-	<nav>
-		<div class="menu-wrap">
-            <input type="checkbox" class="toggler">
-            <div class="hamburger"><div></div></div>
-            <div class="menu">
-              <ul>
-                 <li><a href="/home">Salir</a></li>
-                <li><a href="/dashboard">Juego</a></li>
-                <li><a href="/personajes">¿Quienes somos?</a></li>
-                <li><a href="/contacto">Contacto</a></li>
-              </ul>
-            </div>
-        </div>
-	</nav>
-  </header>
-    <h1>Piedra | Papel | Tijeras</h1>
-    <div id="campo-batalla" class="campo-batalla">
-        <div id="img-ataque-jugador" class="caja-batala"><!--<img class="img-batalla" src="assets/Papel.PNG" alt="">--></div>
-        <div class="caja-batala"><p class="text-mensajes">VS</p></div>
-        <div id="img-ataque-pc" class="caja-batala"><!--<img class="img-batalla" src="assets/Piedra.PNG" alt="">--></div>
+    <h1>Welcome to Rock, Paper and Scissors game</h1>
+    <div id="inicio">
+        <button onclick="crearJuego()">Crear Juego</button>
+        <div>O</div>
+        <input type="text" name="" id="crearId"></button>
+        <button onclick="unirseJuego()">Unirse a Juego</button>
     </div>
+    <div id="Juego">
+        <div id="espera">
+                
+        </div>
+        <div id="juego" style="display:none">
+            <h4>vos:</h4>
+                <div id="jugador1">
+                <button class="roca" onclick="opcion('roca')">roca</button>
+                <button class="papel" onclick="opcion('papel')">papel</button>
+                <button class="tijera" onclick="opcion('tijera')">tijera</button>
+                </div>
+            <h4>oponente:</h4>
+                <div id="jugador2">
+                    <p  id="Estadooponente">Esperando al jugador</p>
+                </div>
+        <div id="Ganador">
+            
+        </div>
+    </div>
+<<<<<<< Updated upstream
     <div>
         <p id="msj-batalla" class="text-mensajes"> </p>
     </div>
@@ -42,3 +51,6 @@
 
 <script src="/socket.io/socket.io.js"></script>
 socket.emit('joinRoom1', 'rivotril');
+=======
+</body>
+>>>>>>> Stashed changes
