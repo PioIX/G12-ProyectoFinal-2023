@@ -1,5 +1,3 @@
-
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,12 +5,13 @@
     <link rel="stylesheet" href="css/curita.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/app.js"></script>
+    
     <title>Piedra | Papel | Tijeras</title>
 </head>
 <body>
-    <h1>Welcome to Rock, Paper and Scissors game</h1>
+    <h1>Bienvenido a piedra,papel,tijera. </h1>
     <div id="inicio">
-        <button onclick="crearJuego()">Crear Juego</button>
+        <button type="submit" onclick="crearJuego()">Crear Juego</button>
         <div>O</div>
         <input type="text" name="" id="crearId"></button>
         <button onclick="unirseJuego()">Unirse a Juego</button>
@@ -36,21 +35,4 @@
             
         </div>
     </div>
-<<<<<<< Updated upstream
-    <div>
-        <p id="msj-batalla" class="text-mensajes"> </p>
-    </div>
-    <h2>Elije un ataque</h2>
-    <div>
-        <img id="btn-piedra" class="btn-ataques" src="img/Piedra.PNG" alt="">
-        <img id="btn-papel" class="btn-ataques" src="img/Papel.PNG" alt="">
-        <img id="btn-tijeras" class="btn-ataques" src="img/Tijeras.PNG" alt="">
-    </div>
-    <script src="js/app.js"></script>
 </body>
-
-<script src="/socket.io/socket.io.js"></script>
-socket.emit('joinRoom1', 'rivotril');
-=======
-</body>
->>>>>>> Stashed changes
