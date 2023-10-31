@@ -10,8 +10,10 @@ function crearJuego() {
 
 function unirseJuego() {
     console.log("hola")
-    idSala=document.getElementById('crearId').value;
+    let idSala=document.getElementById('crearId').value;
+    console.log("idSala: ", idSala);
     socket.emit('unirseJuego',{idSala: idSala});
+    console.log("d");
 }
 
 socket.on("nuevoJuego",(data)=>{
@@ -22,11 +24,11 @@ socket.on("nuevoJuego",(data)=>{
 
 });
 
-socket.on("Jugadores conectados"), () => {
+socket.on("Jugadoresconectados", (data) => {
     document.getElementById('inicio').style.display = 'none';
     document.getElementById('espera').style.display = 'none';
-    document.getElementById('juego').style.display = 'flex';
-}
+    document.getElementById('juego').style.display = "none";
+})
 
 socket.on("j1eleccion",(data)=>{
     if(!jugador1) {

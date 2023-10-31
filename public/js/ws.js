@@ -1,6 +1,5 @@
-/*const IP = "ws://localhost:3000"
-var socket = io(IP);*/
-var socket = io();
+const IP = "ws://localhost:3000"
+var socket = io(IP);
 
 function funcionPrueba() {
     socket.emit('desconectarse', "hola");
@@ -9,6 +8,10 @@ function funcionPrueba() {
 socket.on('reciboEvento', function(msg) {
     console.log(msg)
   });
+
+socket.on("connect", () => {
+    console.log("Conectado");
+})
 
 
 socket.on('opponentMove', function(msg) {

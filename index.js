@@ -1,10 +1,10 @@
 const express = require("express");
-const { createServer } = require('node:http');
-const { join } = require('node:path');
-const { Server } = require('socket.io');
-
 
 const exphbs = require("express-handlebars");
+const bodyParser = require('body-parser');
+const MySQL = require("./modulos/mysql");
+const session = require("express-session");
+
 const { initializeApp } = require("firebase/app");
 const {
   getAuth,
@@ -15,34 +15,21 @@ const {
   GoogleAuthProvider,
 } = require("firebase/auth");
 const app = express();
-const server = createServer(app);
-const io = new Server(server);
 
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static("public"));
+
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 const Listen_Port = 3000;
-/*
-app.listen(Listen_Port, function () {
+
+const server = app.listen(Listen_Port, function () {
   console.log(
     "Servidor NodeJS corriendo en http://localhost:" + Listen_Port + "/"
   );
-});*/
-server.listen(3000, () => {
-  console.log('server running at http://localhost:3000');
 });
-
-
-
-
-
-
-
-
-
-
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -58,6 +45,20 @@ const auth = getAuth(appFirebase);
 
 // Importar AuthService
 const authService = require("./authService");
+
+const io = require("socket.io")(server);
+
+const sessionMiddleware = session({
+  secret: "gasjlkgjkslagjkla",
+  resave: false,
+  saveUninitialized: false,
+})
+
+app.use(sessionMiddleware);
+
+io.use(function(socket, next) {
+  sessionMiddleware(socket.request, socket.request.res, next);
+});
 
 app.get("/", (req, res) => {
   res.render("home");
@@ -141,7 +142,7 @@ app.get("/home", (req, res) => {
 const gameRooms = {};
 
 
-io.on('connection', (socket) => {
+/*io.on('connection', (socket) => {
     console.log('Un jugador se ha conectado.');
   
     // Unirse a la sala "faconeta"
@@ -209,7 +210,7 @@ io.on('connection', (socket) => {
   
         io.to('faconeta').emit('resetGame');
     });
-});
+});*/
   
 function isValidMove(board, index, currentPlayer) {
     return board[index] === '' && (currentPlayer === 'X' || currentPlayer === 'O');
@@ -224,6 +225,8 @@ app.use(express.static(path.join(__dirname, 'client')));
 
 
 io.on('connection', (socket) => {
+  const req = socket.request;
+
     console.log('a user connected');
     socket.on('disconnect', () => {
         console.log('user disconnected');
@@ -233,21 +236,22 @@ io.on('connection', (socket) => {
         const idSala = hacerid(6);
         rooms[idSala] = {};
         socket.join(idSala);
-        socket.emit("nuevoJuego", {idSala: idSala})
+        io.emit("nuevoJuego", {idSala: idSala})
     });
 
     socket.on('unirseJuego', (data) => {
+      console.log("unirseJuego", rooms, data);
+      console.log("A", rooms[data.idSala], rooms[data.idSala] != null);
         if(rooms[data.idSala] != null) {
             socket.join(data.idSala);
-            socket.to(data.idSala).emit("Jugadores conectados", {});
-            socket.emit("Jugadores conectados");
+            io.to(data.idSala).emit("Jugadoresconectados", {});
         }
     })
 
     socket.on("j1eleccion",(data)=>{
         let rspopcion = data.rspopcion;
         rooms[data.idSala].j1eleccion = rspopcion;
-        socket.to(data.roomUniqueId).emit("j1eleccion",{rspopcion : data.rspopcion});
+        io.to(data.idSala).emit("j1eleccion",{rspopcion : data.rspopcion});
         if(rooms[data.idSala]. j2eleccion!= null) {
             declararGanador(data.idSala);
         }
@@ -256,7 +260,7 @@ io.on('connection', (socket) => {
     socket.on("j2eleccion",(data)=>{
       let rspopcion = data.rspopcion;
       rooms[data.idSala].j2eleccion = rspopcion;
-      socket.to(data.roomUniqueId).emit("j2eleccion",{rspopcion : data.rspopcion});
+      io.to(data.idSala).emit("j2eleccion",{rspopcion : data.rspopcion});
       if(rooms[data.idSala]. j1eleccion!= null) {
           declararGanador(data.idSala);
       }
