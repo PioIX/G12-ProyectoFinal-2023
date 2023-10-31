@@ -10,23 +10,22 @@ function crearJuego() {
 
 function unirseJuego() {
     console.log("hola")
-    
-    idSala=document.getElementById("crearId").value;
+    idSala=document.getElementById('crearId').value;
     socket.emit('unirseJuego',{idSala: idSala});
 }
 
 socket.on("nuevoJuego",(data)=>{
     idSala=data.idSala;
     document.getElementById('inicio').style.display='none';
-    document.getElementById('juego').style.display='block';
-    document.getElementById('espera').innerHTML= "Espera por un jugador.Pasale su codigo ",{idSala};
+    document.getElementById('zonajuego').style.display='block';
+    document.getElementById('espera').innerHTML= `Espera por un jugador.Pasale su codigo ${idSala}`;
 
 });
 
 socket.on("Jugadores conectados"), () => {
     document.getElementById('inicio').style.display = 'none';
-    document.getElementById('juego').style.display = 'none';
-    document.getElementById('espera').style.display = 'flex';
+    document.getElementById('espera').style.display = 'none';
+    document.getElementById('juego').style.display = 'flex';
 }
 
 socket.on("j1eleccion",(data)=>{
@@ -36,7 +35,7 @@ socket.on("j1eleccion",(data)=>{
 });
 
 socket.on("j2eleccion",(data)=>{
-    if(!jugador1) {
+    if(jugador1) {
         opcionRival(data);
     }
 });
@@ -57,7 +56,7 @@ socket.on("resultado",(data)=>{
         ganadortexto = `It's a draw`;
     }
     document.getElementById('Estadooponente').style.display = 'none';
-    document.getElementById('rivalboton').style.display = 'block';
+    document.getElementById('botonrival').style.display = 'block';
     document.getElementById('Ganador').innerHTML = ganadortexto;
 });
 
@@ -74,5 +73,17 @@ function opcion (rspopcion){
     eleccionBoton.classList.add(rspopcion.toString().toLowerCase());
     eleccionBoton.innerText = rspopcion;
     document.getElementById('jugador1').innerHTML = "";
-    document.getElementById('jugador2').appendChild(eleccionBoton);
+    document.getElementById('jugador1').appendChild(eleccionBoton);
+}
+
+
+
+function opcionRival(data) {
+    document.getElementById('Estadooponente').innerHTML = "El oponente hizo un movimiento.";
+    let botonrival = document.createElement('button');
+    botonrival.id = 'botonrival';
+    botonrival.classList.add(data.rspopcion.toString().toLowerCase());
+    botonrival.style.display = 'none';
+    botonrival.innerText = data.rspopcion;
+    document.getElementById('jugador2').appendChild(botonrival);
 }
