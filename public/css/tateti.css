@@ -95,6 +95,19 @@
   z-index: 1;
   }
   
+.toggler, .hamburger {
+    margin-top: 35px;
+}
+
+.botonesarribader{
+    cursor: pointer;
+    margin: 10px;
+    transition: 250ms;
+  }
+  .botonesarribader:hover {
+   transform: scale(1.2);
+  }
+
   .menu-wrap .toggler {
   position: absolute;
   top: 0;
@@ -253,3 +266,4 @@
    .dropdown:hover .dropbtn {
     background-color: #3e8e41;
    }
+*/

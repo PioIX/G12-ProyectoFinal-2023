@@ -68,43 +68,52 @@ app.get("/register", (req, res) => {
   res.render("register");
 });
 
-app.post("/register", async (req, res) => {
-  const { email, password } = req.body;
-
+app.post('/register', async function(req, res){
+  const { Mail, Contraseña } = req.body;
   try {
-    await authService.registerUser(auth, { email, password });
-    res.render("register", {
-      message: "Registro exitoso. Puedes iniciar sesión ahora.",
-    });
+      await authService.registerUser(auth, { Mail, Contraseña });
+      await MySQL.realizarQuery (`insert into Usuario (mail,pass) values ("${req.body.Mail}","${req.body.Contraseña}")`)
+      response = await MySQL.realizarQuery (`select id from Usuario where mail = "${req.body.Mail}"`)
+      req.session.id1 = response[0].id 
+      req.session.mail = req.body.Mail
+      console.log(req.session.id1)
+      res.render("home");
   } catch (error) {
-    console.error("Error en el registro:", error);
-    res.render("register", {
-      message: "Error en el registro: " + error.message,
-    });
-  }
+      console.error("Error en el registro:", error);
+      res.render("register", {
+        message: "Error en el registro: " + error.message,
+      });
+    }
 });
 
-app.get("/login", (req, res) => {
-  res.render("login");
-});
-
-app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-
+app.put('/login', async function(req, res){
+  console.log("login", req.body);  
+  let response = await MySQL.realizarQuery(`SELECT * FROM Usuario WHERE mail = "${req.body.Mail}" AND pass = "${req.body.Contraseña}"`)
+  if (response.length > 0) {
+  let verifica = false
+  const {Mail , Contraseña} = {Mail : req.body.user, Contraseña : req.body.Contraseña}
   try {
-    const userCredential = await authService.loginUser(auth, {
-      email,
-      password,
-    });
-    // Aquí puedes redirigir al usuario a la página que desees después del inicio de sesión exitoso
-    res.redirect("/dashboard");
+    authService.loginUser(auth, { Mail, Contraseña });
+    verifica = true
+    req.session.id1 = response[0].id
+    req.session.mail = response[0].Mail
+    console.log(req.session.id1)
+    console.log(req.session.Mail)
   } catch (error) {
-    console.error("Error en el inicio de sesión:", error);
-    res.render("login", {
-      message: "Error en el inicio de sesión: " + error.message,
-    });
+    verifica = false
+    console.log(error)
   }
-});
+
+  if (response.length > 0 && verifica) {
+      if(req.body.user =="idblanco@pioix.edu.ar"){
+          res.send({success:true, admin:true})            
+      }
+      else if (req.body.usuario!="idblanco@pioix.edu.ar"){
+      res.send({success: true, admin:false})    
+  }}
+  else{
+      res.send({success:false})   
+}}});
 
 app.get("/dashboard", (req, res) => {
   // Agrega aquí la lógica para mostrar la página del dashboard

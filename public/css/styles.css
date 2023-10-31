@@ -16,5 +16,38 @@ body {
   background-color: white;
 }
 
-.home {
+.maina{
+  display:flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 82vh;
+}
+
+.chatcito{
+  display: flex;
+  background-color:#e70f0f ;
+  margin-right: 0px;
+  width: 100%;
+  height: 100%;
+  align-items: end;
+}
+
+.chat1{
+  margin-right: 0px;
+}
+.chat2{
+  margin-left: 0px;
+}
+.chat{
+  color: #f00d0d;
+}
+
+.iconderecha{
+  display: flex;
+  height: 100%;
+  width: 150px;
+  align-items: center;
+  justify-content: right;
+  color:aqua;
+  flex-direction: row;
 }

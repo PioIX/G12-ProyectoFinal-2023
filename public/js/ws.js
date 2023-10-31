@@ -18,4 +18,28 @@ socket.on('opponentMove', function(msg) {
     userAction(tiles[index], index);
 });
 
+function mandarMensaje(mensaje) {
+    mensaje = document.getElementById("mensaje").value
+    if (envie == -1) {
+    socket.emit("incoming-message", { data: mensaje });
+    console.log("envie", mensaje);
+    document.getElementById("chat").innerHTML += `
+    <div class="chat2">
+      <h1 class="chat"> ${mensaje}</h1>
+    </div>
+    `    
+    envie = 1
+}};
 
+socket.on("server-message", data => {
+    console.log("tengo que mandar", data);
+    if (envie == -1) {
+        document.getElementById("chat").innerHTML += `
+            <div class="chat1">
+              <h1 class="chat">${data.mensaje.data}</h1>
+          </div>
+          `
+          envie = 1
+    }
+    envie=-1
+});
