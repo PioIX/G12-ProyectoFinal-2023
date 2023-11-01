@@ -210,95 +210,90 @@ const gameRooms = {};
   
         io.to('faconeta').emit('resetGame');
     });
-});*/
+});
   
 function isValidMove(board, index, currentPlayer) {
     return board[index] === '' && (currentPlayer === 'X' || currentPlayer === 'O');
 }
 
+*/
 
 const path = require('path');
 const rooms = {};
 
 app.use(express.static(path.join(__dirname, 'client')));
 
-
-
 io.on('connection', (socket) => {
-  const req = socket.request;
+  console.log('a user connected');
+  socket.on('disconnect', () => {
+      console.log('user disconnected');
+  });
 
-    console.log('a user connected');
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
+  socket.on('crearJuego', () => {
+      const idSala = hacerid(6);
+      rooms[idSala] = {};
+      socket.join(idSala);
+      socket.emit("nuevoJuego", {idSala: idSala})
+  });
 
-    socket.on('crearJuego', () => {
-        const idSala = hacerid(6);
-        rooms[idSala] = {};
-        socket.join(idSala);
-        io.emit("nuevoJuego", {idSala: idSala})
-    });
+  socket.on('unirseJuego', (data) => {
+      if(rooms[data.idSala] != null) {
+          socket.join(data.idSala);
+          socket.to(data.idSala).emit("jugadorConectado", {});
+          socket.emit("jugadorConectado");
+      }
+  })
 
-    socket.on('unirseJuego', (data) => {
-      console.log("unirseJuego", rooms, data);
-      console.log("A", rooms[data.idSala], rooms[data.idSala] != null);
-        if(rooms[data.idSala] != null) {
-            socket.join(data.idSala);
-            io.to(data.idSala).emit("Jugadoresconectados", {});
-        }
-    })
+  socket.on("j1eleccion",(data)=>{
+      let rspJugador = data.rspJugador;
+      rooms[data.idSala].j1eleccion = rspJugador;
+      socket.to(data.idSala).emit("j1eleccion",{rspJugador : data.rspJugador});
+      if(rooms[data.idSala].j2eleccion != null) {
+          declararGanador(data.idSala);
+      }
+  });
 
-    socket.on("j1eleccion",(data)=>{
-        let rspopcion = data.rspopcion;
-        rooms[data.idSala].j1eleccion = rspopcion;
-        io.to(data.idSala).emit("j1eleccion",{rspopcion : data.rspopcion});
-        if(rooms[data.idSala]. j2eleccion!= null) {
-            declararGanador(data.idSala);
-        }
-    });
-
-    socket.on("j2eleccion",(data)=>{
-      let rspopcion = data.rspopcion;
-      rooms[data.idSala].j2eleccion = rspopcion;
-      io.to(data.idSala).emit("j2eleccion",{rspopcion : data.rspopcion});
-      if(rooms[data.idSala]. j1eleccion!= null) {
+  socket.on("j2eleccion",(data)=>{
+      let rspJugador = data.rspJugador;
+      rooms[data.idSala].j2eleccion = rspJugador;
+      socket.to(data.idSala).emit("j2eleccion",{rspJugador : data.rspJugador});
+      if(rooms[data.idSala].j1eleccion != null) {
           declararGanador(data.idSala);
       }
   });
 });
 
 function declararGanador(idSala) {
-    let j1eleccion = rooms[idSala].j1eleccion;
-    let j2eleccion = rooms[idSala].j2eleccion;
-    let ganador = null;
-    if (j1eleccion === j2eleccion) {
-        ganador = "empate ";
-    } else if (j1eleccion == "papel") {
-        if (j2eleccion == "tijera") {
-            ganador = "j2";
-        } else {
-            ganador = "j1";
-        }
-    } else if (j1eleccion == "roca") {
-        if (j2eleccion == "papel") {
-            ganador = "j2";
-        } else {
-            ganador = "j1";
-        }
-    } else if (j1eleccion == "tijera") {
-        if (j2eleccion == "roca") {
-            ganador = "j2";
-        } else {
-            ganador = "j1";
-        }
-    }
-    io.sockets.to(idSala).emit("resultado", {
-        ganador: ganador
-    });
-    rooms[idSala].j1eleccion = null;
-    rooms[idSala].j2eleccion = null;
+  let j1eleccion = rooms[idSala].j1eleccion;
+  let j2eleccion = rooms[idSala].j2eleccion;
+  let ganador = null;
+  if (j1eleccion === j2eleccion) {
+      ganador = "e";
+  } else if (j1eleccion == "Papel") {
+      if (j2eleccion == "Tijera") {
+          ganador = "j2";
+      } else {
+          ganador = "j1";
+      }
+  } else if (j1eleccion == "Roca") {
+      if (j2eleccion == "Papel") {
+          ganador = "j2";
+      } else {
+          ganador = "j1";
+      }
+  } else if (j1eleccion == "Tijera") {
+      if (j2eleccion == "Roca") {
+          ganador = "j2";
+      } else {
+          ganador = "j1";
+      }
+  }
+  io.sockets.to(idSala).emit("resultado", {
+      ganador: ganador
+  });
+  rooms[idSala].j1eleccion = null;
+  rooms[idSala].j2eleccion = null;
 }
-
 
 function hacerid(length) {
   var result           = '';
@@ -309,4 +304,3 @@ function hacerid(length) {
   }
   return result;
 }
-

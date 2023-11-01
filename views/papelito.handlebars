@@ -2,37 +2,43 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/curita.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/app.js"></script>
     
     <title>Piedra | Papel | Tijeras</title>
 </head>
 <body>
-    <h1>Bienvenido a piedra,papel,tijera. </h1>
-    <div id="inicio">
-        <button type="submit" onclick="crearJuego()">Crear Juego</button>
-        <div>O</div>
-        <input type="text" name="" id="crearId"></button>
-        <button onclick="unirseJuego()">Unirse a Juego</button>
+    <h1 class="container py-4 title">Bienvenido a Piedra,Papel,Tijera</h1>
+    <div id="inicio" class="container col-md-6">
+        <button class="form-control btn btn-primary" onclick="crearJuego()">Crear juego</button> 
+        <div class="text-center display-3">or</div>
+        <input class="form-control my-2" placeholder="Ingresa el codigo" type="text" name="" id="idSala" />
+        <button class="form-control btn btn-secondary" onclick="unirseJuego()">Unirse a juego</button>
     </div>
-    <div id="zonajuego">
-        <div id="espera">
-                
+    <div id="zonaJuego" class="container">
+        <div id="waitingArea" class="h4">
+
         </div>
-        <div id="juego" style="display:none">
-            <h4>vos:</h4>
-                <div id="jugador1">
-                <button class="roca" onclick="opcion('roca')">roca</button>
-                <button class="papel" onclick="opcion('papel')">papel</button>
-                <button class="tijera" onclick="opcion('tijera')">tijera</button>
+        <div id="juego" class="h3 row" style="display: none;">
+            <div class="col-md-6">
+                vos:
+                <div id="jugador1eleccion">
+                    <button class="roca" onclick="mandarEleccion('Roca')">Roca</button>
+                    <button class="papel" onclick="mandarEleccion('Papel')">Papel</button>
+                    <button class="tijera" onclick="mandarEleccion('Tijera')">Tijera</button>
                 </div>
-            <h4>oponente:</h4>
-                <div id="jugador2">
-                    <p  id="Estadooponente">Esperando al jugador</p>
+            </div>
+            <div class="col-md-6">
+                El banana:
+                <div id="jugador2eleccion">
+                    <p id="opponentState">Esperando al oponente</p>
                 </div>
-        <div id="Ganador">
-            
+            </div>
+        </div>
+        <hr/>
+        <div id="areaGanadora" class="display-4">
+
         </div>
     </div>
 </body>
+</html>
