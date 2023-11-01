@@ -252,4 +252,12 @@ function checkWin(board, currentPlayer) {
   return false; // No hay un ganador
 }
 
+/// chat///
+io.on("connection", (socket) => {
+  const req = socket.request;
+  socket.on('incoming-message', data => { 
+      console.log(data)
+      io.to("faconeta").emit("server-message", { mensaje: data.data }); // mandar mensaje a sala de un jugador a otro
+  })
+});
 /////PIEDRA PAPEL TIJERA APARTIR DE ACA ABAJO////

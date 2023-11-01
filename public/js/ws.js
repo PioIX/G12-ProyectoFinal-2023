@@ -18,6 +18,8 @@ socket.on('opponentMove', function(msg) {
     userAction(tiles[index], index);
 });
 
+let envie = -1
+
 function mandarMensaje(mensaje) {
     mensaje = document.getElementById("mensaje").value
     if (envie == -1) {
@@ -29,14 +31,14 @@ function mandarMensaje(mensaje) {
     </div>
     `    
     envie = 1
-}};
-
-socket.on("server-message", data => {
+    }};
+    
+socket.on("server-message", data => { // Llega el parametro NO el objeto
     console.log("tengo que mandar", data);
     if (envie == -1) {
         document.getElementById("chat").innerHTML += `
             <div class="chat1">
-              <h1 class="chat">${data.mensaje.data}</h1>
+              <h1 class="chat">${data.mensaje}</h1>
           </div>
           `
           envie = 1
