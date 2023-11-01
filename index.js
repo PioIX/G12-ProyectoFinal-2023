@@ -195,13 +195,13 @@ io.on('connection', (socket) => {
   
             if (roundWon) {
                 io.to('faconeta').emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
-                game.isGameActive = false;
+                io.to('faconeta').emit('opponentMove', { index, currentPlayer: client });
             } else if (!board.includes('')) {
                 io.to('faconeta').emit('gameOver', { result: 'TIE' });
-                game.isGameActive = false;
+                io.to('faconeta').emit('opponentMove', { index, currentPlayer: client });
             } else {
                 game.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                io.to('faconeta').emit('opponentMove', { index, currentPlayer: game.currentPlayer });
+                io.to('faconeta').emit('opponentMove', { index, currentPlayer: client });
             }
         }
     });
@@ -243,4 +243,4 @@ function checkWin(board, currentPlayer) {
   return false; // No hay un ganador
 }
 
-/////PIEDRA PAPEL TIJERA APARTIR DE ACA ABAJO////
+
