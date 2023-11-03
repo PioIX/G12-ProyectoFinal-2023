@@ -1,60 +1,87 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap'); 
 
+
 *{
-    margin: 0;
-    padding: 0;
-    font-family:'Pixelify Sans', cursive;;
+    margin:0;
+    padding:0 ;
+    box-sizing:border-box;
+    font-family:'Pixelify Sans', cursive;
+
 }
 
 body{
-  display: flex;  
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
+
 .container{
-    width:950px ;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    flex-wrap:wrap ;
-}
-
-.container .hexagono1{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
-}
-
-.container .hexagono1 .heaxagono{
-    position: relative;
-    width: 250px;
-    height: 250px;
-    margin: 0 10px;
-    clip-path:polygon(0 25%,50% 0,100% 25%,100% 76%,50% 100%,0 75%);
-    background:deeppink;
-    display:flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+}
+
+.container span{
+    position: absolute;
+    left: 0;
+    width: 32px;
+    height: 6px;
+    background: rgb(53, 76, 107);
+    border-radius: 8px;
+    transform-origin: 128px; ;
+    transform: scale(2.2) rotate(calc(var(--i)*(390deg /40)));
+    animation: animateBlink 3s linear infinite;
+}
+
+@keyframes animateBlink{
+    0% {
+    background:aqua
+    }
+    25% {
+        background-color:rgb(53, 76, 107) ;
+    }
+}
+.login-box{
+    position: absolute;
+    width: 400px;
+  
+}
+
+.login-box form{
+    width: 100%;
+    padding: 0 50px;
+
+}
+
+h2{
+    font-size: 2em;
+    color: aquamarine;
+    text-align: center
+
+
+}
+
+.boton{
+    width: 100%;
+    height: 45px;
+    background: aquamarine;
+    border: none;
+    outline: none;
+    border-radius: 40px;
     cursor: pointer;
-    transition:.5s ;
-    
+    font-size: 1em;
+    color: black;
+    font-weight: 600;
+
 }
 
 
-.container .hexagono1 .heaxagono img{
-    width: 80px;
-    
-}
 
-.container .hexagono1 .heaxagono:hover{
-    background: deepskyblue;
-    transform: scale(0.8);
-}
-
-#tate{
-    width: 100px;
-}
 
 
 .bgAnimation{
@@ -105,26 +132,18 @@ body{
     }
 }
 
-.boton1{
-    position: relative;
-    width: 250px;
-    height: 250px;
-    margin: 0 10px;
-    clip-path:polygon(0 25%,50% 0,100% 25%,100% 76%,50% 100%,0 75%);
-    background:deeppink;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+.Espacio{
+    width: 100%;
+    height: 45px;
+    background:none ;
+    border-color: aqua;
+    outline-color: aqua;
+    border-radius: 40px;
     cursor: pointer;
-    transition:.5s ;
-    
-}
-
-.h1, h1 {
-    font-size: calc(1.375rem + 1.5vw);
-    z-index: 5;
-    color: aqua;
+    font-size: 1em;
+    color: white;
+    font-weight: 600;
+    margin: 5px;
 }
 
 

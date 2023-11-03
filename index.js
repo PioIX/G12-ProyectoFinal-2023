@@ -96,5 +96,43 @@ app.get("/dashboard", (req, res) => {
 /************************************** */
 app.get("/register", (req, res) => {
   // Agrega aquí la lógica para mostrar la página del dashboard
-  res.render("regsiter");
+  res.render("register");
+});
+
+// menu desplegable
+
+app.get('/home1', function(req, res)
+{ console.log(req.query); 
+       res.render('home', null);
+        
+});
+
+app.get('/wordle', function(req, res)
+{ console.log(req.query); 
+       res.render('wordle', null);
+        
+});
+
+app.get('/personajes', function(req, res)
+{ console.log(req.query); 
+       res.render('quienesomos', null);
+        
+});
+
+app.get('/po', function(req, res)
+{ console.log(req.query); 
+       res.render('pong', null);
+        
+});
+
+app.get('/piedra', function(req, res)
+{ console.log(req.query); 
+       res.render('piedra,papel,tijera', null);
+        
+});
+
+app.get('/tate', function(req, res)
+{ console.log(req.query); 
+       res.render('te-te-ti', null);
+        
 });
