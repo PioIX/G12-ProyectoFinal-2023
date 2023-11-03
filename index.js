@@ -139,52 +139,40 @@ app.get("/home", (req, res) => {
 
 
 //Ta-te-ti
-const gameRooms = {};
+const roomsTate = {};
+
+
 
 io.on('connection', (socket) => {
   const req = socket.request;
-  console.log('Un jugador se ha conectado.');
-
-  // Unirse a la sala "faconeta"
-  socket.join('faconeta');
-
-  // Verificar si ya hay un jugador en la sala
-  const room = io.sockets.adapter.rooms.get('faconeta');
-  const numClients = room ? room.size -1: 0;
-  console.log(room)
-  console.log(numClients)
-
-  if (req.session.client == -1) {
-    req.session.client = numClients
-    req.session.save() 
-  }
+  console.log('a user connected');
+    socket.on('disconnect', () => {
+      console.log('user disconnected');
+    });
   
-  socket.emit('unirseSala', {sala: 'faconeta', client: req.session.client})
+    socket.on('crearJuegoTate', () => {
+        const idSalaTate = haceridTate(6);
+        roomsTate[idSalaTate] = {};
+        socket.join(idSalaTate);
+        socket.emit("nuevoJuegoTate", {idSalaTate: idSalaTate})
+    });
+  
+    socket.on('unirseJuegoTate', (data) => {
+      console.log("fulbo")
+        if(roomsTate[data.idSalaTate] != null) {
+            socket.join(data.idSalaTate);
+            socket.to(data.idSalaTate).emit("jugadorConectadoTate", {});
+            socket.emit("jugadorConectadoTate");
+        }
+    });
 
-  if (numClients === 2) {
-      // La sala ya tiene dos jugadores, no se permite un tercer jugador.
-      socket.emit('roomFull', 'La sala está llena. Por favor, intenta más tarde.');
-      socket.disconnect();
-      return;
-  }
-
-  // Crear un nuevo juego para la sala "faconeta"
-  gameRooms['faconeta'] = {
-      board: ['', '', '', '', '', '', '', '', ''],
-      currentPlayer: 'X',
-      isGameActive: true,
-  };
-
-  // Emitir un evento personalizado para unirse a la sala
-  socket.emit('joinRoom', 'faconeta');// join room es de otra forma: socket.join(room)
-
-  socket.on('makeMove', (data) => {
-      const { index, roomId, client } = data;
+    socket.on('makeMove', (data) => {
+      const { index, idSalaTate, client } = data;
     
       console.log("Recibi un movimiento")
 
       socket.emit('mensaje', { result: 'Llega 1', client: client });
-      io.to('faconeta').emit('mensaje', { result: 'Llega' });
+      io.to('idSalaTate').emit('mensaje', { result: 'Llega' });
 
       const game = gameRooms['faconeta'];
       const { board, currentPlayer } = game;
@@ -194,26 +182,25 @@ io.on('connection', (socket) => {
           const roundWon = checkWin(board, currentPlayer);
 
           if (roundWon) {
-              io.to('faconeta').emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
+              io.to('idSalaTate').emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
               game.isGameActive = false;
           } else if (!board.includes('')) {
-              io.to('faconeta').emit('gameOver', { result: 'TIE' });
+              io.to('idSalaTate').emit('gameOver', { result: 'TIE' });
               game.isGameActive = false;
           } else {
               game.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-              io.to('faconeta').emit('opponentMove', { index, currentPlayer: game.currentPlayer });
+              io.to('idSalaTate').emit('opponentMove', { index, currentPlayer: game.currentPlayer });
           }
       }
   });
 
-  socket.on('resetGame', () => {
+    socket.on('resetGame', () => {
       gameRooms['faconeta'] = {
           board: ['', '', '', '', '', '', '', '', ''],
           currentPlayer: 'X',
           isGameActive: true,
       };
 
-      io.to('faconeta').emit('resetGame');
   });
 });
 
@@ -242,6 +229,20 @@ for (const condition of winningConditions) {
 
 return false; // No hay un ganador
 }
+
+
+function haceridTate(length) {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+
+
 
 
 //Piedra,papel,tijera
