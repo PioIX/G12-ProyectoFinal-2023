@@ -93,9 +93,14 @@ let client = -1
         board[index] = currentPlayer;
     }
 
+    function moveUser(tile, index) {
+        if (turnos==true){
+            userAction(tile, index)
+        }
+    }
+
   
     function userAction(tile, index) {
-        if (turnos){
             if (isValidAction(tile) && isGameActive) {
                 tile.innerText = currentPlayer;
                 tile.classList.add(`player${currentPlayer}`);
@@ -108,23 +113,7 @@ let client = -1
                 }else{
                     currentPlayer='X'
                 }
-                
-        }
-        }else{ /*
-            if (isValidAction(tile) && isGameActive) {
-                tile.innerText = currentPlayer;
-                tile.classList.add(`player${currentPlayer}`);
-                turnos=false
-                updateBoard(index);
-                handleResultValidation();
-                socket.emit('makeMove', { index: index, roomId: roomId });
-                if(currentPlayer==='X'){
-                    currentPlayer='O'
-                }else{
-                    currentPlayer='X'
-                }
-                }
-            */}
+            }  
         }
     
         resetButton.addEventListener('click', () => {
@@ -147,7 +136,7 @@ let client = -1
     }
 
     tiles.forEach( (tile, index) => {
-        tile.addEventListener('click', () => userAction(tile, index));
+        tile.addEventListener('click', () => moveUser(tile, index));
     });
 
     resetButton.addEventListener('click', () => {
@@ -164,23 +153,34 @@ let client = -1
 
     socket.on('unirseSala', (data) => {
 
-            roomId = data.sala
-            
-            console.log(data)
-            if (data.client == 1) {
-                client = 'X'
-            } else {
-                client = 'O'
-            }
+        roomId = data.sala
+        
+        console.log(data)
+        if (data.client == 0) {
+            client = 'X'
+        } 
+        if (data.client == 1) {
+            client = 'O'
+            turnos = false
+        }
+        console.log("Client: " , client)
 
-        console.log("Room: ", roomId)
+    console.log("Room: ", roomId)
     });
     socket.on('mensaje', (data) => {
-        
-       
-    });
+    
+   
+});
+
 
     socket.on('opponentMove', (data) => {
+        if (data.currentPlayer == client) {
+            turnos = true
+        }
+        else{
+            turnos = false
+        }
+
         if (data.room === roomId) {
             const tile = tiles[data.index];
             if (isValidAction(tile)) {
@@ -191,34 +191,31 @@ let client = -1
             }
         }
     });
-
+    
     socket.on('makeMove', (data) => {
         const { index, room } = data;
     
         const game = gameRooms[room];
         const { board, currentPlayer } = game;
-    
-        if (isValidMove(board, index, currentPlayer)) {
-            board[index] = currentPlayer;
-            const roundGanada = checkWin(board, currentPlayer);
-    
-            if (roundGanada) {
-                io.to(room).emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
-                game.isGameActive = false;
-            } else if (!board.includes('')) {
-                io.to(room).emit('gameOver', { result: 'TIE' });
-                game.isGameActive = false;
-            } else {
-                game.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                io.to(room).emit('opponentMove', { index, currentPlayer: game.currentPlayer });
+        if (data.currentPlayer==currentPlayer) {
+            turnos=true
+            if (isValidMove(board, index, currentPlayer)) {
+                board[index] = currentPlayer;
+                const roundGanada = checkWin(board, currentPlayer);
+        
+                if (roundGanada) {
+                    io.to(room).emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
+                    game.isGameActive = false;
+                } else if (!board.includes('')) {
+                    io.to(room).emit('gameOver', { result: 'TIE' });
+                    game.isGameActive = false;
+                } else {
+                    game.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                    io.to(room).emit('opponentMove', { index, currentPlayer: game.currentPlayer });
+                }
             }
         }
-        if (data.client!=client) {
-            turnos=true
             
-            console.log("hola")
-        }
-        console.log("Mensaje: ", data)
     });
     
     
