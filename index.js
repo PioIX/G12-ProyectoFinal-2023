@@ -365,31 +365,24 @@ function hacerid(length) {
 
 const roomsPong = {};
 
-
-io.on('connection1', (socket) => {
-  console.log('a user connected');
-  socket.on('disconnect', () => {
-      console.log('user disconnected');
-  });
+io.on('connection', (socket) => {
+  console.log('Cliente conectado: ' + socket.id);
 
   socket.on('crearJuegoPong', () => {
-    console.log("hola");
       const idSalaPong = haceridPong(6);
-      roomsPong[idSalaPong] = {};
       socket.join(idSalaPong);
-      socket.emit("nuevoJuegoPong", {idSalaPong: idSalaPong})
+      socket.emit('nuevoJuegoPong', { idSalaPong });
   });
 
   socket.on('unirseJuegoPong', (data) => {
-    console.log("que pasa");
-      if(roomsPong[data.idSalaPong] != null) {
-          socket.join(data.idSalaPong);
-          socket.to(data.idSalaPong).emit("jugadorConectadoPong", {});
-          socket.emit("jugadorConectadoPong");
-      }
-  })
-
+      const idSalaPong = data.idSalaPong;
+      socket.join(idSalaPong);
+      socket.to(idSalaPong).emit('jugadorConectadoPong', { player: 2 });
+      socket.emit('jugadorConectadoPong', { player: 1 });
+  });
 });
+
+
 
 
 function haceridPong(length) {

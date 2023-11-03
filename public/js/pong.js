@@ -4,12 +4,14 @@ let idSalaPong = null;
 
 function crearJuegoPong() {
     socket.emit('crearJuegoPong');
-    console.log("metete")
+    console.log("metete");
+    console.log(idSalaPong);
 }
 
 function unirseJuegoPong() {
     idSalaPong = document.getElementById('idSalaPong').value;
     socket.emit('unirseJuegoPong', {idSalaPong: idSalaPong});
+    console.log(idSalaPong)
 }
 
 socket.on("nuevoJuegoPong", (data) => {
