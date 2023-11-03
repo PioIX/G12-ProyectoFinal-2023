@@ -1,49 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
 
-
+* {
+    font-family: 'Itim', cursive;
+    font-size: 15px;
+    text-align: center;
+}
 body{
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: 'Itim', cursive;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: top;
     background-color:  #12181B;
     color: white;
+    margin: 0;
 }
-
-
-.campo-batalla{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid red;
-    padding: 30px;
-    border-radius: 20px;
-}
-
-.caja-batala{
-    margin: 25px;
-}
-
-.text-mensajes{
-    font-size: 45px;
-}
-
-.img-batalla{
-    border-radius: 50%;
-}
-
-.btn-ataques{
-    width: 200px;
-    border-radius: 50%;
-    margin: 20px;
-}
-
-.btn-ataques:hover{
-    border: 2px solid red;
-    cursor: pointer;
-    margin: 18px;
-}
-
 
 .menu {
     max-width: 100%;
@@ -86,7 +56,7 @@ body{
   flex: none;
   width: 100%;
   height: 2px;
-  background: #fff;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,7 +143,7 @@ body{
   
   .menu-wrap .menu > div > div > ul > li {
   list-style: none;
-  color: #fff;
+  color: black;
   font-size: 1.5rem;
   padding: 1rem;
   }
@@ -183,4 +153,3 @@ body{
   text-decoration: none;
   transition: color 0.4s ease;
   }
-  

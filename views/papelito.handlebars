@@ -4,11 +4,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/app.js"></script>
+    <link rel="stylesheet" href="css/curita.css">
     
     <title>Piedra | Papel | Tijeras</title>
 </head>
 <body>
+    <header>
+	<nav>
+		<div class="menu-wrap">
+            <input type="checkbox" class="toggler">
+            <div class="hamburger"><div></div></div>
+            <div class="menu">
+              <ul>
+                 <li><a href="/home">Salir</a></li>
+                <li><a href="/dashboard">Juego</a></li>
+                <li><a href="/personajes">¿Quienes somos?</a></li>
+                <li><a href="/contacto">Contacto</a></li>
+              </ul>
+            </div>
+    </div>
+	</nav>
+  </header>
+    <div class="bgAnimation" id="bgAnimation">
+        <div class="backgroundAmim">
+            
+        </div>
+    </div>
     <h1 class="container py-4 title">Bienvenido a Piedra,Papel,Tijera</h1>
+    
     <div id="inicio" class="container col-md-6">
         <button class="form-control btn btn-primary" onclick="crearJuego()">Crear juego</button> 
         <div class="text-center display-3">o</div>
@@ -23,7 +46,7 @@
             <div class="col-md-6">
                 vos:
                 <div id="jugador1eleccion">
-                    <button class="roca" onclick="mandarEleccion('Roca')">Roca</button>
+                    <button class="roca" onclick="mandarEleccion('Roca')"><img src="/img/manitomano.png" alt="">Roca</button>
                     <button class="papel" onclick="mandarEleccion('Papel')">Papel</button>
                     <button class="tijera" onclick="mandarEleccion('Tijera')">Tijera</button>
                 </div>
@@ -35,7 +58,6 @@
                 </div>
             </div>
         </div>
-        <hr/>
         <div id="areaGanadora" class="display-4">
 
         </div>
