@@ -62,10 +62,10 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-top: 1em;
+    margin-top: 30px;
 }
 
-.controls button {
+#reset {
     color: white;
     padding: 8px;
     border-radius: 8px;
@@ -73,16 +73,12 @@
     font-size: 20px;
     margin-left: 1em;
     cursor: pointer;
+    background-color: #FF3860;
 }
 
 .restart {
     background-color: #498AFB;
 }
-
-#reset {
-    background-color: #FF3860;
-}
-
 
 .menu {
     max-width: 100%;

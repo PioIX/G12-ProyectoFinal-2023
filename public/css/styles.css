@@ -55,6 +55,7 @@ body {
   display: flex;
   height: 10%;
   width: 120px;
+  margin-right: 95%;
   align-items: center;
   justify-content: right;
   color:rgb(59, 190, 70);

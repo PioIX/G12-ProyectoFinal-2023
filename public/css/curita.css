@@ -182,5 +182,33 @@ body{
   color: inherit;
   text-decoration: none;
   transition: color 0.4s ease;
-  }
+}
+
+.chat1{
+    margin-right: 0%;
+    color: red;
+    max-width: 70px;
+    flex-wrap: wrap;
+    display:flex;
+    text-align: justify;
+}
   
+.chat2{
+    margin-left: 300%;
+    color: green;
+    max-width: 70px;
+    flex-wrap: wrap;
+    display:flex;
+    text-align: justify;
+}
+
+.iconderecha{
+    display: flex;
+    height: 10%;
+    width: 120px;
+    align-items: center;
+    justify-content: right;
+    color:rgb(59, 190, 70);
+    flex-direction: row;
+    background-color: none;
+}
