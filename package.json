@@ -1,7 +1,6 @@
 {
   "name": "titonuncama",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,12 +10,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "express": "^4.17.1",
-    "express-handlebars": "^5.3.3",
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "express-handlebars": "^5.3.5",
+    "express-session": "^1.17.3",
     "firebase": "^10.3.1",
-    "http": "0.0.0",
+    "http": "^0.0.0",
     "mysql2": "^2.3.0",
-    "nodemon": "^3.0.1"
-  }
+    "nodemon": "^3.0.1",
+    "socket.io": "^4.7.2"
+  },
+  "description": ""
 }
