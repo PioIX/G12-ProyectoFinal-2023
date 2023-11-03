@@ -244,18 +244,20 @@ return false; // No hay un ganador
 }
 
 
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
+//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera
+//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera
+//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera
+//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera
+//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera
+//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera
+//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera
+//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera
+//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera
+//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera
+//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera
+//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera
+//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera//Piedra,papel,tijera
+
 
 
 
@@ -346,3 +348,80 @@ function hacerid(length) {
   }
   return result;
 }
+
+
+
+//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG
+//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG
+//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG
+//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG
+//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG
+//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG
+//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG
+//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG
+//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG
+//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG//PONG
+
+
+const roomsPong = {};
+
+
+io.on('connection1', (socket) => {
+  console.log('a user connected');
+  socket.on('disconnect', () => {
+      console.log('user disconnected');
+  });
+
+  socket.on('crearJuegoPong', () => {
+    console.log("hola");
+      const idSalaPong = haceridPong(6);
+      roomsPong[idSalaPong] = {};
+      socket.join(idSalaPong);
+      socket.emit("nuevoJuegoPong", {idSalaPong: idSalaPong})
+  });
+
+  socket.on('unirseJuegoPong', (data) => {
+    console.log("que pasa");
+      if(roomsPong[data.idSalaPong] != null) {
+          socket.join(data.idSalaPong);
+          socket.to(data.idSalaPong).emit("jugadorConectadoPong", {});
+          socket.emit("jugadorConectadoPong");
+      }
+  })
+
+});
+
+
+function haceridPong(length) {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

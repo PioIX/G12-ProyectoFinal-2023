@@ -1,3 +1,45 @@
+
+
+let idSalaPong = null;
+
+function crearJuegoPong() {
+    socket.emit('crearJuegoPong');
+    console.log("metete")
+}
+
+function unirseJuegoPong() {
+    idSalaPong = document.getElementById('idSalaPong').value;
+    socket.emit('unirseJuegoPong', {idSalaPong: idSalaPong});
+}
+
+socket.on("nuevoJuegoPong", (data) => {
+    idSalaPong = data.idSalaPong;
+    document.getElementById('inicioPong').style.display = 'none';
+    document.getElementById('zonaJuegoPong').style.display = 'block';
+    let copyButton = document.createElement('button');
+    copyButton.style.display = 'block';
+    copyButton.classList.add('btn','btn-primary','py-2', 'my-2')
+    copyButton.innerText = 'Copia el codigo';
+    copyButton.addEventListener('click', () => {
+        navigator.clipboard.writeText(idSalaPong).then(function() {
+            console.log('Async: Copying to clipboard was successful!');
+        }, function(err) {
+            console.error('Async: Could not copy text: ', err);
+        });
+    });
+    document.getElementById('waitingAreaPong').innerHTML = `Comparti el siguiente codigo: "${idSalaPong}" para que tu rival se una.`;
+    document.getElementById('waitingAreaPong').appendChild(copyButton);
+});
+
+socket.on("jugadorConectadoPong", () => {
+    document.getElementById('inicioPong').style.display = 'none';
+    document.getElementById('waitingAreaPong').style.display = 'none';
+    document.getElementById('juegoPong').style.display = 'flex';
+})
+
+
+
+
 var DIRECTION = {
     IDLE: 0,
     UP: 1,

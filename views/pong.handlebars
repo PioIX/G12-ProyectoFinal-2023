@@ -3,6 +3,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/pong.css">
+    <script src="/socket.io/socket.io.js"></script>
     <title>Pong Game</title>
 </head>
 <body>
@@ -22,8 +23,23 @@
         </div>
 	</nav>
   </header>
-    <h1>Pong Game</h1>
-    <canvas></canvas>
-    <p>Control the left player by using up and down arrow keys</p>
+    <h1 class="container py-4 title">Bienvenido al Pong</h1>
+      <div id="inicioPong" class="container col-md-6">
+          <button class="form-control btn btn-primary" onclick="crearJuegoPong()">Crear juego</button> 
+          <div class="text-center display-3">o</div>
+          <input class="form-control my-2" placeholder="Ingresa el codigo" type="text" name="" id="idSalaPong" />
+          <button class="form-control btn btn-secondary" onclick="unirseJuegoPong()">Unirse a juego</button>
+      </div>
+      <div id="zonaJuegoPong" class="container">
+        <div id="waitingAreaPong" class="h4">
+
+        </div>
+        <div id="juegoPong" class="h3 row" style="display: none;">
+          <h1>Pong Game</h1>
+          <canvas></canvas>
+          <script src="js/pong.js"></script>
+        </div>
+  
+    </div>
     <script src="js/pong.js"></script>
 </body>
