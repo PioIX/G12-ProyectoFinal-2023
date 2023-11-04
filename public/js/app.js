@@ -76,23 +76,49 @@ function mandarEleccion(rspJugador) {
         rspJugador: rspJugador,
         idSala: idSala
     });
-    let botonjugador = document.createElement('button');
-    botonjugador.style.display = 'block';
-    botonjugador.classList.add(rspJugador.toString().toLowerCase());
-    botonjugador.innerText = rspJugador;
-    document.getElementById('jugador1eleccion').innerHTML = "";
-    document.getElementById('jugador1eleccion').appendChild(botonjugador);
+    let eleccionJugador = rspJugador
+    eleccionJugador.toString()
+    console.log(rspJugador)
+    if (eleccionJugador == "Roca") {
+        let botonjugador = document.createElement('button');
+        document.getElementById('jugador1eleccion').innerHTML = `<img src="/img/Piedra.png" width="50px">`;
+        document.getElementById('jugador1eleccion').appendChild(botonjugador);
+    }else if (eleccionJugador == "Tijera") {
+        let botonjugador = document.createElement('button');
+        document.getElementById('jugador1eleccion').innerHTML = `<img src="/img/Tijeras.png" width="50px">`;
+        document.getElementById('jugador1eleccion').appendChild(botonjugador);
+
+    }else if (eleccionJugador == "Papel"){
+        let botonjugador = document.createElement('button');
+        document.getElementById('jugador1eleccion').innerHTML = `<img src="/img/Papel.png" width="50px">`;
+        document.getElementById('jugador1eleccion').appendChild(botonjugador);
+    }
 }
 
 
 function opcionRival(data) {
     document.getElementById('opponentState').innerHTML = "El rival ya decidio";
-    let botonRivalElegido = document.createElement('button');
-    botonRivalElegido.id = 'botonrivalcito';
-    botonRivalElegido.classList.add(data.rspJugador.toString().toLowerCase());
-    botonRivalElegido.style.display = 'none';
-    botonRivalElegido.innerText = data.rspJugador;
-    document.getElementById('jugador2eleccion').appendChild(botonRivalElegido);
+    console.log(data.rspJugador)
+    let eleccionJugador1 = data.rspJugador
+    eleccionJugador1.toString()
+    if (eleccionJugador1 == "Roca") {
+        let botonRivalElegido = document.createElement('button');
+        botonRivalElegido.id = 'botonrivalcito';
+        botonRivalElegido.innerHTML = `<img src="/img/Piedra.png" width="50px">`;
+        document.getElementById('jugador2eleccion').appendChild(botonRivalElegido);
+    }else if (eleccionJugador1 == "Tijera") {
+        let botonRivalElegido = document.createElement('button');
+        botonRivalElegido.id = 'botonrivalcito';
+        botonRivalElegido.innerHTML = `<img src="/img/Tijeras.png" width="50px">`;
+        document.getElementById('jugador2eleccion').appendChild(botonRivalElegido);
+
+    }else if (eleccionJugador1 == "Papel"){
+        let botonRivalElegido = document.createElement('button');
+        botonRivalElegido.id = 'botonrivalcito';
+        botonRivalElegido.innerHTML = `<img src="/img/Papel.png" width="50px">`;
+        document.getElementById('jugador2eleccion').appendChild(botonRivalElegido);
+    }
+    
 }
 
 
