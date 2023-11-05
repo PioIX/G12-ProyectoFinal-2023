@@ -10,6 +10,13 @@ function unirseJuego() {
     idSala = document.getElementById('idSala').value;
     socket.emit('unirseJuego', {idSala: idSala});
 }
+/*
+window.addEventListener("keydown",(enterTecla)=>{
+    if (enterTecla.keyCode===13) {
+        unirseJuego
+    }
+})
+*/
 
 socket.on("nuevoJuego", (data) => {
     idSala = data.idSala;
