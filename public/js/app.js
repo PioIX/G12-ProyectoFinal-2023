@@ -10,13 +10,13 @@ function unirseJuego() {
     idSala = document.getElementById('idSala').value;
     socket.emit('unirseJuego', {idSala: idSala});
 }
-/*
+
 window.addEventListener("keydown",(enterTecla)=>{
-    if (enterTecla.keyCode===13) {
-        unirseJuego
+   
+    if (enterTecla.key==="Enter" ) {
+        unirseJuego()
     }
 })
-*/
 
 socket.on("nuevoJuego", (data) => {
     idSala = data.idSala;
@@ -63,14 +63,14 @@ socket.on("resultado",(data)=>{
         if(data.ganador == 'j1' && jugador1) {
             ganadortexto = 'Ganaste panflin ';
         } else if(data.ganador == 'j1') {
-            ganadortexto = 'Perdiste Papurulo';
+            ganadortexto = 'Perdiste Papirulo';
         } else if(data.ganador == 'j2' && !jugador1) {
             ganadortexto = 'Ganaste panflin';
         } else if(data.ganador == 'j2') {
-            ganadortexto = 'Perdiste Paparulo';
+            ganadortexto = 'Perdiste Papirulo';
         }
     } else {
-        ganadortexto = `It's a draw`;
+        ganadortexto = `empataron: A JUGAR OTRA`;
     }
     document.getElementById('opponentState').style.display = 'none';
     document.getElementById('botonrivalcito').style.display = 'block';
@@ -111,17 +111,20 @@ function opcionRival(data) {
     if (eleccionJugador1 == "Roca") {
         let botonRivalElegido = document.createElement('button');
         botonRivalElegido.id = 'botonrivalcito';
+        botonRivalElegido.style.display="none"
         botonRivalElegido.innerHTML = `<img src="/img/Piedra.png" width="50px">`;
         document.getElementById('jugador2eleccion').appendChild(botonRivalElegido);
     }else if (eleccionJugador1 == "Tijera") {
         let botonRivalElegido = document.createElement('button');
         botonRivalElegido.id = 'botonrivalcito';
+        botonRivalElegido.style.display="none"
         botonRivalElegido.innerHTML = `<img src="/img/Tijeras.png" width="50px">`;
         document.getElementById('jugador2eleccion').appendChild(botonRivalElegido);
 
     }else if (eleccionJugador1 == "Papel"){
         let botonRivalElegido = document.createElement('button');
         botonRivalElegido.id = 'botonrivalcito';
+        botonRivalElegido.style.display="none"
         botonRivalElegido.innerHTML = `<img src="/img/Papel.png" width="50px">`;
         document.getElementById('jugador2eleccion').appendChild(botonRivalElegido);
     }
