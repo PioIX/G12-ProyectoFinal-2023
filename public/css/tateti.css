@@ -4,11 +4,19 @@
     font-family: 'Itim', cursive;
 }
 
-.background {
-    background-color: #12181B;
+body {
+    text-align: center;
+    background-color:  #12181B;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
-    padding-top: 1px;
+    flex-direction: column;
+    position: fixed;
+    width: 100%;
+    color: white;
 }
+
 
 .title {
     color: white;

@@ -166,15 +166,16 @@ io.on('connection', (socket) => {
         }
     });
 
+    
     socket.on('makeMove', (data) => {
-      const { index, idSalaTate, client } = data;
+      const { index,roomsTate , client } = data;
     
       console.log("Recibi un movimiento")
 
       socket.emit('mensaje', { result: 'Llega 1', client: client });
       io.to('idSalaTate').emit('mensaje', { result: 'Llega' });
 
-      const game = gameRooms['faconeta'];
+      const game = roomsTate[idSalaTate]
       const { board, currentPlayer } = game;
 
       if (isValidMove(board, index, currentPlayer)) {
@@ -194,14 +195,6 @@ io.on('connection', (socket) => {
       }
   });
 
-    socket.on('resetGame', () => {
-      gameRooms['faconeta'] = {
-          board: ['', '', '', '', '', '', '', '', ''],
-          currentPlayer: 'X',
-          isGameActive: true,
-      };
-
-  });
 });
 
 function isValidMove(board, index, currentPlayer) {
@@ -227,9 +220,8 @@ for (const condition of winningConditions) {
     }
 }
 
-return false; // No hay un ganador
+return false; 
 }
-
 
 function haceridTate(length) {
   var result           = '';
@@ -240,8 +232,6 @@ function haceridTate(length) {
   }
   return result;
 }
-
-
 
 
 
