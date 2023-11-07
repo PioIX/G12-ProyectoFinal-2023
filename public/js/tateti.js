@@ -1,43 +1,6 @@
 let idSalaTate = null;
 let jugador1 = false;
-
-function crearJuegoTate() {
-    jugador1 = true;
-    socket.emit('crearJuegoTate');
-}
-
-function unirseJuegoTate() {
-    idSalaTate = document.getElementById('idSalaTate').value;
-    socket.emit('unirseJuegoTate', {idSalaTate: idSalaTate});
-}
-
-socket.on("nuevoJuegoTate", (data) => {
-    idSalaTate = data.idSalaTate;
-    document.getElementById('inicioTate').style.display = 'none';
-    document.getElementById('zonaJuegoTate').style.display = 'block';
-    let copyButton = document.createElement('button');
-    copyButton.style.display = 'block';
-    copyButton.classList.add('btn','btn-primary','py-2', 'my-2')
-    copyButton.innerText = 'Copia el codigo';
-    copyButton.addEventListener('click', () => {
-        navigator.clipboard.writeText(idSalaTate).then(function() {
-            console.log('Async: Copying to clipboard was successful!');
-        }, function(err) {
-            console.error('Async: Could not copy text: ', err);
-        });
-    });
-    document.getElementById('esperaTate').innerHTML = `Comparti el siguiente codigo: "${idSalaTate}" para que tu rival se una.`;
-    document.getElementById('esperaTate').appendChild(copyButton);
-});
-
-socket.on("jugadorConectadoTate", () => {
-    document.getElementById('inicioTate').style.display = 'none';
-    document.getElementById('esperaTate').style.display = 'none';
-    document.getElementById('juegoTate').style.display = 'flex';
-})
-
 let turnos=true 
-let roomId = -1
 let client = -1
 
     const tiles = Array.from(document.querySelectorAll('.tile'));
@@ -78,6 +41,42 @@ let client = -1
     });
     */
 
+
+    function crearJuegoTate() {
+        jugador1 = true;
+        socket.emit('crearJuegoTate');
+    }
+    
+    function unirseJuegoTate() {
+        idSalaTate = document.getElementById('idSalaTate').value;
+        socket.emit('unirseJuegoTate', {idSalaTate: idSalaTate});
+    }
+    
+    socket.on("nuevoJuegoTate", (data) => {
+        idSalaTate = data.idSalaTate;
+        document.getElementById('inicioTate').style.display = 'none';
+        document.getElementById('zonaJuegoTate').style.display = 'block';
+        let copyButton = document.createElement('button');
+        copyButton.style.display = 'block';
+        copyButton.classList.add('btn','btn-primary','py-2', 'my-2')
+        copyButton.innerText = 'Copia el codigo';
+        copyButton.addEventListener('click', () => {
+            navigator.clipboard.writeText(idSalaTate).then(function() {
+                console.log('Async: Copying to clipboard was successful!');
+            }, function(err) {
+                console.error('Async: Could not copy text: ', err);
+            });
+        });
+        document.getElementById('esperaTate').innerHTML = `Comparti el siguiente codigo: "${idSalaTate}" para que tu rival se una.`;
+        document.getElementById('esperaTate').appendChild(copyButton);
+    });
+    
+    socket.on("jugadorConectadoTate", () => {
+        document.getElementById('inicioTate').style.display = 'none';
+        document.getElementById('esperaTate').style.display = 'none';
+        document.getElementById('juegoTate').style.display = 'flex';
+        console.log(idSalaTate)
+    })
 
     function handleResultValidation() {
         let roundWon = false;
@@ -145,7 +144,7 @@ let client = -1
                 turnos=false
                 updateBoard(index);
                 handleResultValidation();
-                socket.emit('makeMove', { index: index, roomId: roomId, });
+                socket.emit('makeMove', { index: index, idSalaTate: idSalaTate, });
                 if(currentPlayer==='X'){
                     currentPlayer='O'
                 }else{
@@ -211,9 +210,9 @@ let client = -1
     });
     
     socket.on('makeMove', (data) => {
-        const { index, room } = data;
+        const { index, idSalaTate } = data;
     
-        const game = gameRooms[room];
+        const game = roomsTate[idSalaTate];
         const { board, currentPlayer } = game;
         if (data.currentPlayer==currentPlayer) {
             turnos=true
@@ -222,14 +221,14 @@ let client = -1
                 const roundGanada = checkWin(board, currentPlayer);
         
                 if (roundGanada) {
-                    io.to(room).emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
+                    io.to(idSalaTate).emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
                     game.isGameActive = false;
                 } else if (!board.includes('')) {
-                    io.to(room).emit('gameOver', { result: 'TIE' });
+                    io.to(idSalaTate).emit('gameOver', { result: 'TIE' });
                     game.isGameActive = false;
                 } else {
                     game.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                    io.to(room).emit('opponentMove', { index, currentPlayer: game.currentPlayer });
+                    io.to(idSalaTate).emit('opponentMove', { index, currentPlayer: game.currentPlayer });
                 }
             }
         }

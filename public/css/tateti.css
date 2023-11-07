@@ -4,6 +4,15 @@
     font-family: 'Itim', cursive;
 }
 
+body{
+    font-family: 'Josefin Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color:  #12181B;
+    color: white;
+}
+
 .background {
     background-color: #12181B;
     height: 100vh;
@@ -40,7 +49,6 @@
 
 .tile {
     border: 1px solid white;
-    min-width: 92px;
     min-height: 110px;
     display: flex;
     justify-content: center;

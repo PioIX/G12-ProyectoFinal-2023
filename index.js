@@ -174,7 +174,7 @@ io.on('connection', (socket) => {
       socket.emit('mensaje', { result: 'Llega 1', client: client });
       io.to('idSalaTate').emit('mensaje', { result: 'Llega' });
 
-      const game = gameRooms['faconeta'];
+      const game =roomsTate[idSalaTate]
       const { board, currentPlayer } = game;
 
       if (isValidMove(board, index, currentPlayer)) {
@@ -195,7 +195,7 @@ io.on('connection', (socket) => {
   });
 
     socket.on('resetGame', () => {
-      gameRooms['faconeta'] = {
+      roomsTate[idSalaTate] = {
           board: ['', '', '', '', '', '', '', '', ''],
           currentPlayer: 'X',
           isGameActive: true,
