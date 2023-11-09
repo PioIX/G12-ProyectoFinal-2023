@@ -419,8 +419,6 @@ io.on('connection', (socket) => {
 
     socket.on("unirse", () => {
         console.log(rooms);
-
-        // get room 
         let room;
         if (rooms.length > 0 && rooms[rooms.length - 1].players.length === 1) {
             room = rooms[rooms.length - 1];
@@ -473,7 +471,7 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on("move", (data) => {
+    socket.on("movimiento", (data) => {
         let room = rooms.find(room => room.id === data.roomID);
 
         if (room) {
@@ -538,7 +536,6 @@ function startGame(room) {
             }
         }
 
-        // check if ball hits player 2
         if (room.ball.x > 690 && room.ball.y > room.players[1].y && room.ball.y < room.players[1].y + 60) {
             room.ball.dx = -1;
 
