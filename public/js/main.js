@@ -62,7 +62,7 @@ function startGame() {
     startBtn.style.display = 'none';
 
     if (socket.connected) {
-        socket.emit('join');
+        socket.emit('unirse');
         message.innerText = "Espera al otro jugador"
     }
     else {

@@ -417,7 +417,7 @@ let rooms = [];
 io.on('connection', (socket) => {
     console.log('a user connected');
 
-    socket.on("join", () => {
+    socket.on("unirse", () => {
         console.log(rooms);
 
         // get room 
