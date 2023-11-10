@@ -595,14 +595,14 @@ function startGame(room) {
         }
 
 
-        if (room.players[0].score === 10) {
+        if (room.players[0].score === 5) {
             room.winner = 1;
             rooms = rooms.filter(r => r.id !== room.id);
             io.to(room.id).emit('endGame', room);
             clearInterval(interval);
         }
 
-        if (room.players[1].score === 10) {
+        if (room.players[1].score === 5) {
             room.winner = 2;
             rooms = rooms.filter(r => r.id !== room.id);
             io.to(room.id).emit('endGame', room);
