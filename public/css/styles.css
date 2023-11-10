@@ -32,14 +32,21 @@ body {
   height: 100%;
   align-items: end;
 }
-
 .chat1{
   margin-right: 0%;
   color: red;
   max-width: 70px;
   flex-wrap: wrap;
-  display:flex;
+  display:grid;
   text-align: justify;
+}
+
+.chat{
+  text-wrap: balance;
+  max-width: 50%;
+  padding: 0;
+  text-align: justify;
+  display: grid;
 }
 
 .chat2{
@@ -47,7 +54,7 @@ body {
   color: green;
   max-width: 70px;
   flex-wrap: wrap;
-  display:flex;
+  display:grid;
   text-align: justify;
 }
 
