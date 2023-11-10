@@ -1,5 +1,5 @@
-const IP = "ws://localhost:3000"
-var socket = io(IP);
+//const IP = "ws://10.1.4.200:3000"
+var socket = io();
 
 function funcionPrueba() {
     socket.emit('desconectarse', "hola");
