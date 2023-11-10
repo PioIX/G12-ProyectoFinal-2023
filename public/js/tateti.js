@@ -1,3 +1,41 @@
+let idSalaTate = null;
+let jugador1 = false;
+
+function crearJuegoTate() {
+    jugador1 = true;
+    socket.emit('crearJuegoTate');
+}
+
+function unirseJuegoTate() {
+    idSalaTate = document.getElementById('idSalaTate').value;
+    socket.emit('unirseJuegoTate', {idSalaTate: idSalaTate});
+}
+
+socket.on("nuevoJuegoTate", (data) => {
+    idSalaTate = data.idSalaTate;
+    document.getElementById('inicioTate').style.display = 'none';
+    document.getElementById('zonaJuegoTate').style.display = 'block';
+    let copyButton = document.createElement('button');
+    copyButton.style.display = 'block';
+    copyButton.classList.add('btn','btn-primary','py-2', 'my-2')
+    copyButton.innerText = 'Copia el codigo';
+    copyButton.addEventListener('click', () => {
+        navigator.clipboard.writeText(idSalaTate).then(function() {
+            console.log('Async: Copying to clipboard was successful!');
+        }, function(err) {
+            console.error('Async: Could not copy text: ', err);
+        });
+    });
+    document.getElementById('esperaTate').innerHTML = `Comparti el siguiente codigo: "${idSalaTate}" para que tu rival se una.`;
+    document.getElementById('esperaTate').appendChild(copyButton);
+});
+
+socket.on("jugadorConectadoTate", () => {
+    document.getElementById('inicioTate').style.display = 'none';
+    document.getElementById('esperaTate').style.display = 'none';
+    document.getElementById('juegoTate').style.display = 'flex';
+})
+
 let turnos=true 
 let roomId = -1
 let client = -1
@@ -151,26 +189,6 @@ let client = -1
         
     });
 
-    socket.on('unirseSala', (data) => {
-
-        roomId = data.sala
-        
-        console.log(data)
-        if (data.client == 0) {
-            client = 'X'
-        } 
-        if (data.client == 1) {
-            client = 'O'
-            turnos = false
-        }
-        console.log("Client: " , client)
-
-    console.log("Room: ", roomId)
-    });
-    socket.on('mensaje', (data) => {
-    
-   
-});
 
 
     socket.on('opponentMove', (data) => {
