@@ -1,4 +1,4 @@
-class Ball {
+class Pelota {
     constructor(x, y, radius, color) {
         this.x = x
         this.y = y
@@ -49,13 +49,49 @@ let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
 
 
-let player1;
-let player2;
-let ball;
+let jugador1;
+let jugador2;
+let pelota;
 
-let isGameStarted = false;
-let playerNo = 0;
+let arrancar = false;
+let jugadorN = 0;
 let roomID;
+
+
+function crearJuegoPong() {
+    socket.emit('crearJuegoPong');
+}
+
+function unirseJuegoPong() {
+    idSalaPong = document.getElementById('idSalaPong').value;
+    socket.emit('unirseJuegoPong', {idSalaPong: idSalaPong});
+    console.log("arranco")
+}
+
+socket.on("nuevoJuegoPong", (data) => {
+    idSalaPong = data.idSalaPong;
+    document.getElementById('inicioPong').style.display = 'none';
+    document.getElementById('zonaJuegoPong').style.display = 'block';
+    let copyButton = document.createElement('button');
+    copyButton.style.display = 'block';
+    copyButton.classList.add('btn','btn-primary','py-2', 'my-2')
+    copyButton.innerText = 'Copia el codigo';
+    copyButton.addEventListener('click', () => {
+        navigator.clipboard.writeText(idSalaPong).then(function() {
+            console.log('Async: Copying to clipboard was successful!');
+        }, function(err) {
+            console.error('Async: Could not copy text: ', err);
+        });
+    });
+    document.getElementById('esperaPong').innerHTML = `Comparti el siguiente codigo: "${idSalaPong}" para que tu rival se una.`;
+    document.getElementById('esperaPong').appendChild(copyButton);
+});
+
+socket.on("jugadorConectadoPong", () => {
+    document.getElementById('inicioPong').style.display = 'none';
+    document.getElementById('esperaPong').style.display = 'none';
+    document.getElementById('juegoPong').style.display = 'flex';
+})
 
 
 function startGame() {
@@ -70,45 +106,45 @@ function startGame() {
     }
 }
 
-socket.on("playerNo", (newPlayerNo) => {
-    console.log(newPlayerNo);
-    playerNo = newPlayerNo;
+socket.on("JugadorN", (nuevoJugador) => {
+    console.log("tito");
+    jugadorN = nuevoJugador;
 });
 
-socket.on("startingGame", () => {
-    isGameStarted = true;
+socket.on("inicioJuego", () => {
+    arrancar = true;
     message.innerText = "El juego va a arrancar";
 });
 
-socket.on("startedGame", (room) => {
+socket.on("juego", (room) => {
     console.log(room);
 
     roomID = room.id;
     message.innerText = "";
 
-    player1 = new Player(room.players[0].x, room.players[0].y, 20, 60, 'red');
-    player2 = new Player(room.players[1].x, room.players[1].y, 20, 60, 'blue');
+    jugador1 = new Player(room.players[0].x, room.players[0].y, 20, 60, 'red');
+    jugador2 = new Player(room.players[1].x, room.players[1].y, 20, 60, 'blue');
 
-    player1.score = room.players[0].score;
-    player2.score = room.players[1].score;
+    jugador1.score = room.players[0].score;
+    jugador2.score = room.players[1].score;
 
 
-    ball = new Ball(room.ball.x, room.ball.y, 10, 'white');
+    pelota = new Pelota(room.pelota.x, room.pelota.y, 10, 'white');
 
     window.addEventListener('keydown', (e) => {
-        if (isGameStarted) {
+        if (arrancar) {
             if (e.keyCode === 38) {
-                console.log("player move 1 up")
-                socket.emit("move", {
+                console.log("J1 Arriba")
+                socket.emit("movimiento", {
                     roomID: roomID,
-                    playerNo: playerNo,
+                    jugadorN: jugadorN,
                     direction: 'up'
                 })
             } else if (e.keyCode === 40) {
-                console.log("player move 1 down")
-                socket.emit("move", {
+                console.log("J2 abajo")
+                socket.emit("movimiento", {
                     roomID: roomID,
-                    playerNo: playerNo,
+                    jugadorN: jugadorN,
                     direction: 'down'
                 })
             }
@@ -118,24 +154,24 @@ socket.on("startedGame", (room) => {
     draw();
 });
 
-socket.on("updateGame", (room) => {
-    player1.y = room.players[0].y;
-    player2.y = room.players[1].y;
+socket.on("cambios", (room) => {
+    jugador1.y = room.players[0].y;
+    jugador2.y = room.players[1].y;
 
-    player1.score = room.players[0].score;
-    player2.score = room.players[1].score;
+    jugador1.score = room.players[0].score;
+    jugador2.score = room.players[1].score;
 
-    ball.x = room.ball.x;
-    ball.y = room.ball.y;
+    pelota.x = room.pelota.x;
+    pelota.y = room.pelota.y;
 
     draw();
 });
 
-socket.on("endGame", (room) => {
-    isGameStarted = false;
-    message.innerText = `${room.winner === playerNo ? "You are Winner!" : "You are Loser!"}`;
+socket.on("finJuego", (room) => {
+    arrancar = false;
+    message.innerText = `${room.winner === jugadorN ? "Ganaste!" : "Perdiste!"}`;
 
-    socket.emit("leave", roomID);
+    socket.emit("desconexion", roomID);
 
 
     setTimeout(() => {
@@ -150,11 +186,10 @@ function draw() {
     ctx.clearRect(0, 0, 800, 500);
 
 
-    player1.draw(ctx);
-    player2.draw(ctx);
-    ball.draw(ctx);
+    jugador1.draw(ctx);
+    jugador2.draw(ctx);
+    pelota.draw(ctx);
 
-    // center line
     ctx.strokeStyle = 'white';
     ctx.beginPath();
     ctx.setLineDash([10, 10])

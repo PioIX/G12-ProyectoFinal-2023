@@ -414,13 +414,28 @@ function haceridPong(length) {
 
 let rooms = [];
 
+
 io.on('connection', (socket) => {
     console.log('a user connected');
+
+    socket.on('crearJuegoPong', () => {
+        const idSalaPong = haceridPong(6);
+        rooms[idSalaPong] = {};
+        socket.join(idSalaPong);
+        socket.emit("nuevoJuegoPong", {idSalaPong: idSalaPong})
+    });
+  
+    socket.on('unirseJuegoPong', (data) => {
+        if(rooms[data.idSalaPong] != null) {
+            socket.join(data.idSalaPong);
+            socket.to(data.idSalaPong).emit("jugadorConectadoPong", {});
+            socket.emit("jugadorConectadoPong");
+        }
+    })
 
     socket.on("unirse", () => {
         console.log(rooms);
 
-        // get room 
         let room;
         if (rooms.length > 0 && rooms[rooms.length - 1].players.length === 1) {
             room = rooms[rooms.length - 1];
@@ -428,22 +443,20 @@ io.on('connection', (socket) => {
 
         if (room) {
             socket.join(room.id);
-            socket.emit('playerNo', 2);
-
-            // add player to room
+            socket.emit('jugadorN', 2);
             room.players.push({
                 socketID: socket.id,
-                playerNo: 2,
+                jugadorN: 2,
                 score: 0,
                 x: 690,
                 y: 200,
             });
 
             // send message to room
-            io.to(room.id).emit('startingGame');
+            io.to(room.id).emit('inicioJuego');
 
             setTimeout(() => {
-                io.to(room.id).emit('startedGame', room);
+                io.to(room.id).emit('juego', room);
 
                 // start game
                 startGame(room);
@@ -454,7 +467,7 @@ io.on('connection', (socket) => {
                 id: rooms.length + 1,
                 players: [{
                     socketID: socket.id,
-                    playerNo: 1,
+                    jugadorN: 1,
                     score: 0,
                     x: 90,
                     y: 200,
@@ -469,31 +482,29 @@ io.on('connection', (socket) => {
             }
             rooms.push(room);
             socket.join(room.id);
-            socket.emit('playerNo', 1);
+            socket.emit('jugadorN', 1);
         }
     });
 
-    socket.on("move", (data) => {
+    socket.on("movimiento", (data) => {
         let room = rooms.find(room => room.id === data.roomID);
 
         if (room) {
             if (data.direction === 'up') {
-                room.players[data.playerNo - 1].y -= 10;
+                room.players[data.jugadorN - 1].y -= 10;
 
-                if (room.players[data.playerNo - 1].y < 0) {
-                    room.players[data.playerNo - 1].y = 0;
+                if (room.players[data.jugadorN - 1].y < 0) {
+                    room.players[data.jugadorN - 1].y = 0;
                 }
             }
             else if (data.direction === 'down') {
-                room.players[data.playerNo - 1].y += 10;
+                room.players[data.jugadorN - 1].y += 10;
 
-                if (room.players[data.playerNo - 1].y > 440) {
-                    room.players[data.playerNo - 1].y = 440;
+                if (room.players[data.plajugadorNerNo - 1].y > 440) {
+                    room.players[data.jugadorN - 1].y = 440;
                 }
             }
         }
-
-        // update rooms
         rooms = rooms.map(r => {
             if (r.id === room.id) {
                 return room;
@@ -503,10 +514,10 @@ io.on('connection', (socket) => {
             }
         });
 
-        io.to(room.id).emit('updateGame', room);
+        io.to(room.id).emit('cambios', room);
     });
 
-    socket.on("leave", (roomID) => {
+    socket.on("desconexion", (roomID) => {
         socket.leave(roomID);
     });
 
@@ -522,11 +533,9 @@ function startGame(room) {
         room.ball.x += room.ball.dx * 5;
         room.ball.y += room.ball.dy * 5;
 
-        // check if ball hits player 1
         if (room.ball.x < 110 && room.ball.y > room.players[0].y && room.ball.y < room.players[0].y + 60) {
             room.ball.dx = 1;
 
-            // change ball direction
             if (room.ball.y < room.players[0].y + 30) {
                 room.ball.dy = -1;
             }
@@ -538,11 +547,9 @@ function startGame(room) {
             }
         }
 
-        // check if ball hits player 2
         if (room.ball.x > 690 && room.ball.y > room.players[1].y && room.ball.y < room.players[1].y + 60) {
             room.ball.dx = -1;
 
-            // change ball direction
             if (room.ball.y < room.players[1].y + 30) {
                 room.ball.dy = -1;
             }
@@ -554,13 +561,10 @@ function startGame(room) {
             }
         }
 
-        // up and down walls
         if (room.ball.y < 5 || room.ball.y > 490) {
             room.ball.dy *= -1;
         }
 
-
-        // left and right walls
         if (room.ball.x < 5) {
             room.players[1].score += 1;
             room.ball.x = 395;
@@ -578,26 +582,35 @@ function startGame(room) {
         }
 
 
-        if (room.players[0].score === 10) {
+        if (room.players[0].score === 5) {
             room.winner = 1;
             rooms = rooms.filter(r => r.id !== room.id);
-            io.to(room.id).emit('endGame', room);
+            io.to(room.id).emit('finJuego', room);
             clearInterval(interval);
         }
 
-        if (room.players[1].score === 10) {
+        if (room.players[1].score === 5) {
             room.winner = 2;
             rooms = rooms.filter(r => r.id !== room.id);
-            io.to(room.id).emit('endGame', room);
+            io.to(room.id).emit('finJuego', room);
             clearInterval(interval);
         }
 
-        io.to(room.id).emit('updateGame', room);
+        io.to(room.id).emit('cambios', room);
     }, 1000 / 60);
 }
 
 
 
+function haceridPong(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
 
 
 
