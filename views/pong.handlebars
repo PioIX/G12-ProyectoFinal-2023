@@ -8,36 +8,33 @@
     <title>PONG SALESIANO</title>
 </head>
 <body>
-    <header>
-	<nav>
-		<div class="menu-wrap">
-            <input type="checkbox" class="toggler">
-            <div class="hamburger"><div></div></div>
-            <div class="menu">
-              <ul>
-                 <li><a href="/home">Salir</a></li>
-                <li><a href="/dashboard">Juego</a></li>
-                <li><a href="/personajes">¿Quienes somos?</a></li>
-                <li><a href="/contacto">Contacto</a></li>
-              </ul>
-            </div>
-        </div>
-	</nav>
-    </header>
-    <div class="container">
-        <h1 id="heading">
-           PONG SALESIANO
-        </h1>
-        <div class="game">
-            <canvas id="canvas" width="800" height="500"></canvas>
-
-            <p id="message"> </p>
-            <button id="startBtn">
-                ARRANCA EL JUEGO KPO
-            </button>
-        </div>
+    <body>
+    <h1 class="container py-4 title">Bienvenido a un pong Salesiano</h1>
+    <div id="inicioPong" class="container col-md-6">
+            <button class="form-control btn btn-primary" onclick="crearJuegoPong()">Crear juego</button> 
+            <div class="text-center display-3">o</div>
+            <input class="form-control my-2" placeholder="Ingresa el codigo" type="text" name="" id="idSalaPong" />
+            <button class="form-control btn btn-secondary" onclick="unirseJuegoPong()">Unirse a juego</button>
     </div>
+    <div id="zonaJuegoPong" class="container">
+        <div id="esperaPong" class="h4">
 
-      <script src="js/pong.js"></script>
+        </div>
+        <div id="juegoPong" class="h3 row" style="display: none;">
+            <div class="container">
+                <h1 id="heading">
+                </h1>
+                <div class="game">
+                    <canvas id="canvas" width="800" height="500"></canvas>
+
+                    <p id="message"> </p>
+                    <button id="startBtn">
+                        ARRANCA EL JUEGO KPO
+                    </button>
+                </div>
+            </div>
+
+            <script src="js/main.js"></script>
+        </div>
 
 </body>

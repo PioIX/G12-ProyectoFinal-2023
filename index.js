@@ -414,11 +414,30 @@ function haceridPong(length) {
 
 let rooms = [];
 
+
 io.on('connection', (socket) => {
     console.log('a user connected');
 
+    socket.on('crearJuegoPong', () => {
+        const idSalaPong = haceridPong(6);
+        rooms[idSalaPong] = {};
+        socket.join(idSalaPong);
+        socket.emit("nuevoJuegoPong", {idSalaPong: idSalaPong})
+    });
+  
+    socket.on('unirseJuegoPong', (data) => {
+        if(rooms[data.idSalaPong] != null) {
+            socket.join(data.idSalaPong);
+            socket.to(data.idSalaPong).emit("jugadorConectadoPong", {});
+            socket.emit("jugadorConectadoPong");
+        }
+    })
+
+    
     socket.on("unirse", () => {
         console.log(rooms);
+
+        // get room 
         let room;
         if (rooms.length > 0 && rooms[rooms.length - 1].players.length === 1) {
             room = rooms[rooms.length - 1];
@@ -471,7 +490,7 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on("movimiento", (data) => {
+    socket.on("move", (data) => {
         let room = rooms.find(room => room.id === data.roomID);
 
         if (room) {
@@ -536,6 +555,7 @@ function startGame(room) {
             }
         }
 
+        // check if ball hits player 2
         if (room.ball.x > 690 && room.ball.y > room.players[1].y && room.ball.y < room.players[1].y + 60) {
             room.ball.dx = -1;
 
@@ -592,6 +612,29 @@ function startGame(room) {
         io.to(room.id).emit('updateGame', room);
     }, 1000 / 60);
 }
+
+
+function haceridPong(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
