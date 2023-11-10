@@ -27,18 +27,18 @@ function mandarMensaje(mensaje) {
     console.log("envie", mensaje);
     document.getElementById("chat").innerHTML += `
     <div class="chat2">
-      <h1 class="chat"> ${mensaje}</h1>
+      <p class="chatderecha"> ${mensaje}</p>
     </div>
     `    
     envie = 1
     }};
     
-socket.on("server-message", data => { // Llega el parametro NO el objeto
+socket.on("server-message", data => { 
     console.log("tengo que mandar", data);
     if (envie == -1) {
         document.getElementById("chat").innerHTML += `
             <div class="chat1">
-              <h1 class="chat">${data.mensaje}</h1>
+              <p class="chatizquierda">${data.mensaje}</p>
           </div>
           `
           envie = 1
