@@ -88,16 +88,16 @@ function mandarEleccion(rspJugador) {
     console.log(rspJugador)
     if (eleccionJugador == "Roca") {
         let botonjugador = document.createElement('button');
-        document.getElementById('jugador1eleccion').innerHTML = `<img src="/img/Piedra.png" width="50px">`;
+        document.getElementById('jugador1eleccion').innerHTML = `<img src="/img/Piedra.png" width="90px">`;
         document.getElementById('jugador1eleccion').appendChild(botonjugador);
     }else if (eleccionJugador == "Tijera") {
         let botonjugador = document.createElement('button');
-        document.getElementById('jugador1eleccion').innerHTML = `<img src="/img/Tijeras.png" width="50px">`;
+        document.getElementById('jugador1eleccion').innerHTML = `<img src="/img/Tijeras.png" width="90px">`;
         document.getElementById('jugador1eleccion').appendChild(botonjugador);
 
     }else if (eleccionJugador == "Papel"){
         let botonjugador = document.createElement('button');
-        document.getElementById('jugador1eleccion').innerHTML = `<img src="/img/Papel.png" width="50px">`;
+        document.getElementById('jugador1eleccion').innerHTML = `<img src="/img/Papel.png" width="90px">`;
         document.getElementById('jugador1eleccion').appendChild(botonjugador);
     }
 }
@@ -112,20 +112,20 @@ function opcionRival(data) {
         let botonRivalElegido = document.createElement('button');
         botonRivalElegido.id = 'botonrivalcito';
         botonRivalElegido.style.display="none"
-        botonRivalElegido.innerHTML = `<img src="/img/Piedra.png" width="50px">`;
+        botonRivalElegido.innerHTML = `<img src="/img/Piedra.png" width="90px">`;
         document.getElementById('jugador2eleccion').appendChild(botonRivalElegido);
     }else if (eleccionJugador1 == "Tijera") {
         let botonRivalElegido = document.createElement('button');
         botonRivalElegido.id = 'botonrivalcito';
         botonRivalElegido.style.display="none"
-        botonRivalElegido.innerHTML = `<img src="/img/Tijeras.png" width="50px">`;
+        botonRivalElegido.innerHTML = `<img src="/img/Tijeras.png" width="90px">`;
         document.getElementById('jugador2eleccion').appendChild(botonRivalElegido);
 
     }else if (eleccionJugador1 == "Papel"){
         let botonRivalElegido = document.createElement('button');
         botonRivalElegido.id = 'botonrivalcito';
         botonRivalElegido.style.display="none"
-        botonRivalElegido.innerHTML = `<img src="/img/Papel.png" width="50px">`;
+        botonRivalElegido.innerHTML = `<img src="/img/Papel.png" width="90px">`;
         document.getElementById('jugador2eleccion').appendChild(botonRivalElegido);
     }
     
