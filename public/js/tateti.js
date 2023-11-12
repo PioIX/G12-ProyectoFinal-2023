@@ -182,12 +182,12 @@ let client = -1
             socket.emit('makeMove', { index: index, idSalaTate: idSalaTate });
         }
     }
-    
+    if (resetButton){
         resetButton.addEventListener('click', () => {
         resetBoard();
 
         socket.emit('resetGame');
-    });
+    });}
 
     
     const resetBoard = () => {
@@ -206,13 +206,6 @@ let client = -1
         tile.addEventListener('click', () => moveUser(tile, index));
     });
 
-    resetButton.addEventListener('click', () => {
-        resetBoard();
-
-        socket.emit('resetGame');
-    });
-
-    
     
     
 
