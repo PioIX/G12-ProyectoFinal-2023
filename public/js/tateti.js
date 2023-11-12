@@ -136,8 +136,8 @@ let client = -1
             return;
         }
 
-    if (!board.includes(''))
-        announce(TIE);
+    if (!board.includes('')){
+        announce(TIE);}
     }
 
     const announce = (type) => {
