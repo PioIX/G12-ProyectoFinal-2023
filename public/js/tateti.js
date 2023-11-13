@@ -47,7 +47,8 @@ let client = -1
     socket.on("jugadorConectadoTate", () => {
         document.getElementById('inicioTate').style.display = 'none';
         document.getElementById('esperaTate').style.display = 'none';
-        document.getElementById('juegoTate').style.display = 'flex';
+        document.getElementById('juegoTate').style.display = '';
+
         console.log(idSalaTate);
     })
     
@@ -65,7 +66,7 @@ let client = -1
 
     
     socket.on('makeMove', (data) => {
-
+        console.log("botoncito")
         const { index, idSalaTate } = data;
     
         const game = roomsTate[idSalaTate];
