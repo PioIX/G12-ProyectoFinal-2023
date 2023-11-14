@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/app.js"></script>
+    <link rel="stylesheet" href="css/curita.css">
     
     <title>Piedra | Papel | Tijeras</title>
 </head>
@@ -37,7 +38,10 @@
         </div>
         <hr/>
         <div id="areaGanadora" class="display-4">
-
+            <button class="form-control btn btn-danger" onclick="reiniciarJuegoParcial()">Reiniciar Juego</button>
+        </div>
+        <div id="resultadoGlobal" class="display-4">
+            Victorias: 0 | Derrotas: 0
         </div>
     </div>
 </body>

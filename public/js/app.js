@@ -1,55 +1,147 @@
-const cuadrados = document.querySelectorAll('.cuadrado')
-const bosco = document.querySelector('.bosco')
-const tiempoGastado = document.querySelector('#tiempoGastado')
-const puntaje = document.querySelector('#puntaje')
+let idSala = null;
+let jugador1 = false;
+let victorias = 0;
+let derrotas = 0;
+let rondasJugadas = 0;
+const MAX_ROUNDS = 3;
 
-let resultado = 0
-let posicion
-let tiempo = 60
-let temporizador = null
-
-function alelatorioCuadrado() {
-  cuadrados.forEach(cuadrado => {
-    cuadrado.classList.remove('bosco')
-  })
-
-  let alelatorioCuadrado = cuadrados[Math.floor(Math.random() * 9)]
-  console.log(Math.floor(Math.random() * 9))
-  alelatorioCuadrado.classList.add('bosco')
-  console.log(alelatorioCuadrado)
-  posicion = alelatorioCuadrado.id
+function crearJuego() {
+    jugador1 = true;
+    socket.emit('crearJuego');
 }
 
-alelatorioCuadrado()
+function unirseJuego() {
+    idSala = document.getElementById('idSala').value;
+    socket.emit('unirseJuego', {idSala: idSala});
+}
 
-cuadrados.forEach(cuadrado => {
-  cuadrado.addEventListener('mousedown', () => {
-    if (cuadrado.id == posicion) {
-      resultado++
-      puntaje.textContent = resultado
-      posicion = null
+window.addEventListener("keydown",(enterTecla)=>{
+   
+    if (enterTecla.key==="Enter" ) {
+        unirseJuego()
     }
-  })
 })
 
-function moverBosco() {
-  temporizador = setInterval(alelatorioCuadrado, 500)
+socket.on("nuevoJuego", (data) => {
+    idSala = data.idSala;
+    document.getElementById('inicio').style.display = 'none';
+    document.getElementById('zonaJuego').style.display = 'block';
+    let copyButton = document.createElement('button');
+    copyButton.style.display = 'block';
+    copyButton.classList.add('btn','btn-primary','py-2', 'my-2')
+    copyButton.innerText = 'Copia el codigo';
+    copyButton.addEventListener('click', () => {
+        navigator.clipboard.writeText(idSala).then(function() {
+            console.log('Async: Copying to clipboard was successful!');
+        }, function(err) {
+            console.error('Async: Could not copy text: ', err);
+        });
+    });
+    document.getElementById('waitingArea').innerHTML = `Comparti el siguiente codigo: "${idSala}" para que tu rival se una.`;
+    document.getElementById('waitingArea').appendChild(copyButton);
+});
+
+socket.on("jugadorConectado", () => {
+    document.getElementById('inicio').style.display = 'none';
+    document.getElementById('waitingArea').style.display = 'none';
+    document.getElementById('juego').style.display = 'flex';
+})
+
+socket.on("j1eleccion",(data)=>{
+    if(!jugador1) {
+        opcionRival(data);
+    }
+    console.log("facon");
+});
+
+socket.on("j2eleccion",(data)=>{
+    if(jugador1) {
+        opcionRival(data);
+    }
+    console.log("rivas");
+});
+
+socket.on("resultado",(data)=>{
+    let ganadortexto = '';
+    if(data.ganador != 'e') {
+        if(data.ganador == 'j1' && jugador1) {
+            ganadortexto = 'Ganaste panflin ';
+        } else if(data.ganador == 'j1') {
+            ganadortexto = 'Perdiste Papirulo';
+        } else if(data.ganador == 'j2' && !jugador1) {
+            ganadortexto = 'Ganaste panflin';
+        } else if(data.ganador == 'j2') {
+            ganadortexto = 'Perdiste Papirulo';
+        }
+    } else {
+        ganadortexto = `empataron: A JUGAR OTRA`;
+    }
+    document.getElementById('opponentState').style.display = 'none';
+    document.getElementById('botonrivalcito').style.display = 'block';
+    document.getElementById('areaGanadora').innerHTML = ganadortexto;
+});
+
+function reiniciarJuego() {
+    reiniciarJuegoParcial();
+    document.getElementById('resultadoGlobal').innerHTML = `Victorias: ${victorias} | Derrotas: ${derrotas}`;
+
+    // Mostrar un mensaje de fin de juego
+    document.getElementById('areaGanadora').innerHTML = `Fin del juego. Resultado final: Victorias: ${victorias} | Derrotas: ${derrotas}`;
 }
 
-moverBosco()
 
-function contador() {
- tiempo--
- tiempoGastado.textContent = tiempo
+function mandarEleccion(rspJugador) {
+    const eleccion= jugador1 ? "j1eleccion" : "j2eleccion";
+    socket.emit(eleccion,{
+        rspJugador: rspJugador,
+        idSala: idSala
+    });
+    let eleccionJugador = rspJugador
+    eleccionJugador.toString()
+    console.log(rspJugador)
+    if (eleccionJugador == "Roca") {
+        let botonjugador = document.createElement('button');
+        document.getElementById('jugador1eleccion').innerHTML = `<img src="/img/Piedra.png" width="90px">`;
+        document.getElementById('jugador1eleccion').appendChild(botonjugador);
+    }else if (eleccionJugador == "Tijera") {
+        let botonjugador = document.createElement('button');
+        document.getElementById('jugador1eleccion').innerHTML = `<img src="/img/Tijeras.png" width="90px">`;
+        document.getElementById('jugador1eleccion').appendChild(botonjugador);
 
- if (tiempo == 0) {
-   clearInterval(contadortimbero)
-   clearInterval(temporizador)
-   alert('¡Terminaste! tu resultado es  ' + resultado)
- }
-
+    }else if (eleccionJugador == "Papel"){
+        let botonjugador = document.createElement('button');
+        document.getElementById('jugador1eleccion').innerHTML = `<img src="/img/Papel.png" width="90px">`;
+        document.getElementById('jugador1eleccion').appendChild(botonjugador);
+    }
 }
 
-let contadortimbero = setInterval(contador, 1000)
+
+function opcionRival(data) {
+    document.getElementById('opponentState').innerHTML = "El rival ya decidio";
+    console.log(data.rspJugador)
+    let eleccionJugador1 = data.rspJugador
+    eleccionJugador1.toString()
+    if (eleccionJugador1 == "Roca") {
+        let botonRivalElegido = document.createElement('button');
+        botonRivalElegido.id = 'botonrivalcito';
+        botonRivalElegido.style.display="none"
+        botonRivalElegido.innerHTML = `<img src="/img/Piedra.png" width="90px">`;
+        document.getElementById('jugador2eleccion').appendChild(botonRivalElegido);
+    }else if (eleccionJugador1 == "Tijera") {
+        let botonRivalElegido = document.createElement('button');
+        botonRivalElegido.id = 'botonrivalcito';
+        botonRivalElegido.style.display="none"
+        botonRivalElegido.innerHTML = `<img src="/img/Tijeras.png" width="90px">`;
+        document.getElementById('jugador2eleccion').appendChild(botonRivalElegido);
+
+    }else if (eleccionJugador1 == "Papel"){
+        let botonRivalElegido = document.createElement('button');
+        botonRivalElegido.id = 'botonrivalcito';
+        botonRivalElegido.style.display="none"
+        botonRivalElegido.innerHTML = `<img src="/img/Papel.png" width="90px">`;
+        document.getElementById('jugador2eleccion').appendChild(botonRivalElegido);
+    }
+    
+}
 
 
