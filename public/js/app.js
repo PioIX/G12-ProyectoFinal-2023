@@ -17,7 +17,7 @@ function alelatorioCuadrado() {
   console.log(Math.floor(Math.random() * 9))
   alelatorioCuadrado.classList.add('bosco')
   console.log(alelatorioCuadrado)
-  hitPosition = alelatorioCuadrado.id
+  posicion = alelatorioCuadrado.id
 }
 
 alelatorioCuadrado()
@@ -33,7 +33,7 @@ cuadrados.forEach(cuadrado => {
 })
 
 function moverBosco() {
-  temporizador = setInterval(alelatorioCuadrado, 200)
+  temporizador = setInterval(alelatorioCuadrado, 500)
 }
 
 moverBosco()
