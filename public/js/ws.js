@@ -1,5 +1,3 @@
-/*const IP = "ws://localhost:3000"
-var socket = io(IP);*/
 var socket = io();
 
 function funcionPrueba() {
