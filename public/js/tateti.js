@@ -99,13 +99,17 @@ function handleResultValidation() {
     }
 
     if (roundWon) {
-        announce(currentPlayer === "X" ? PLAYERX_WON : PLAYERO_WON);
-        isGameActive = false;
-        return;
+            announce(currentPlayer === 'X' ? PLAYERX_WON : PLAYERO_WON);
+            isGameActive = false;
+            return;
+        }
+
+    if (!board.includes('')){
+        announce(TIE);}
     }
 
     if (!board.includes("")) announce(TIE);
-}
+
 
 const announce = (type) => {
     switch (type) {
@@ -173,6 +177,22 @@ const resetBoard = () => {
         tile.classList.remove("playerO");
     });
 };
+  
+    function userAction(tile, index) {
+        if (isValidAction(tile) && isGameActive) {
+            tile.innerText = currentPlayer;
+            tile.classList.add(`player${currentPlayer}`);
+            updateBoard(index);
+            handleResultValidation();
+            socket.emit('makeMove', { index: index, idSalaTate: idSalaTate });
+        }
+    }
+    if (resetButton){
+        resetButton.addEventListener('click', () => {
+        resetBoard();
+
+        socket.emit('resetGame');
+    });}
 
 console.log("TILES", tiles)
 tiles.forEach((tile, index) => {
@@ -231,3 +251,12 @@ socket.on("makeMove", (data) => {
         }
     }
 });
+    tiles.forEach( (tile, index) => {
+        tile.addEventListener('click', () => moveUser(tile, index));
+    });
+
+    
+    
+
+
+
