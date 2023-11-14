@@ -129,6 +129,10 @@ app.get("/pong", (req, res) => {
   res.render("pong");
 });
 
+app.get("/wordle", (req, res) => {
+    res.render("wordle");
+  });
+
 app.get("/dashboard", (req, res) => {
   res.render("dashboard");
 });
@@ -136,6 +140,11 @@ app.get("/dashboard", (req, res) => {
 app.get("/home", (req, res) => {
   res.render("home");
 });
+
+app.get("/bosco", (req, res) => {
+    res.render("donBosco");
+  });
+  
 
 
 //Ta-te-ti
@@ -373,7 +382,7 @@ io.on('connection', (socket) => {
 
         if (room) {
             socket.join(room.id);
-            socket.emit('playerNo', 2);
+            socket.emit('jugador', 2);
 
             // add player to room
             room.players.push({
@@ -385,10 +394,10 @@ io.on('connection', (socket) => {
             });
 
             // send message to room
-            io.to(room.id).emit('startingGame');
+            io.to(room.id).emit('empezar');
 
             setTimeout(() => {
-                io.to(room.id).emit('startedGame', room);
+                io.to(room.id).emit('juego', room);
 
                 // start game
                 startGame(room);
@@ -414,11 +423,11 @@ io.on('connection', (socket) => {
             }
             rooms.push(room);
             socket.join(room.id);
-            socket.emit('playerNo', 1);
+            socket.emit('jugador', 1);
         }
     });
 
-    socket.on("move", (data) => {
+    socket.on("movimiento", (data) => {
         let room = rooms.find(room => room.id === data.roomID);
 
         if (room) {
@@ -448,10 +457,10 @@ io.on('connection', (socket) => {
             }
         });
 
-        io.to(room.id).emit('updateGame', room);
+        io.to(room.id).emit('', room);
     });
 
-    socket.on("leave", (roomID) => {
+    socket.on("afuera", (roomID) => {
         socket.leave(roomID);
     });
 
@@ -526,18 +535,18 @@ function startGame(room) {
         if (room.players[0].score === 5) {
             room.winner = 1;
             rooms = rooms.filter(r => r.id !== room.id);
-            io.to(room.id).emit('endGame', room);
+            io.to(room.id).emit('terminarJuego', room);
             clearInterval(interval);
         }
 
         if (room.players[1].score === 5) {
             room.winner = 2;
             rooms = rooms.filter(r => r.id !== room.id);
-            io.to(room.id).emit('endGame', room);
+            io.to(room.id).emit('terminarJuego', room);
             clearInterval(interval);
         }
 
-        io.to(room.id).emit('updateGame', room);
+        io.to(room.id).emit('actualizarJuego', room);
     }, 1000 / 60);
 }
 
@@ -551,3 +560,16 @@ function haceridPong(length) {
     }
     return result;
 }
+
+
+//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
+//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
+//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
+//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
+//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
+//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
+//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
+//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
+
+
+    

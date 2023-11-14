@@ -110,17 +110,17 @@ function startGame() {
     }
 }
 
-socket.on("playerNo", (newPlayerNo) => {
+socket.on("jugador", (newPlayerNo) => {
     console.log(newPlayerNo);
     playerNo = newPlayerNo;
 });
 
-socket.on("startingGame", () => {
+socket.on("empezar", () => {
     isGameStarted = true;
     message.innerText = "El juego va a arrancar";
 });
 
-socket.on("startedGame", (room) => {
+socket.on("juego", (room) => {
     console.log(room);
 
     roomID = room.id;
@@ -139,14 +139,14 @@ socket.on("startedGame", (room) => {
         if (isGameStarted) {
             if (e.keyCode === 38) {
                 console.log("Jugador 1 arriba")
-                socket.emit("move", {
+                socket.emit("movimiento", {
                     roomID: roomID,
                     playerNo: playerNo,
                     direction: 'up'
                 })
             } else if (e.keyCode === 40) {
                 console.log("Jugador 2 arriba")
-                socket.emit("move", {
+                socket.emit("movimiento", {
                     roomID: roomID,
                     playerNo: playerNo,
                     direction: 'down'
@@ -158,7 +158,7 @@ socket.on("startedGame", (room) => {
     draw();
 });
 
-socket.on("updateGame", (room) => {
+socket.on("actualizarJuego", (room) => {
     player1.y = room.players[0].y;
     player2.y = room.players[1].y;
 
@@ -171,11 +171,11 @@ socket.on("updateGame", (room) => {
     draw();
 });
 
-socket.on("endGame", (room) => {
+socket.on("terminarJuego", (room) => {
     isGameStarted = false;
     message.innerText = `${room.winner === playerNo ? "Ganaste!" : "Perdiste!"}`;
 
-    socket.emit("leave", roomID);
+    socket.emit("afuera", roomID);
 
 
     setTimeout(() => {
@@ -188,13 +188,9 @@ socket.on("endGame", (room) => {
 
 function draw() {
     ctx.clearRect(0, 0, 800, 500);
-
-
     player1.draw(ctx);
     player2.draw(ctx);
     ball.draw(ctx);
-
-    // center line
     ctx.strokeStyle = 'white';
     ctx.beginPath();
     ctx.setLineDash([10, 10])
