@@ -1,3 +1,4 @@
+
 let idSala = null;
 let jugador1 = false;
 let rondas = 0;

@@ -174,63 +174,62 @@ io.on('connection', (socket) => {
             socket.emit("jugadorConectadoTate");
         }
     });
-
-    
     socket.on('makeMove', (data) => {
-      const { index,roomsTate , client } = data;
-    
-      console.log("Recibi un movimiento")
+      const { index, idSalaTate } = data;
+      const game = roomsTate[idSalaTate];
+      const { board, currentPlayer, isGameActive } = game;
 
-      socket.emit('mensaje', { result: 'Llega 1', client: client });
-      io.to('idSalaTate').emit('mensaje', { result: 'Llega' });
-      const game =roomsTate[idSalaTate]
+      if (!isGameActive) return;
 
-      const { board, currentPlayer } = game;
-
-      if (isValidMove(board, index, currentPlayer)) {
+      if (isValidMove(board, index) && currentPlayer === getClientId(socket)) {
           board[index] = currentPlayer;
           const roundWon = checkWin(board, currentPlayer);
 
           if (roundWon) {
-              io.to('idSalaTate').emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
+              io.to(idSalaTate).emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
               game.isGameActive = false;
           } else if (!board.includes('')) {
-              io.to('idSalaTate').emit('gameOver', { result: 'TIE' });
+              io.to(idSalaTate).emit('gameOver', { result: 'TIE' });
               game.isGameActive = false;
           } else {
               game.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-              io.to('idSalaTate').emit('opponentMove', { index, currentPlayer: game.currentPlayer });
+              io.to(idSalaTate).emit('opponentMove', { index, currentPlayer: game.currentPlayer });
           }
       }
   });
+});   
 
-});
 
 function isValidMove(board, index, currentPlayer) {
   return board[index] === '' && (currentPlayer === 'X' || currentPlayer === 'O');
 }
 
 function checkWin(board, currentPlayer) {
-const winningConditions = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-];
+  const winningConditions = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+  ];
 
-for (const condition of winningConditions) {
-    const [a, b, c] = condition;
-    if (board[a] === currentPlayer && board[b] === currentPlayer && board[c] === currentPlayer) {
-        return true; 
-    }
+  for (const condition of winningConditions) {
+      const [a, b, c] = condition;
+      if (board[a] === currentPlayer && board[b] === currentPlayer && board[c] === currentPlayer) {
+          return true; 
+      }
+  }
+
+  return false; // 
 }
 
-return false; 
+function getClientId(socket) {
+  return socket.id;
 }
+    
 
 function haceridTate(length) {
   var result           = '';
@@ -261,10 +260,6 @@ function haceridTate(length) {
 
 const path = require('path');
 const roomsPPT = {};
-
-app.use(express.static(path.join(__dirname, 'client')));
-
-
 
 
 io.on('connection', (socket) => {
