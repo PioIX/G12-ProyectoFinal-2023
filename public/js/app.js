@@ -9,6 +9,22 @@ rondasTotales = 0;
 
 
 function reiniciarJuego() {
+    document.getElementById('resultadoGlobal').innerHTML = `Rondas jugadas: ${rondas} | Victorias: ${victorias} | Derrotas: ${derrotas} | Empates: ${empates}`;
+
+    document.getElementById('jugador1eleccion').innerHTML = `<button class="roca" onclick="mandarEleccion('Roca')">
+    <img src="/img/Piedra.png" width="90px">
+</button>
+<button class="papel" onclick="mandarEleccion('Papel')">
+    <img src="/img/Papel.png" width="90px">
+</button>
+<button class="tijera" onclick="mandarEleccion('Tijera')">
+    <img src="/img/Tijeras.png" width="90px">`;
+    document.getElementById('jugador2eleccion').innerHTML = '<p id="opponentState">Esperando al oponente</p>';
+
+    document.getElementById('opponentState').innerHTML = 'Esperando al oponente';
+    document.getElementById('botonrivalcito').style.display = 'none';
+    document.getElementById('areaGanadora').innerHTML = '';
+    document.getElementById('juego').style.display = 'flex';
     socket.emit('reiniciar', {idSala: idSala})
 }
 
@@ -18,6 +34,7 @@ function volverAJugar() {
     document.getElementById('opponentState').innerHTML = 'Esperando al oponente';
     document.getElementById('botonrivalcito').style.display = 'none';
     document.getElementById('areaGanadora').innerHTML = '';
+    document.getElementById('zonaJuego').style.display = 'block';
     document.getElementById('juego').style.display = 'flex';
 }
 
