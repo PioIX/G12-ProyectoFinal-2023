@@ -29,17 +29,20 @@ body {
   background-color:rgba(81, 233, 132, 0.473) ;
   margin-right: 0px;
   width: 100%;
-  height: 100%;
+  height: 90%;
   align-items: end;
-  overflow-y: scroll;
 }
 
 .espaciomensaje {
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
+  padding-top: 20px;
   width: 100%;
-  height: 95%;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.header-chat{
+  width: 100%;
+  height: 10%;
 }
 
 .inputmensaje{
