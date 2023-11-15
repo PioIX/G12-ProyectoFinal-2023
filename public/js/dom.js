@@ -40,7 +40,7 @@ async function fetchLogin(data){
         mail: mail,
         contraseña: contraseña
     }
-  
+    console.log(object)
     if(object.mail != "" && object.contraseña != ""){
       fetchLogin(object)
       

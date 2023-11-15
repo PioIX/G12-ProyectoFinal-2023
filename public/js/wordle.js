@@ -1,3 +1,118 @@
+async function fetchPalabra(data){
+    try {
+      const response = await fetch("/admin", {
+        method: "PUT", // or 'POST'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      //En result obtengo la respuesta
+      const result = await response.json();
+      console.log("Success:", result)
+      
+        if (result.validar == false) {
+          swal({
+            title: "La palabra ya existe",
+            icon: "warning",
+            button: "Ok!",
+          });
+        } 
+        if (result.validar == true) {
+          if (result.palabrarda == true){
+            swal({
+              title: "La palabra se ingreso correctamente",
+              icon: "success",
+              button: "Ok!",
+            });
+          }
+          else {
+  
+          
+            swal({
+              title: "La palabra debe tener 6 letras",
+              icon: "warning",
+              button: "Ok!",
+            });
+        }
+    }} catch (error) {
+      console.error("Error:", error);
+    }
+  }
+  
+  //Esta funcion la llama el boton Ingresar que tiene que ser type button para ejecutar el onclick
+  function agregarPalabra() {
+    //Leo los datos del input
+    let palabra = document.getElementById("palabra").value
+  
+    //Creo un objeto de forma instantanea
+    let data = {
+        palabra: palabra
+    }
+    //data es el objeto que le paso al back
+    if(data.palabra != "" ){
+      fetchPalabra(data)
+      console.log(data)
+  
+    }
+    else{
+      alert("No se ha ingresado nada")
+    }
+  }
+  
+  
+  async function fetchPalabraEliminar(data){
+    try {
+      const response = await fetch("/admin1", {
+        method: "PUT", // or 'POST'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      //En result obtengo la respuesta
+      const result = await response.json();
+      console.log("Success:", result)
+      
+        if (result.validar == false) {
+          swal({
+            title: "La palabra no existe",
+            icon: "warning",
+            button: "Ok!",
+          });
+        } 
+        if (result.validar == true) {
+          swal({
+            title: "La palabra se elimino correctamente",
+            icon: "success",
+            button: "Ok!",
+          });
+            }
+  } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+  
+  //Esta funcion la llama el boton Ingresar que tiene que ser type button para ejecutar el onclick
+  function eliminarPalabra() {
+    //Leo los datos del input
+    let palabras = document.getElementById("palabraid").value
+  
+    //Creo un objeto de forma instantanea
+    let data = {
+        palabras: palabras
+    }
+    //data es el objeto que le paso al back
+    if(data.palabras != "" ){
+      fetchPalabraEliminar(data)
+      console.log(data)
+    }
+    else{
+      alert("No se ha ingresado nada")
+    }
+  }
+
+
 let resultElement
 let mainContainer
 let idLinea
@@ -305,3 +420,4 @@ function showResult(textMsg) {
         location.reload();
     });
 }
+
