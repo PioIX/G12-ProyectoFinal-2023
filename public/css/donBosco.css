@@ -5,10 +5,10 @@
     grid-template-columns: auto auto auto;
     justify-content: center;
     margin: 0 auto;
-    column-gap: 27.5%;
+    column-gap: 24%;
     row-gap: 24%;
-    padding-right: 66px;
-    padding-top: 54px;
+    padding-right: 0%;
+    padding-top: 5%;
 }
 
 .cuadrado {
@@ -26,9 +26,12 @@ h2{
 }
 body{
 	background-image: url("/img/fondoBosco.png");
-	background-size:95%;
-	margin: 0 auto;
+	background-size:85%;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-color: #edeeed;
 }
+	
 .basurita{
 	display: grid;
 	grid-template-columns: auto;
