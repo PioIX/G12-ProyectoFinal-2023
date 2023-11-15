@@ -19,7 +19,7 @@ async function fetchLogin(data){
           });
         } 
         else if (result.success == true) {
-          localStorage.setItem("user", data.user); //Guardo el usuario en el localStorage
+          localStorage.setItem("mail", data.mail); //Guardo el usuario en el localStorage
           if(result.admin == true){
             location.href ='/admin';
           }
@@ -33,15 +33,15 @@ async function fetchLogin(data){
   }
   
   function login() {
-    let user = document.getElementById("userId").value
-    let pass = document.getElementById("passwordId").value
+    let mail = document.getElementById("mail").value
+    let contraseña = document.getElementById("contraseña").value
   
     let object = {
-        user: user,
-        pass: pass
+        mail: mail,
+        contraseña: contraseña
     }
   
-    if(object.user != "" && object.pass != ""){
+    if(object.mail != "" && object.contraseña != ""){
       fetchLogin(object)
       
     }
@@ -52,4 +52,56 @@ async function fetchLogin(data){
       });
     }
   }
+  
+  async function fetchBannearJson(data){
+    try {
+      const response = await fetch("/bannear", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+      console.log("Success:", result)
+      
+        if (result.bannear == false) {
+          swal({
+            title: "No existe el usuario",
+            icon: "warning",
+            button: "Ok!",
+          });
+        } 
+        else if (result.bannear == true) {
+          swal({
+            title: "Usuario banneado correctamente",
+            icon: "success",
+            button: "Ok!",
+          });
+  
+    }}
+    catch (error) {
+      console.error("Error:", error);
+    }
+  }
+  
+  
+  function bannearUser() {
+    let mail = document.getElementById("Mail_ban").value
+  
+    let data = {
+       mail:mail
+    }
+  
+    if(data.mail != ""){
+      fetchBannearJson(data) 
+    }
+    else{
+      swal({
+        title: "No ingreso ningun mail",
+        button: "Ok!",
+      });
+    }
+  }
+  
   

@@ -63,12 +63,83 @@ io.use(function(socket, next) {
 app.get("/", (req, res) => {
   res.render("home");
 });
+/// ADMIN, LOGIN Y REGISTER 
 
-app.get("/register", (req, res) => {
-  res.render("register");
+app.post('/register', async function(req, res){
+  const { email, password } = req.body;
+  try {
+      await authService.registerUser(auth, { email, password });
+      await MySQL.realizarQuery (`insert into Usuario (Mail,Contraseña) values ("${req.body.email}","${req.body.password}")`)
+      response = await MySQL.realizarQuery (`select id from Usuario where Mail = "${req.body.email}"`)
+      req.session.id1 = response[0].idUsuario 
+      req.session.email = req.body.mail
+      console.log(req.session.id1)
+      res.render("home");
+  } catch (error) {
+      console.error("Error en el registro:", error);
+      res.render("register", {
+        message: "Error en el registro: " + error.message,
+      });
+    }
 });
 
-app.post("/register", async (req, res) => {
+app.put('/login', async function(req, res){
+  console.log("login", req.body);
+  let response = await MySQL.realizarQuery(`SELECT * FROM Usuario WHERE Mail = "${req.body.mail}" AND Contraseña = "${req.body.contraseña}"`)
+  if (response.length > 0) {
+  let verifica = false
+  const {email , password} = {email : req.body.mail, password : req.body.contraseña}
+  try {
+    authService.loginUser(auth, { email, password });
+    verifica = true
+    req.session.id1 = response[0].idUsuario
+    req.session.email = response[0].mail
+    console.log(req.session.id1)
+    console.log(req.session.mail)
+  } catch (error) {
+    verifica = false
+    console.log(error)
+  }
+
+  if (response.length > 0 && verifica) {
+      if(req.body.mail =="agustinbianco0508@gmail.com"){
+          res.send({success:true, admin:true})            
+      }
+      else if (req.body.mail!="agustinbianco0508@gmail.com"){
+      res.send({success: true, admin:false})    
+  }}
+  else{
+      res.send({success:false})   
+}}});
+
+app.put('/bannear', async function(req, res){
+  user_exists = await MySQL.realizarQuery(`select Mail from Usuario where Mail = "${req.body.mail}"`)
+  console.log(user_exists)
+  if (user_exists.length > 0) {
+      await MySQL.realizarQuery(`delete from Usuario where Mail = "${req.session.mail}"`)
+      res.send({bannear:true});    
+  }
+  else{
+      res.send({bannear:false});
+  }
+  
+});
+
+app.get('/login', function(req, res){ 
+  res.render('login', null);
+});
+
+app.get('/register', function(req, res){
+  console.log(req.query); 
+  res.render('register', null);
+});
+
+app.get('/admin', function(req, res){
+  console.log(req.query); 
+  res.render('admin', null);
+});
+
+/*app.post("/register", async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -104,7 +175,7 @@ app.post("/login", async (req, res) => {
       message: "Error en el inicio de sesión: " + error.message,
     });
   }
-});
+});*/
 
 app.get("/dashboard", (req, res) => {
   // Agrega aquí la lógica para mostrar la página del dashboard
@@ -112,10 +183,6 @@ app.get("/dashboard", (req, res) => {
 });
 
 /************************************** */
-app.get("/register", (req, res) => {
-  // Agrega aquí la lógica para mostrar la página del dashboard
-  res.render("register");
-});
 
 app.get("/papelito", (req, res) => {
   res.render("papelito");
@@ -245,17 +312,6 @@ function haceridTate(length) {
 
 
 //Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
-//Piedra,papel,tijera
 
 
 
@@ -347,7 +403,7 @@ function hacerid(length) {
 }
 
 
-//pongpongpongpongpongpongpongpongpongpongpongpong
+//pong
 
 let rooms = [];
 
@@ -562,14 +618,5 @@ function haceridPong(length) {
 }
 
 
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-
-
+//WORDLE
     
