@@ -1,9 +1,11 @@
 let idSala = null;
 let jugador1 = false;
+let rondas = 0;
 let victorias = 0;
 let derrotas = 0;
-let rondasJugadas = 0;
-const MAX_ROUNDS = 3;
+let empates= 0;
+let rondasTotales = 0;
+
 
 function crearJuego() {
     jugador1 = true;
@@ -62,32 +64,36 @@ socket.on("j2eleccion",(data)=>{
 });
 
 socket.on("resultado",(data)=>{
+    let resultadoGlobal = document.getElementById('resultadoGlobal');
     let ganadortexto = '';
+    
     if(data.ganador != 'e') {
+        rondas++;
+        rondasTotales++; // Incrementa el número de rondas jugadas
+            
         if(data.ganador == 'j1' && jugador1) {
-            ganadortexto = 'Ganaste panflin ';
+             ganadortexto = 'Ganaste panflin ';
+             victorias++;
         } else if(data.ganador == 'j1') {
+             ganadortexto = 'Perdiste Papirulo';
+             derrotas++;
+          } else if(data.ganador == 'j2' && !jugador1) {
+             ganadortexto = 'Ganaste panflin';
+             victorias++;
+         } else if(data.ganador == 'j2') {
             ganadortexto = 'Perdiste Papirulo';
-        } else if(data.ganador == 'j2' && !jugador1) {
-            ganadortexto = 'Ganaste panflin';
-        } else if(data.ganador == 'j2') {
-            ganadortexto = 'Perdiste Papirulo';
-        }
-    } else {
-        ganadortexto = `empataron: A JUGAR OTRA`;
+             derrotas++;
+         }else{
+            ganadortexto = `empataron: A JUGAR OTRA`;
+                empates++;
+         }
     }
+    resultadoGlobal.textContent = `Rondas jugadas: ${rondas} | Victorias: ${victorias} | Derrotas: ${derrotas} | Empates: ${empates}`;
     document.getElementById('opponentState').style.display = 'none';
     document.getElementById('botonrivalcito').style.display = 'block';
     document.getElementById('areaGanadora').innerHTML = ganadortexto;
 });
 
-function reiniciarJuego() {
-    reiniciarJuegoParcial();
-    document.getElementById('resultadoGlobal').innerHTML = `Victorias: ${victorias} | Derrotas: ${derrotas}`;
-
-    // Mostrar un mensaje de fin de juego
-    document.getElementById('areaGanadora').innerHTML = `Fin del juego. Resultado final: Victorias: ${victorias} | Derrotas: ${derrotas}`;
-}
 
 
 function mandarEleccion(rspJugador) {
@@ -143,5 +149,7 @@ function opcionRival(data) {
     }
     
 }
+
+
 
 
