@@ -7,7 +7,7 @@
     justify-content: center;
     margin: 0 auto;
     column-gap: 24%;
-    row-gap: 25%;
+    row-gap: 26%;
     padding-right: 0%;
     padding-top: 4%;
 }
@@ -27,11 +27,11 @@ h2{
 	font-family: 'Itim', cursive;
 }
 body{
-	background-image: url("/img/fondoBosco.png");
+	background-image: url("/img/fondoBosco2.png");
 	background-size:85%;
 	background-repeat: no-repeat;
 	background-position: center;
-	background-color: #edeeed;
+	background-color: #12181B;
 }
 	
 .basurita{
