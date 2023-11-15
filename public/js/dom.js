@@ -24,7 +24,7 @@ async function fetchLogin(data){
             location.href ='/admin';
           }
           else {
-            location.href ='/salas';
+            location.href ='/dashboard';
         }}
   
     } catch (error) {

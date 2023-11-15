@@ -68,9 +68,9 @@ app.get("/", (req, res) => {
 app.post('/register', async function(req, res){
   const { email, password } = req.body;
   try {
-      await authService.registerUser(auth, { email, password });
-      await MySQL.realizarQuery (`insert into Usuario (Mail,Contraseña) values ("${req.body.email}","${req.body.password}")`)
-      response = await MySQL.realizarQuery (`select id from Usuario where Mail = "${req.body.email}"`)
+      let userCredential = await authService.registerUser(auth, { email, password });
+      await MySQL.realizarQuery (`insert into Usuario (Mail,Contraseña, idUsuario) values ("${req.body.email}","${req.body.password}", "${userCredential.user.uid}")`)
+      response = await MySQL.realizarQuery (`select idUsuario from Usuario where Mail = "${req.body.email}"`)
       req.session.id1 = response[0].idUsuario 
       req.session.email = req.body.mail
       console.log(req.session.id1)
@@ -103,7 +103,7 @@ app.put('/login', async function(req, res){
 
   if (response.length > 0 && verifica) {
       if(req.body.mail =="agustinbianco0508@gmail.com"){
-          res.send({success:true, admin:true})            
+          res.send({success:true, admin:true})    
       }
       else if (req.body.mail!="agustinbianco0508@gmail.com"){
       res.send({success: true, admin:false})    
@@ -127,6 +127,10 @@ app.put('/bannear', async function(req, res){
 
 app.get('/login', function(req, res){ 
   res.render('login', null);
+});
+
+app.post('/login', function(req, res){ 
+  res.render('dashboard', null);
 });
 
 app.get('/register', function(req, res){
@@ -187,6 +191,7 @@ app.get("/dashboard", (req, res) => {
 app.get("/papelito", (req, res) => {
   res.render("papelito");
 });
+
 
 app.get("/tateti", (req, res) => {
   res.render("tateti");

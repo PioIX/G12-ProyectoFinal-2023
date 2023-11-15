@@ -15,6 +15,7 @@ const registerUser = async (auth, { email, password }) => {
     );
     await sendEmailVerification(auth.currentUser);
     console.log("Verification email sent!");
+    return userCredential
   } catch (error) {
     console.error("Error registering user:", error);
     throw error;
