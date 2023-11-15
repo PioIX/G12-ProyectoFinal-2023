@@ -4,7 +4,22 @@
   <link rel="stylesheet" href="css/donBosco.css">
 </head>
 <body>
-
+  <header>
+      <nav>
+        <div class="menu-wrap">
+                <input type="checkbox" class="toggler">
+                <div class="hamburger"><div></div></div>
+                <div class="menu">
+                  <ul>
+                    <li><a href="/home">Salir</a></li>
+                    <li><a href="/dashboard">Juego</a></li>
+                    <li><a href="/personajes">¿Quienes somos?</a></li>
+                    <li><a href="/contacto">Contacto</a></li>
+                  </ul>
+                </div>
+            </div>
+      </nav>
+  </header>
   <div class="grid">
     <div class="cuadrado" id="1"></div>
     <div class="cuadrado" id="2"></div>
@@ -17,10 +32,10 @@
     <div class="cuadrado" id="9"></div>
   </div>
   <div class="basurita">
-    <h2>tu puntaje:</h2>
+    <h2>Puntaje:</h2>
     <h2 id="puntaje">0</h2>
 
-    <h2>tiempoGastado:</h2>
+    <h2>Tiempo:</h2>
     <h2 id="tiempoGastado">60</h2>
   </div>
   <script src="js/bosco.js"></script>
