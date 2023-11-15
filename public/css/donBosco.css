@@ -1,17 +1,37 @@
 .grid {
-	width: 606px;
-	height: 606px;
-	display: flex;
-	flex-wrap: wrap;
+	width: 80%;
+    height: 80%;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: center;
+    margin: 0 auto;
+    column-gap: 27.5%;
+    row-gap: 24%;
+    padding-right: 66px;
+    padding-top: 54px;
 }
 
 .cuadrado {
-	height: 200px;
-	width: 200px;
-	border: solid black 1px;
+	height: 120px;
+	width: 120px;
+	border: none;
 }
 
 .bosco {
 	background-image: url("/img/donBosco.png");
 	background-size: cover;
+}
+h2{
+	font-size: 15px;
+}
+body{
+	background-image: url("/img/fondoBosco.png");
+	background-size:95%;
+	margin: 0 auto;
+}
+.basurita{
+	display: grid;
+	grid-template-columns: auto;
+	width: 8%;
+	justify-content: first baseline;
 }

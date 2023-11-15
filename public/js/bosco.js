@@ -33,7 +33,11 @@ cuadrados.forEach(cuadrado => {
 })
 
 function moverBosco() {
-  temporizador = setInterval(alelatorioCuadrado, 500)
+  if (resultado<=8) {
+    temporizador = setInterval(alelatorioCuadrado, 600)
+  }else{
+  temporizador = setInterval(alelatorioCuadrado, 100)
+  } 
 }
 
 moverBosco()
