@@ -1,7 +1,8 @@
+
 let turnos=true 
 let client = -1
 
-    const tiles = Array.from(document.querySelectorAll('.tile'));
+    let tiles = [];
     const playerDisplay = document.querySelector('.display-player');
     const resetButton = document.querySelector('#reset');
     const announcer = document.querySelector('.announcer');
@@ -90,9 +91,6 @@ let client = -1
         }
             
     });
-    
-    
-    
 
     console.log("hola")
     /*
@@ -167,6 +165,7 @@ let client = -1
     }
 
     function moveUser(tile, index) {
+        console.log("MOVE USER", turnos);
         if (turnos==true){
             userAction(tile, index)
         }
@@ -174,6 +173,7 @@ let client = -1
 
   
     function userAction(tile, index) {
+        console.log(isValidAction(tile), isGameActive);
         if (isValidAction(tile) && isGameActive) {
             tile.innerText = currentPlayer;
             tile.classList.add(`player${currentPlayer}`);
@@ -202,9 +202,14 @@ let client = -1
         });
     }
 
-    tiles.forEach( (tile, index) => {
-        tile.addEventListener('click', () => moveUser(tile, index));
-    });
+    window.addEventListener("load", () => {
+        tiles = document.querySelectorAll('.tile');
+        console.log("VOY A CARGAR moveUser", tiles);
+        tiles.forEach( (tile, index) => {
+            console.log("CARGANDO", tile, index);
+            tile.addEventListener('click', () => moveUser(tile, index));
+        });
+    })
 
     
     

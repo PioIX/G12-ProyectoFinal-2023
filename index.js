@@ -150,8 +150,6 @@ app.get("/bosco", (req, res) => {
 //Ta-te-ti
 const roomsTate = {};
 
-
-
 io.on('connection', (socket) => {
   const req = socket.request;
   console.log('a user connected');
@@ -173,14 +171,18 @@ io.on('connection', (socket) => {
             socket.to(data.idSalaTate).emit("jugadorConectadoTate", {});
             socket.emit("jugadorConectadoTate");
         }
+      
     });
+
     socket.on('makeMove', (data) => {
       const { index, idSalaTate } = data;
       const game = roomsTate[idSalaTate];
       const { board, currentPlayer, isGameActive } = game;
 
+      console.log("makeMove game", game);
       if (!isGameActive) return;
 
+      console.log("MakeMove", isValidMove(board, index), currentPlayer, getClientId(socket));
       if (isValidMove(board, index) && currentPlayer === getClientId(socket)) {
           board[index] = currentPlayer;
           const roundWon = checkWin(board, currentPlayer);
