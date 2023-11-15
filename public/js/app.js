@@ -22,7 +22,7 @@ function reiniciarJuego() {
     document.getElementById('jugador2eleccion').innerHTML = '<p id="opponentState">Esperando al oponente</p>';
 
     document.getElementById('opponentState').innerHTML = 'Esperando al oponente';
-    document.getElementById('botonrivalcito').style.display = 'none';
+    document.getElementById('botonrivalcito').style.display = '';
     document.getElementById('areaGanadora').innerHTML = '';
     document.getElementById('juego').style.display = 'flex';
     socket.emit('reiniciar', {idSala: idSala})
@@ -82,6 +82,7 @@ socket.on("jugadorConectado", () => {
     document.getElementById('inicio').style.display = 'none';
     document.getElementById('waitingArea').style.display = 'none';
     document.getElementById('juego').style.display = 'flex';
+    document.getElementById('tablitas').style.display = 'block';
 })
 
 socket.on("reinicio", () => {

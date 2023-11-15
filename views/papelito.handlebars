@@ -46,13 +46,15 @@
         </div>
         <hr/>
 
-        <div  class="display-4">
+        <div  class="display-4" id="tablitas" style="display: none;"> 
             <div id="resultadoGlobal" >
                 Victorias: 0 | Derrotas: 0 | Empates: 0 
 
             </div>
             <button class="btn btn-secondary" onclick="reiniciarJuego()">¿Otra ronda?</button>
-            <button class="btn btn-primary" onclick="volverAJugar()">Volver a Jugar</button>
+            <form action="/papelito" method="get">
+                <button class="btn btn-primary" type="submit">Salir</button>
+            </form>
         </div>
     </div>
 </body>
