@@ -277,6 +277,10 @@ io.on('connection', (socket) => {
       socket.emit("nuevoJuego", {idSala: idSala})
   });
 
+  socket.on('reiniciar', (data) => {
+    socket.to(data.idSala).emit("reinicio")
+});
+
   socket.on('unirseJuego', (data) => {
       if(roomsPPT[data.idSala] != null) {
           socket.join(data.idSala);
