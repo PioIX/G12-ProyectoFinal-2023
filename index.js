@@ -85,37 +85,39 @@ app.post('/register', async function(req, res){
 
 app.put('/login', async function(req, res){
   console.log("PUT /login", req.body);
-  let response = await MySQL.realizarQuery(`SELECT * FROM Usuario WHERE Mail = "${req.body.mail}" AND Contraseña = "${req.body.contraseña}"`)
-  console.log("result del sql",response)
-  try {
-  if (response.length > 0) {
-  let verifica = false
-  const {email , password} = {email : req.body.mail, password : req.body.contraseña}
   
-    authService.loginUser(auth, { email, password });
-    verifica = true
-    req.session.id1 = response[0].idUsuario
-    req.session.email = response[0].mail
-    console.log(req.session.id1)
-    console.log(req.session.mail)
-  }
-  } catch (error) {
-    verifica = false
-    console.log(error)
+  consulta=`SELECT * FROM Usuario WHERE Mail = "${req.body.mail}" AND Contraseña = "${req.body.contraseña}"`
+  console.log(consulta)
+  let response = await MySQL.realizarQuery(consulta)
+  
+  console.log("result del sql",response)
+  if (response.length > 0) {
+    let verifica = false
+    const {email , password} = {email : req.body.mail, password : req.body.contraseña}
+    try {
+      authService.loginUser(auth, { email, password });
+      verifica = true
+      req.session.id1 = response[0].idUsuario
+      req.session.email = response[0].mail
+      console.log(req.session.id1)
+      console.log(req.session.mail)
+    }
+     catch (error) {
+        verifica = false
+        console.log(error)
   }
 
   if (response.length > 0 && verifica) {
-      if(req.body.mail =="agustinbianco0508@gmail.com"){
-          //res.send({success:true, admin:true})    
-          res.redirect("/admin")    
+      if(req.body.mail =="jetcheverry@pioix.edu.ar"){
+        res.send({success:true, admin:true})       
       }
-      else if (req.body.mail!="agustinbianco0508@gmail.com"){
-      res.send({success: true, admin:false})    
+      else if (req.body.mail!="jetcheverry@pioix.edu.ar"){
+        res.send({success: true, admin:false})    
   }}
   else{
       res.send({success:false})   
   }
-});
+}});
 
 app.put('/bannear', async function(req, res){
   user_exists = await MySQL.realizarQuery(`select Mail from Usuario where Mail = "${req.body.mail}"`)
