@@ -41,5 +41,6 @@ socket.on("server-message", data => {
           `
           envie = 1
     }
+    document.getElementById("chat").scrollTop = document.getElementById("chat").scrollHeight;
     envie=-1
 });
