@@ -121,6 +121,10 @@ app.get("/papelito", (req, res) => {
   res.render("papelito");
 });
 
+app.get("/tatetiyo", (req, res) => {
+    res.render("tatetiyo");
+  });
+
 app.get("/tateti", (req, res) => {
   res.render("tateti");
 });
@@ -277,6 +281,23 @@ io.on('connection', (socket) => {
   // Emitir un evento personalizado para unirse a la sala
   socket.emit('joinRoom', 'faconeta');
 
+  socket.on('crearJuegoTate', () => {
+    const idSalaTate = haceridTate(6);
+    gameRooms[idSalaTate] = {};
+    socket.join(idSalaTate);
+    socket.emit("nuevoJuegoTate", {idSalaTate: idSalaTate})
+});
+
+socket.on('unirseJuegoTate', (data) => {
+  console.log("fulbo")
+    if(gameRooms[data.idSalaTate] != null) {
+        socket.join(data.idSalaTate);
+        socket.to(data.idSalaTate).emit("jugadorConectadoTate", {});
+        socket.emit("jugadorConectadoTate");
+    }
+  
+});
+
   socket.on('makeMove', (data) => {
       const { index, roomId } = data;
     
@@ -297,11 +318,8 @@ io.on('connection', (socket) => {
           board[index] = currentPlayer;
           const roundWon = checkWin(board, currentPlayer);
 
-          if (roundWon) {
-              io.to('faconeta').emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
-              game.isGameActive = false;
-          } else if (!board.includes('')) {
-              io.to('faconeta').emit('gameOver', { result: 'TIE' });
+         if (!board.includes('')) {
+              io.to('faconeta').emit('gameOver', { result: '' });
               game.isGameActive = false;
           } else {
               game.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
@@ -346,6 +364,16 @@ for (const condition of winningConditions) {
 
 return false;
 }
+
+function haceridTate(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
 //Piedra,papel,tijera
 //Piedra,papel,tijera
 //Piedra,papel,tijera

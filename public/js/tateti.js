@@ -274,13 +274,13 @@ let roomId = -1
     const announce = (type) => {
         switch(type){
             case PLAYERO_WON:
-                announcer.innerHTML = 'Player <span class="playerO">O</span> Won';
+                announcer.innerHTML = 'Jugador <span class="playerO">O</span> Gano';
                 break;
             case PLAYERX_WON:
-                announcer.innerHTML = 'Player <span class="playerX">X</span> Won';
+                announcer.innerHTML = 'Jugador <span class="playerX">X</span> Gano';
                 break;
             case TIE:
-                announcer.innerText = 'Tie';
+                announcer.innerText = 'Empate';
         }
         announcer.classList.remove('hide');
     };
@@ -391,7 +391,7 @@ let roomId = -1
             const roundWon = checkWin(board, currentPlayer);
     
             if (roundWon) {
-                io.to(room).emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
+                io.to(room).emit('gameOver', { result: currentPlayer === 'X' ? 'JugadorX_Gano' : 'JugadorO_Gano' });
                 game.isGameActive = false;
             } else if (!board.includes('')) {
                 io.to(room).emit('gameOver', { result: 'TIE' });
