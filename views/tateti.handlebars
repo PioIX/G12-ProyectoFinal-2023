@@ -2,11 +2,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/tateti2.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
-    <script src="/socket.io/socket.io.js"></script>
-     <link rel="stylesheet" href="css/tateti.css" />
-    <script src="js/tateti.js"></script>
     <title>Ta-Te-Ti</title>
 </head>
 <body>
@@ -26,43 +24,29 @@
         </div>
 	</nav>
     </header>
-    <div id="inicioTate" class="container col-md-6">
-        <h1 class="container py-4 title">Bienvenido al TA-TE-TI.</h1>
-        <button class="form-control btn btn-primary" onclick="crearJuegoTate()">Crear juego</button> 
-        <div class="text-center display-3">o</div>
-        <input class="form-control my-2" placeholder="Ingresa el codigo" type="text" name="" id="idSalaTate" />
-        <button class="form-control btn btn-secondary" onclick="unirseJuegoTate()">Unirse a juego</button>
-    </div>
-    <div id="zonaJuegoTate" class="container">
-        <div id="esperaTate" class="h4">
-
-        </div>
-        <div id="juegoTate" style="display: none;">
-            <main class="background">
-                <section class="title">
-                    <h1>Ta-Te-Ti</h1>
-                </section>
-                <section class="display">
-                    Rivas <span class="display-player playerX"></span> turno
-                </section>
-                <section class="containerjuego">
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                </section>
-                <section class="display announcer hide"></section>
-                <section class="controls">
-                    <button id="reset">REINICIAR</button>
-                </section>
-            </main>
-    </div>
-
-   
-    
+    <main class="background">
+        <section class="title">
+            <h1>Ta-Te-Ti</h1>
+        </section>
+        <section class="display">
+            Rivas <span class="display-player playerX"></span> turno
+        </section>
+        <section class="container">
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+        </section>
+        <section class="display announcer hide"></section>
+        <section class="controls">
+            <button id="reset">REINICIAR</button>
+        </section>
+    </main>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/tateti.js"></script>
 </body>

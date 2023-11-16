@@ -13,12 +13,10 @@ socket.on("connect", () => {
     console.log("Conectado");
 })
 
-
 socket.on('opponentMove', function(msg) {
     console.log(msg)
     let index = msg.index;
     let tiles = document.getElementsByClassName("tile");
     userAction(tiles[index], index);
 });
-
 

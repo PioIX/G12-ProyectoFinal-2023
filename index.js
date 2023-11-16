@@ -148,6 +148,8 @@ app.get("/bosco", (req, res) => {
 
 
 //Ta-te-ti
+
+/*
 const roomsTate = {};
 
 io.on('connection', (socket) => {
@@ -243,8 +245,107 @@ function haceridTate(length) {
   return result;
 }
 
+*/
 
+const gameRooms = {};
 
+io.on('connection', (socket) => {
+  console.log('Un jugador se ha conectado.');
+
+  // Unirse a la sala "faconeta"
+  socket.join('faconeta');
+  socket.emit('unirseSala', {sala: 'faconeta'})
+
+  // Verificar si ya hay un jugador en la sala
+  const room = io.sockets.adapter.rooms['faconeta'];
+  const numClients = room ? room.length : 0;
+
+  if (numClients === 2) {
+      // La sala ya tiene dos jugadores, no se permite un tercer jugador.
+      socket.emit('roomFull', 'La sala está llena. Por favor, intenta más tarde.');
+      socket.disconnect();
+      return;
+  }
+
+  // Crear un nuevo juego para la sala "faconeta"
+  gameRooms['faconeta'] = {
+      board: ['', '', '', '', '', '', '', '', ''],
+      currentPlayer: 'X',
+      isGameActive: true,
+  };
+
+  // Emitir un evento personalizado para unirse a la sala
+  socket.emit('joinRoom', 'faconeta');
+
+  socket.on('makeMove', (data) => {
+      const { index, roomId } = data;
+    
+      console.log("Recibi un movimiento")
+
+      if (roomId !== 'faconeta') {
+          return;
+      }
+
+      console.log("Recibi un movimiento")
+      socket.emit('mensaje', { result: 'Llega 1' });
+      io.to('faconeta').emit('mensaje', { result: 'Llega' });
+
+      const game = gameRooms['faconeta'];
+      const { board, currentPlayer } = game;
+
+      if (isValidMove(board, index, currentPlayer)) {
+          board[index] = currentPlayer;
+          const roundWon = checkWin(board, currentPlayer);
+
+          if (roundWon) {
+              io.to('faconeta').emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
+              game.isGameActive = false;
+          } else if (!board.includes('')) {
+              io.to('faconeta').emit('gameOver', { result: 'TIE' });
+              game.isGameActive = false;
+          } else {
+              game.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+              io.to('faconeta').emit('opponentMove', { index, currentPlayer: game.currentPlayer });
+          }
+      }
+  });
+
+  socket.on('resetGame', () => {
+      gameRooms['faconeta'] = {
+          board: ['', '', '', '', '', '', '', '', ''],
+          currentPlayer: 'X',
+          isGameActive: true,
+      };
+
+      io.to('faconeta').emit('resetGame');
+  });
+});
+
+function isValidMove(board, index, currentPlayer) {
+  return board[index] === '' && (currentPlayer === 'X' || currentPlayer === 'O');
+}
+
+function checkWin(board, currentPlayer) {
+const winningConditions = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+];
+
+for (const condition of winningConditions) {
+    const [a, b, c] = condition;
+    if (board[a] === currentPlayer && board[b] === currentPlayer && board[c] === currentPlayer) {
+        return true; 
+    }
+}
+
+return false;
+}
 //Piedra,papel,tijera
 //Piedra,papel,tijera
 //Piedra,papel,tijera

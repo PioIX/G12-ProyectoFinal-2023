@@ -22,20 +22,12 @@ function reiniciarJuego() {
     document.getElementById('jugador2eleccion').innerHTML = '<p id="opponentState">Esperando al oponente</p>';
 
     document.getElementById('opponentState').innerHTML = 'Esperando al oponente';
-    document.getElementById('botonrivalcito').style.display = '';
+    document.getElementById('botonrivalcito').style.display = 'block';
     document.getElementById('areaGanadora').innerHTML = '';
     document.getElementById('juego').style.display = 'flex';
     socket.emit('reiniciar', {idSala: idSala})
 }
 
-function volverAJugar() {
-    document.getElementById('jugador1eleccion').innerHTML = '';
-    document.getElementById('jugador2eleccion').innerHTML = '';
-    document.getElementById('opponentState').innerHTML = 'Esperando al oponente';
-    document.getElementById('botonrivalcito').style.display = 'none';
-    document.getElementById('areaGanadora').innerHTML = '';
-    document.getElementById('zonaJuego').style.display = 'block';
-    document.getElementById('juego').style.display = 'flex';
 }
 
 
