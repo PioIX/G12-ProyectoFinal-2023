@@ -1,20 +1,3 @@
-/*
-let turnos=true 
-let client = -1
-
-    let tiles = [];
-    const playerDisplay = document.querySelector('.display-player');
-    const resetButton = document.querySelector('#reset');
-    const announcer = document.querySelector('.announcer');
-
-    let board = ['', '', '', '', '', '', '', '', ''];
-    let currentPlayer = 'X';
-    let isGameActive = true;
-
-    const PLAYERX_WON = 'PLAYERX_WON';
-    const PLAYERO_WON = 'PLAYERO_WON';
-    const TIE = 'TIE';
-*/
 function crearJuegoTate() {
     jugador1 = true;
     socket.emit('crearJuegoTate');
