@@ -85,13 +85,16 @@ body {
 }
 
 .iconderecha{
-  display: block;
-  height: 10%;
-  width: 120px;
-  margin-right: 95%;
-  align-items: self-start;
-  justify-content: right;
-  color:rgb(59, 190, 70);
-  flex-direction: row;
-  background-color: none;
+  position: relative;
+    left: -406px;
+    top: 12px;
+    display: block;
+    height: 10%;
+    width: 120px;
+    /* margin-right: 95%; */
+    align-items: self-start;
+    justify-content: right;
+    color: rgb(59, 190, 70);
+    flex-direction: row;
+    background-color: none;
 }
