@@ -1,0 +1,48 @@
+<head>
+  <link rel="stylesheet" href="css/climasito.css" />
+</head>
+
+<body>
+    <header>
+      <nav>
+        <div class="menu-wrap">
+                <input type="checkbox" class="toggler">
+                <div class="hamburger"><div></div></div>
+                <div class="menu">
+                  <ul>
+                    <li><a href="/home">Salir</a></li>
+                    <li><a href="/dashboard">Juegos</a></li>
+                    <li><a href="/bosco">Niveles</a></li>
+                    <li><a href="/personajes">¿Quienes somos?</a></li>
+                  </ul>
+                </div>
+            </div>
+      </nav>
+    </header>
+    <section class="weather-content">
+        <h1>Buscador del clima</h1>
+        <div class="result">
+            <p>Agrege cuidad y pais</p>
+            <!-- <h5>Clima en Bogota</h5>
+            <img src="" alt="">
+            <h2>28°C</h2>
+            <p>Max: 29°C</p>
+            <p>Min: 27°C</p> -->
+        </div>
+        <form action="" method="POST" class="get-weather">
+            <input type="text" name="city" id="city" placeholder="escribi tu ciudad">
+            <select name="" id="country">
+                <option disabled selected value="">elegi tu pais</option>
+                <option value="AR">Argentina</option>
+                <option value="CO">Colombia</option>
+                <option value="CR">Costa Rica</option>
+                <option value="ES">España</option>
+                <option value="US">Estados Unidos</option>
+                <option value="MX">México</option>
+                <option value="PE">Perú</option>
+            </select>
+            <input type="submit" name="" id="" value="CONSULTAR">
+        </form>
+    </section>
+    <script src="js/clima.js"></script>
+</body>

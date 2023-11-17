@@ -151,6 +151,10 @@ app.get('/admin', function(req, res){
   res.render('admin', null);
 });
 
+app.get("/clima", (req, res) => {
+  res.render("climas");
+});
+
 /*app.post("/register", async (req, res) => {
   const { email, password } = req.body;
 
@@ -819,3 +823,4 @@ io.on("connection", (socket) => {
       io.to(idSalaChat).emit("server-message", { mensaje: data.data }); // mandar mensaje a sala de un jugador a otro
   })
 })
+
