@@ -1,4 +1,7 @@
 
+
+
+
 function crearJuegoPong() {
     socket.emit('crearJuegoPong');
 }
@@ -31,7 +34,7 @@ socket.on("nuevoJuegoPong", (data) => {
 socket.on("jugadorConectadoPong", () => {
     document.getElementById('inicioPong').style.display = 'none';
     document.getElementById('esperaPong').style.display = 'none';
-    document.getElementById('juegoPong').style.display = 'flex';
+    document.getElementById('juegoPong').style.display = '';
 })
 
 
@@ -139,14 +142,14 @@ socket.on("juego", (room) => {
                 socket.emit("movimiento", {
                     roomID: roomID,
                     playerNo: playerNo,
-                    direction: 'arriba'
+                    direction: 'up'
                 })
             } else if (e.keyCode === 40) {
                 console.log("Jugador 2 arriba")
                 socket.emit("movimiento", {
                     roomID: roomID,
                     playerNo: playerNo,
-                    direction: 'abajo'
+                    direction: 'down'
                 })
             }
         }

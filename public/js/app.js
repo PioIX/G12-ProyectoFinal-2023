@@ -28,9 +28,6 @@ function reiniciarJuego() {
     socket.emit('reiniciar', {idSala: idSala})
 }
 
-}
-
-
 
 function crearJuego() {
     jugador1 = true;

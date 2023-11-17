@@ -352,6 +352,7 @@ function haceridTate(length) {
 const gameRooms = {};
 
 io.on('connection', (socket) => {
+  const req = socket.request;
   console.log('Un jugador se ha conectado.');
 
   // Unirse a la sala "faconeta"
@@ -381,6 +382,8 @@ io.on('connection', (socket) => {
 
   socket.on('crearJuegoTate', () => {
     const idSalaTate = haceridTate(6);
+    req.session.idSala = "faconeta"
+    req.session.save()
     gameRooms[idSalaTate] = {};
     socket.join(idSalaTate);
     socket.emit("nuevoJuegoTate", {idSalaTate: idSalaTate})
@@ -492,6 +495,7 @@ const roomsPPT = {};
 
 
 io.on('connection', (socket) => {
+  const req = socket.request;
   console.log('a user connected');
   socket.on('disconnect', () => {
       console.log('user disconnected');
@@ -499,6 +503,8 @@ io.on('connection', (socket) => {
 
   socket.on('crearJuego', () => {
       const idSala = hacerid(6);
+      req.session.idSala = idSala
+      req.session.save()
       roomsPPT[idSala] = {};
       socket.join(idSala);
       socket.emit("nuevoJuego", {idSala: idSala})
@@ -584,10 +590,13 @@ let rooms = [];
 
 
 io.on('connection', (socket) => {
+  const req = socket.request;
     console.log('a user connected');
 
     socket.on('crearJuegoPong', () => {
         const idSalaPong = haceridPong(6);
+        req.session.idSala = idSalaPong
+        req.session.save()
         rooms[idSalaPong] = {};
         socket.join(idSalaPong);
         socket.emit("nuevoJuegoPong", {idSalaPong: idSalaPong})
@@ -794,13 +803,19 @@ function haceridPong(length) {
 
 
 //WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
-//WORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLEWORDLE
 
 
-    
+//CHAT 
+
+io.on("connection", (socket) => {
+  const req = socket.request;
+  socket.on('incoming-message', data => { 
+      let idSalaChat = "faconeta"
+      console.log(req.session.idSala)
+      if (req.session.idSala != undefined) {
+        idSalaChat = req.session.idSala
+      }
+      console.log(data)
+      io.to(idSalaChat).emit("server-message", { mensaje: data.data }); // mandar mensaje a sala de un jugador a otro
+  })
+})
