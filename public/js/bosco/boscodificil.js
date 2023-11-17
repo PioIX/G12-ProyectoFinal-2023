@@ -5,7 +5,7 @@ const puntaje = document.querySelector('#puntaje')
 
 let resultado = 0
 let posicion
-let tiempo = 60
+let tiempo = 30
 let temporizador = null
 
 function alelatorioCuadrado() {
@@ -33,7 +33,11 @@ cuadrados.forEach(cuadrado => {
 })
 
 function moverBosco() {
-  temporizador = setInterval(alelatorioCuadrado, 500)
+  if (resultado<=8) {
+    temporizador = setInterval(alelatorioCuadrado, 250)
+  }else{
+  temporizador = setInterval(alelatorioCuadrado, 100)
+  } 
 }
 
 moverBosco()
@@ -51,5 +55,3 @@ function contador() {
 }
 
 let contadortimbero = setInterval(contador, 1000)
-
-

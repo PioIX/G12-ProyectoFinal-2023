@@ -1,7 +1,4 @@
 
-
-
-
 function crearJuegoPong() {
     socket.emit('crearJuegoPong');
 }
@@ -142,14 +139,14 @@ socket.on("juego", (room) => {
                 socket.emit("movimiento", {
                     roomID: roomID,
                     playerNo: playerNo,
-                    direction: 'up'
+                    direction: 'arriba'
                 })
             } else if (e.keyCode === 40) {
                 console.log("Jugador 2 arriba")
                 socket.emit("movimiento", {
                     roomID: roomID,
                     playerNo: playerNo,
-                    direction: 'down'
+                    direction: 'abajo'
                 })
             }
         }

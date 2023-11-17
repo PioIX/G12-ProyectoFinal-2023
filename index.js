@@ -63,12 +63,95 @@ io.use(function(socket, next) {
 app.get("/", (req, res) => {
   res.render("home");
 });
+/// ADMIN, LOGIN Y REGISTER 
 
-app.get("/register", (req, res) => {
-  res.render("register");
+app.post('/register', async function(req, res){
+  const { email, password } = req.body;
+  try {
+      let userCredential = await authService.registerUser(auth, { email, password });
+      await MySQL.realizarQuery (`insert into Usuario (Mail,Contraseña, idUsuario) values ("${req.body.email}","${req.body.password}", "${userCredential.user.uid}")`)
+      response = await MySQL.realizarQuery (`select idUsuario from Usuario where Mail = "${req.body.email}"`)
+      req.session.id1 = response[0].idUsuario 
+      req.session.email = req.body.mail
+      console.log(req.session.id1)
+      res.render("home");
+  } catch (error) {
+      console.error("Error en el registro:", error);
+      res.render("register", {
+        message: "Error en el registro: " + error.message,
+      });
+    }
 });
 
-app.post("/register", async (req, res) => {
+app.put('/login', async function(req, res){
+  console.log("PUT /login", req.body);
+  
+  consulta=`SELECT * FROM Usuario WHERE Mail = "${req.body.mail}" AND Contraseña = "${req.body.contraseña}"`
+  console.log(consulta)
+  let response = await MySQL.realizarQuery(consulta)
+  
+  console.log("result del sql",response)
+  if (response.length > 0) {
+    let verifica = false
+    const {email , password} = {email : req.body.mail, password : req.body.contraseña}
+    try {
+      authService.loginUser(auth, { email, password });
+      verifica = true
+      req.session.id1 = response[0].idUsuario
+      req.session.email = response[0].mail
+      console.log(req.session.id1)
+      console.log(req.session.mail)
+    }
+     catch (error) {
+        verifica = false
+        console.log(error)
+  }
+
+  if (response.length > 0 && verifica) {
+      if(req.body.mail =="jetcheverry@pioix.edu.ar"){
+        res.send({success:true, admin:true})       
+      }
+      else if (req.body.mail!="jetcheverry@pioix.edu.ar"){
+        res.send({success: true, admin:false})    
+  }}
+  else{
+      res.send({success:false})   
+  }
+}});
+
+app.put('/bannear', async function(req, res){
+  user_exists = await MySQL.realizarQuery(`select Mail from Usuario where Mail = "${req.body.mail}"`)
+  console.log(user_exists)
+  if (user_exists.length > 0) {
+      await MySQL.realizarQuery(`delete from Usuario where Mail = "${req.session.mail}"`)
+      res.send({bannear:true});    
+  }
+  else{
+      res.send({bannear:false});
+  }
+  
+});
+
+app.get('/login', function(req, res){ 
+  res.render('login', null);
+});
+
+app.post('/login', function(req, res){ 
+  console.log("hola", req.body);
+  res.render('dashboard', null);
+});
+
+app.get('/register', function(req, res){
+  console.log(req.query); 
+  res.render('register', null);
+});
+
+app.get('/admin', function(req, res){
+  console.log(req.query); 
+  res.render('admin', null);
+});
+
+/*app.post("/register", async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -104,7 +187,7 @@ app.post("/login", async (req, res) => {
       message: "Error en el inicio de sesión: " + error.message,
     });
   }
-});
+});*/
 
 app.get("/dashboard", (req, res) => {
   // Agrega aquí la lógica para mostrar la página del dashboard
@@ -112,18 +195,20 @@ app.get("/dashboard", (req, res) => {
 });
 
 /************************************** */
-app.get("/register", (req, res) => {
-  // Agrega aquí la lógica para mostrar la página del dashboard
-  res.render("register");
-});
 
 app.get("/papelito", (req, res) => {
   res.render("papelito");
 });
 
+
 app.get("/tateti", (req, res) => {
-  res.render("tateti");
+  res.render("tatetiyo");
 });
+
+
+app.get("/tatetipiola", (req, res) => {
+    res.render("tateti");
+  });
 
 app.get("/pong", (req, res) => {
   res.render("pong");
@@ -142,10 +227,24 @@ app.get("/home", (req, res) => {
 });
 
 app.get("/bosco", (req, res) => {
-    res.render("donBosco");
-  });
-  
+    res.render("bosco");
+});
 
+app.get("/medio", (req, res) => {
+    res.render("donBosco");
+});
+
+app.get("/dificil", (req, res) => {
+    res.render("donBosco2");
+});
+
+app.get("/facil", (req, res) => {
+    res.render("donBosco1");
+});
+  
+app.get("/personajes", (req, res) => {
+    res.render("quieness");
+});
 
 //Ta-te-ti
 
@@ -247,6 +346,9 @@ function haceridTate(length) {
 
 */
 
+
+
+
 const gameRooms = {};
 
 io.on('connection', (socket) => {
@@ -277,6 +379,23 @@ io.on('connection', (socket) => {
   // Emitir un evento personalizado para unirse a la sala
   socket.emit('joinRoom', 'faconeta');
 
+  socket.on('crearJuegoTate', () => {
+    const idSalaTate = haceridTate(6);
+    gameRooms[idSalaTate] = {};
+    socket.join(idSalaTate);
+    socket.emit("nuevoJuegoTate", {idSalaTate: idSalaTate})
+});
+
+socket.on('unirseJuegoTate', (data) => {
+  console.log("fulbo")
+    if(gameRooms[data.idSalaTate] != null) {
+        socket.join(data.idSalaTate);
+        socket.to(data.idSalaTate).emit("jugadorConectadoTate", {});
+        socket.emit("jugadorConectadoTate");
+    }
+  
+});
+
   socket.on('makeMove', (data) => {
       const { index, roomId } = data;
     
@@ -297,11 +416,8 @@ io.on('connection', (socket) => {
           board[index] = currentPlayer;
           const roundWon = checkWin(board, currentPlayer);
 
-          if (roundWon) {
-              io.to('faconeta').emit('gameOver', { result: currentPlayer === 'X' ? 'PLAYERX_WON' : 'PLAYERO_WON' });
-              game.isGameActive = false;
-          } else if (!board.includes('')) {
-              io.to('faconeta').emit('gameOver', { result: 'TIE' });
+         if (!board.includes('')) {
+              io.to('faconeta').emit('gameOver', { result: '' });
               game.isGameActive = false;
           } else {
               game.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
@@ -346,6 +462,16 @@ for (const condition of winningConditions) {
 
 return false;
 }
+
+function haceridTate(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
 //Piedra,papel,tijera
 //Piedra,papel,tijera
 //Piedra,papel,tijera

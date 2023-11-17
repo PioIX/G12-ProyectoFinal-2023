@@ -1,307 +1,196 @@
-let resultElement
-let mainContainer
-let idLinea
-let puntos_actuales = 0
-let WORDS = []
-async function traerPalabras() {
-    try {
-        const response = await fetch("/traerPalabras", {
-          method: "GET", // or 'POST'
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        //En result obtengo la respuesta
-        const result = await response.json();
-        console.log("Success:", result.palabras)
-        for (let i = 0; i < result.palabras.length; i++) {
-            WORDS.push(result.palabras[i].palabra.toUpperCase())
-            
-        }
-        console.log(WORDS)
-        rightGuessString = WORDS[Math.floor(Math.random() * WORDS.length)]
-        console.log(rightGuessString)
-        inicio()
-        } 
-    catch (error) {
-    console.error("Error:", error);
-      }
-        
-}
 
-class Letra {
-    constructor(letra) {
-        this.letra = letra;
-        this.colocada = false;
-        this.colocadaCorrecta = false;
-    }
-}
+var height = 6; //number of guesses
+var width = 5; //length of the word
 
-let palabra
-let palabraSepa
-let letras = [];
-let lineaNow
+var row = 0; //current guess (attempt #)
+var col = 0; //current letter for that attempt
 
-function inicio() {
-    resultElement = document.querySelector('.result');
-    mainContainer = document.querySelector('.main-container')
-    idLinea = 1;
+var gameOver = false;
+// var word = "SQUID";
+var wordList = ["Salud","Cáida","Dolor","Traba","Calle","Lucha", "Miedo", "Ayuda"]
 
-    palabra = rightGuessString;    
-    palabraSepa = palabra.toUpperCase().split('');
-    console.log(palabraSepa)
-    
-    for(let i = 0; i < palabraSepa.length; i++){
-        letras[i] = new Letra(palabraSepa[i]);
-    }
-        
 
-    lineaNow = document.querySelector('.rowAndy')
 
-    drawSquares(lineaNow);
-    listenInput(lineaNow)
-    
-    addfocus(lineaNow)
+
+var word = wordList[Math.floor(Math.random()*wordList.length)].toUpperCase();
+console.log(word);
+
+window.onload = function(){
+    intialize();
 }
 
 
-function wordCount(ggg) {
-    let ContadorLetra = {}
-    for (let u = 0; u < palabra.length; u++) {
-        ggg = palabra[u]
-        if (ContadorLetra[ggg]) {
-            ContadorLetra[ggg] += 1;
-        }
-        else{
-            ContadorLetra[ggg] = 1;
+function intialize() {
+
+    // Create the game board
+    for (let r = 0; r < height; r++) {
+        for (let c = 0; c < width; c++) {
+            // <span id="0-0" class="tile">P</span>
+            let tile = document.createElement("span");
+            tile.id = r.toString() + "-" + c.toString();
+            tile.classList.add("tile");
+            tile.innerText = "";
+            document.getElementById("board").appendChild(tile);
         }
     }
-    console.log(ContadorLetra)
-}
-async function enviarPuntaje(data) {
-    try {
-        const response = await fetch("/traerpuntaje", {
-          method: "PUT", // or 'POST'
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
 
-        } 
-    catch (error) {
-    console.error("Error:", error);
-      }
-        
-}
-function enviarPuntos(){
-    let data = {
-        puntos_actuales: puntos_actuales
-    }
-    if (puntos_actuales>0){
-        console.log(data)
-        enviarPuntaje(data)
-    }
-  }
+    // Create the key board
+    let keyboard = [
+        ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+        ["A", "S", "D", "F", "G", "H", "J", "K", "L", " "],
+        ["Enter", "Z", "X", "C", "V", "B", "N", "M", "⌫" ]
+    ]
 
+    for (let i = 0; i < keyboard.length; i++) {
+        let currRow = keyboard[i];
+        let keyboardRow = document.createElement("div");
+        keyboardRow.classList.add("keyboard-row");
 
+        for (let j = 0; j < currRow.length; j++) {
+            let keyTile = document.createElement("div");
 
-
-function listenInput(lineaNow){
-    let squares = lineaNow.querySelectorAll('.square')
-    squares= [...squares]
-    
-    let userInput = []
-    
-    squares.forEach(element =>{
-        element.addEventListener('input', event=>{
-            if (event.inputType !== 'deleteContentBackward') {
-                userInput.push(event.target.value.toUpperCase())
-                console.log(userInput)
-                if (event.target.nextElementSibling) {
-                    event.target.nextElementSibling.focus();    
-                }else{
-                    let squaresFilled = document.querySelectorAll('.square')
-                    squaresFilled = [...squaresFilled]
-                    let last5SquaresFilled = squaresFilled.slice(-palabra.length)
-                    let finalUserInput = [];
-                    last5SquaresFilled.forEach(element =>{
-                        finalUserInput.push(element.value.toUpperCase())
-                    })
-
-                    for (let i = 0; i < letras.length; i++) {
-                        letras[i].colocada = false;
-                        letras[i].colocadaCorrecta = false;
-                    }
-
-                    console.log(letras)
-
-                    for(let j = 0; j < finalUserInput.length; j++) {
-                        if(letras[j].letra == finalUserInput[j] && letras[j].colocada == false) {
-                            squares[j].classList.add('verde');
-                            console.log("verde j ",j)
-                            letras[j].colocadaCorrecta = true;
-                        }
-                    }    
-                    
-
-                    console.log(letras)
-                    for(let j = 0; j < finalUserInput.length; j++) {
-                        for(let i = 0; i < letras.length; i++) {
-                            if(j != i) {
-                                if(letras[i].colocadaCorrecta == false){
-                                    if(letras[i].letra == finalUserInput[j] && letras[j].colocadaCorrecta == false && letras[i].colocada == false){
-                                        squares[j].classList.add('amarillo');
-                                            letras[i].colocada = true;
-                                        console.log("amarillo j - i:  ",j,i)
-                                        console.log(squares[j])
-                                        console.log(letras[i])
-                                    }
-                                }    
-                            }
-                        }    
-                    }
-
-
-                    /*let posicionCorrecta = compareArrays(palabraSepa, finalUserInput)
-                    posicionCorrecta.forEach(element => {
-                        squares[element].classList.add('verde')
-                    })
-                    
-
-                    let existePeroNo = existLetter(palabraSepa, finalUserInput)
-                    existePeroNo.forEach(element => {
-                        
-                        squares[element].classList.add('amarillo');
-                    })
-                    console.log(posicionCorrecta)*/
-
-                    let gane = true;
-                    for(let i = 0; i < letras.length; i++) {
-                        if(letras[i].letra != finalUserInput[i] || letras[i].colocadaCorrecta == false)
-                            gane = false;
-                    }
-                   
-                    if (gane == true) {
-                        if (idLinea==1){
-                            puntos_actuales=10
-                            showResult('Ganaste pichichi')
-                        }
-                        if (idLinea==2){
-                            puntos_actuales=8
-                            showResult('Ganaste pichichi')
-                        }
-                        if (idLinea==3){
-                            puntos_actuales=6
-                            showResult('Ganaste pichichi')
-                        }
-                        if (idLinea==4){
-                            puntos_actuales=4
-                            showResult('Ganaste pichichi')
-                        }
-                        if (idLinea==5){
-                            puntos_actuales=2
-                            showResult('Ganaste pichichi')
-                        }
-                        console.log(puntos_actuales)
-                        
-                        return;
-                    }
-                    let lineaNow = createRow()
-                    if (!lineaNow) {
-                        return
-                    }
-                    drawSquares(lineaNow)
-                    listenInput(lineaNow)
-                    addfocus(lineaNow)
-        
-                    
-        
-                }
-            }else{
-                userInput.pop();
+            let key = currRow[j];
+            keyTile.innerText = key;
+            if (key == "Enter") {
+                keyTile.id = "Enter";
             }
-            
-            
-        });
-    })
-}
+            else if (key == "⌫") {
+                keyTile.id = "Backspace";
+            }
+            else if ("A" <= key && key <= "Z") {
+                keyTile.id = "Key" + key; // "Key" + "A";
+            } 
 
-function letterInWord() {
-    
-}
+            keyTile.addEventListener("click", processKey);
 
-function compareArrays(array1, array2){
-    let igualesIndex = []
-    array1.forEach((element, index)=>{
-        if (element == array2[index]){
-            wordCount(array1)
-            console.log(`EN la posicion ${index} si son igulaes`)
-            igualesIndex.push(index);
-        }else{
-            console.log(`En la posicion ${index} no son iguales`)
+            if (key == "Enter") {
+                keyTile.classList.add("enter-key-tile");
+            } else {
+                keyTile.classList.add("key-tile");
+            }
+            keyboardRow.appendChild(keyTile);
         }
-    })
-    return igualesIndex
-}
-
-function existLetter(array1, array2){
-    let existIndexArray = []
-    let existLetterArray = []
-    array2.forEach((element, index)=>{
-        if(array1.includes(element)){
-            existIndexArray.push(index)
-            existLetterArray.push(element)
-            console.log(existLetterArray)
-        }
-    });
-    return existIndexArray
-}
-
-function createRow() {
-    idLinea++
-    if (idLinea <= 5){
-        let newRow = document.createElement('div');
-        newRow.classList.add('rowAndy')
-        newRow.setAttribute('id', idLinea)
-        mainContainer.appendChild(newRow)
-        return newRow;
-    }else{
-        showResult('sos un burro perdiste rey')
+        document.body.appendChild(keyboardRow);
     }
     
-}
 
-function drawSquares(lineaNow) {
-    palabraSepa.forEach((item, index) =>{
-        if (index === 0) {
-            lineaNow.innerHTML += `<input type="text" maxlength="1" class="square focus">`
-        }else{
-            lineaNow.innerHTML += `<input type="text" maxlength="1" class="square">`
-        }
-        
+    // Listen for Key Press
+    document.addEventListener("keyup", (e) => {
+        processInput(e);
     })
 }
 
-function addfocus(lineaNow) {
-    let focusElement = lineaNow.querySelector('.focus')
-    focusElement.focus();
-       
+function processKey() {
+    e = { "code" : this.id };
+    processInput(e);
 }
 
-function showResult(textMsg) {
-    resultElement.innerHTML = `
-    <p> ${textMsg}</p>
-    <button class="button">Reiniciar</button>
-    <form action="/tabla" method="GET" class="container-sm">
-        <div class="mb-3 form-group" id="klk"> 
-            <div class="mb-3 form-check"></div>
-            <input type="submit" class=" button" value="tabla">
-        </div>
-    </form>
-    `
-    let resetButton = document.querySelector('.button')
-    resetButton.addEventListener('click', ()=>{
-        location.reload();
-    });
+function processInput(e) {
+    if (gameOver) return; 
+
+    // alert(e.code);
+    if ("KeyA" <= e.code && e.code <= "KeyZ") {
+        if (col < width) {
+            let currTile = document.getElementById(row.toString() + '-' + col.toString());
+            if (currTile.innerText == "") {
+                currTile.innerText = e.code[3];
+                col += 1;
+            }
+        }
+    }
+    else if (e.code == "Backspace") {
+        if (0 < col && col <= width) {
+            col -=1;
+        }
+        let currTile = document.getElementById(row.toString() + '-' + col.toString());
+        currTile.innerText = "";
+    }
+
+    else if (e.code == "Enter") {
+        update();
+    }
+
+    if (!gameOver && row == height) {
+        gameOver = true;
+        document.getElementById("answer").innerText = word;
+    }
+}
+
+function update() {
+    let guess = "";
+    document.getElementById("answer").innerText = "";
+
+    for (let c = 0; c < width; c++) {
+        let currTile = document.getElementById(row.toString() + '-' + c.toString());
+        let letter = currTile.innerText;
+        guess += letter;
+    }
+
+    guess = guess.toLowerCase(); 
+    console.log(guess);
+
+
+    let correct = 0;
+
+    let letterCount = {}; 
+    for (let i = 0; i < word.length; i++) {
+        let letter = word[i];
+
+        if (letterCount[letter]) {
+           letterCount[letter] += 1;
+        } 
+        else {
+           letterCount[letter] = 1;
+        }
+    }
+
+    console.log(letterCount);
+
+
+    for (let c = 0; c < width; c++) {
+        let currTile = document.getElementById(row.toString() + '-' + c.toString());
+        let letter = currTile.innerText;
+
+        //Is it in the correct position?
+        if (word[c] == letter) {
+            currTile.classList.add("correct");
+
+            let keyTile = document.getElementById("Key" + letter);
+            keyTile.classList.remove("present");
+            keyTile.classList.add("correct");
+
+            correct += 1;
+            letterCount[letter] -= 1; //deduct the letter count
+        }
+
+        if (correct == width) {
+            gameOver = true;
+        }
+    }
+
+    console.log(letterCount);
+    for (let c = 0; c < width; c++) {
+        let currTile = document.getElementById(row.toString() + '-' + c.toString());
+        let letter = currTile.innerText;
+
+        if (!currTile.classList.contains("correct")) {
+            if (word.includes(letter) && letterCount[letter] > 0) {
+                currTile.classList.add("present");
+                
+                let keyTile = document.getElementById("Key" + letter);
+                if (!keyTile.classList.contains("correct")) {
+                    keyTile.classList.add("present");
+                }
+                letterCount[letter] -= 1;
+            } 
+            else {
+                currTile.classList.add("absent");
+                let keyTile = document.getElementById("Key" + letter);
+                keyTile.classList.add("absent")
+            }
+        }
+    }
+
+    row += 1; //start new row
+    col = 0; //start at 0 for new row
 }

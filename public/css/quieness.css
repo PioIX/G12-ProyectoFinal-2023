@@ -1,46 +1,132 @@
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
-.grid {
-	width: 80%;
-    height: 80%;
-    display: grid;
-    grid-template-columns: auto auto auto;
-    justify-content: center;
-    margin: 0 auto;
-    column-gap: 24%;
-    row-gap: 26%;
-    padding-right: 0%;
-    padding-top: 4%;
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap'); 
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family:'Pixelify Sans', cursive;;
 }
 
-.cuadrado {
-	height: 120px;
-	width: 120px;
-	border: none;
-}
-
-.bosco {
-	background-image: url("/img/donBosco.png");
-	background-size: cover;
-}
-h2{
-	font-size: 25px;
-	font-family: 'Itim', cursive;
-	color: whitesmoke;
-}
 body{
-	background-image: url("/img/fondoBosco2.png");
-	background-size:85%;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-color: #12181B;
+  display: flex;  
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
-	
-.basurita{
-	display: grid;
-    grid-template-columns: auto;
-    width: 10%;
-    margin-left: 10px;
+.container{
+    width:950px ;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap:wrap ;
 }
+
+.container .hexagono1{
+    display: flex;
+}
+
+.container .hexagono1 .heaxagono{
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin: 0 10px;
+    clip-path:polygon(0 25%,50% 0,100% 25%,100% 76%,50% 100%,0 75%);
+    background:deeppink;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+    transition:.5s ;
+    
+}
+
+
+.container .hexagono1 .heaxagono img{
+    width: 140px;
+    
+}
+
+.container .hexagono1 .heaxagono:hover{
+    background: deepskyblue;
+    transform: scale(0.8);
+}
+
+#tate{
+    width: 100px;
+}
+
+
+.bgAnimation{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(20,1fr);
+    grid-template-rows: repeat(20,1fr);
+    background: #1d1d1d;
+    filter: saturate(2);
+    overflow: hidden;
+}
+
+.colorBox{
+    z-index: 2;
+    filter: brightness(1.1);
+    transition: 2s ease;
+    position: relative;
+    margin: 2px;
+    background: #1d1d1d;
+}
+
+.colorBox:hover{
+    background: #00bfff;
+    transition-duration: 0s;
+}
+
+.backgroundAmim{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: #00bfff;
+    filter: blur(60px);
+    animation: animBack 6s linear infinite;
+}
+
+@keyframes animBack {
+    0%{
+        top: -60px;
+    }
+    100%{
+        top: 120%;
+    }
+}
+
+.boton1{
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin: 0 10px;
+    clip-path:polygon(0 25%,50% 0,100% 25%,100% 76%,50% 100%,0 75%);
+    background:deeppink;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+    transition:.5s ;
+    
+}
+
+.h1, h1 {
+    font-size: calc(1.375rem + 1.5vw);
+    z-index: 5;
+    color: aqua;
+}
+
 
 .menu {
     max-width: 100%;
@@ -83,7 +169,7 @@ body{
   flex: none;
   width: 100%;
   height: 2px;
-  background: white;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -170,7 +256,7 @@ body{
   
   .menu-wrap .menu > div > div > ul > li {
   list-style: none;
-  color: black;
+  color: #fff;
   font-size: 1.5rem;
   padding: 1rem;
   }
@@ -180,10 +266,4 @@ body{
   text-decoration: none;
   transition: color 0.4s ease;
   }
-  button{
-    border-radius: 50%;
-  }
-
-  img{
-    border-radius: 50%;
-  }
+  
