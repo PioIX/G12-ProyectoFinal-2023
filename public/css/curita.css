@@ -400,16 +400,13 @@ margin-left: 0px;
 width: 100%;
 margin-bottom: 10px;
 }
-
-.iconderecha{
+.iconderecha {
     display: flex;
-    height: 10%;
-    width: 120px;
-    margin-top: 24px;
+    height: 50;
+    width: auto;
     margin-left: 24px;
-    /* margin-right: 85px; */
-    align-items: center;
-    justify-content: center;
+    align-items: start;
+    justify-content: end;
     color: rgb(59, 190, 70);
     flex-direction: row;
     background-color: none;

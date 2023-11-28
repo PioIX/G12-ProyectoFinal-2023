@@ -9,7 +9,7 @@ rondasTotales = 0;
 
 
 function reiniciarJuego() {
-    document.getElementById('resultadoGlobal').innerHTML = `Rondas jugadas: ${rondas} | Victorias: ${victorias} | Derrotas: ${derrotas} | Empates: ${empates}`;
+    document.getElementById('resultadoGlobal').innerHTML = `Rondas jugadas: ${rondas} | Victorias: ${victorias} | Derrotas: ${derrotas} `;
 
     document.getElementById('jugador1eleccion').innerHTML = `<button class="roca" onclick="mandarEleccion('Roca')">
     <img src="/img/Piedra.png" width="90px">
@@ -75,7 +75,7 @@ socket.on("jugadorConectado", () => {
 })
 
 socket.on("reinicio", () => {
-    document.getElementById('resultadoGlobal').innerHTML = `Rondas jugadas: ${rondas} | Victorias: ${victorias} | Derrotas: ${derrotas} | Empates: ${empates}`;
+    document.getElementById('resultadoGlobal').innerHTML = `Rondas jugadas: ${rondas} | Victorias: ${victorias} | Derrotas: ${derrotas} `;
 
     document.getElementById('jugador1eleccion').innerHTML = `<button class="roca" onclick="mandarEleccion('Roca')">
     <img src="/img/Piedra.png" width="90px">
@@ -133,8 +133,7 @@ socket.on("resultado", (data) => {
             empates++;
         }
     }
-    resultadoGlobal.textContent = `Rondas jugadas: ${rondas} | Victorias: ${victorias} | Derrotas: ${derrotas} | Empates: ${empates}
-    `;
+    resultadoGlobal.textContent = `Rondas jugadas: ${rondas} | Victorias: ${victorias} | Derrotas: ${derrotas} `;
     document.getElementById('opponentState').style.display = 'none';
     document.getElementById('botonrivalcito').style.display = 'block';
     document.getElementById('areaGanadora').innerHTML = ganadortexto;

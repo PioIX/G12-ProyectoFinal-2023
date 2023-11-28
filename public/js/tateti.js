@@ -394,7 +394,7 @@ socket.on('makeMove', (data) => {
             io.to(room).emit('gameOver', { result: currentPlayer === 'X' ? 'JugadorX_Gano' : 'JugadorO_Gano' });
             game.isGameActive = false;
         } else if (!board.includes('')) {
-            io.to(room).emit('gameOver', { result: 'TIE' });
+            io.to(room).emit('gameOver', { result: 'Empate' });
             game.isGameActive = false;
         } else {
             game.currentPlayer = currentPlayer === 'X' ? 'O' : 'X';

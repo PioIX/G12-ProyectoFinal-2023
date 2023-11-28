@@ -7,7 +7,7 @@ var col = 0; //current letter for that attempt
 
 var gameOver = false;
 // var word = "SQUID";
-var wordList = ["Salud","Cáida","Dolor","Traba","Calle","Lucha", "Miedo", "Ayuda"]
+var wordList = ["Salud","Dolor","Calle","Lucha", "Miedo", "Ayuda"]
 
 
 

@@ -1,19 +1,16 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  font-family: 'Itim', cursive;
+  font-size: 15px;
+  text-align: center;
 }
-
-body {
-background-color: #12181B;
-color: white;
-display: flex;
-align-items: center;
-justify-content: flex-start;
-width: 100%;
-height: 100vh;
-overflow: hidden;
-font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+body{
+  font-family: 'Itim', cursive;
+  display: flex;
+  flex-direction: column;
+  align-items: top;
+  background-color:  #12181B;
+  color: white;
+  margin: 0;
 }
 
 .container {
@@ -204,6 +201,7 @@ text-decoration: none;
 transition: color 0.4s ease;
 }
 
+
 .maina{
   display:flex;
   justify-content: space-between;
@@ -212,82 +210,76 @@ transition: color 0.4s ease;
 }
 
 .chatcito{
-  display: flex;
-  background-color:rgba(81, 233, 132, 0.473) ;
-  margin-right: 0px;
-  width: 100%;
-  height: 100%;
-  align-items: end;
-  overflow-y: scroll;
+display: flex;
+background-color:rgba(81, 233, 132, 0.473) ;
+margin-right: 0px;
+width: 100%;
+height: 100%;
+align-items: end;
+overflow-y: scroll;
 }
 
 .espaciomensaje {
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
-  width: 100%;
-  height: 95%;
+display: flex;
+flex-direction: column;
+justify-content: end;
+width: 100%;
+height: 95%;
 }
 
 .inputmensaje{
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  height: 5%;
+display: flex;
+justify-content: space-between;
+width: 100%;
+height: 5%;
 }
 
 .chat2{
-  display: flex;
-  margin-right: 0px;
-  width: 100%;
-  justify-content: right;
-  margin-bottom: 10px;
+display: flex;
+margin-right: 0px;
+width: 100%;
+justify-content: right;
+margin-bottom: 10px;
 }
 
 .chatderecha{
-  word-wrap: break-word;
-  width: 65%;
-  max-height: 100%;
-  background-color:rgba(50, 87, 248, 0.452);
-  margin-right: 10px;
-  border-radius: 5px;
-  color: black;
+word-wrap: break-word;
+width: 65%;
+max-height: 100%;
+background-color:rgba(50, 87, 248, 0.452);
+margin-right: 10px;
+border-radius: 5px;
+color: black;
 }
 
 .chatizquierda{
-  word-wrap: break-word;
-  width: 65%;
-  max-height: 100%;
-  margin-left: 10px;
-  background-color:rgba(252, 133, 133, 0.452);
-  border-radius: 5px;
-  color: black;
+word-wrap: break-word;
+width: 65%;
+max-height: 100%;
+margin-left: 10px;
+background-color:rgba(252, 133, 133, 0.452);
+border-radius: 5px;
+color: black;
 }
 
 .chat1{
-  display: flex;
-  justify-content: left;
-  margin-left: 0px;
-  width: 100%;
-  margin-bottom: 10px;
+display: flex;
+justify-content: left;
+margin-left: 0px;
+width: 100%;
+margin-bottom: 10px;
 }
 
-.cha{
+.iconderecha {
   display: flex;
-  height: 38px;
-  width: 37px;
-  margin-top: -166px;
-  margin-left: -95px;
-  /* margin-right: 85px; */
-  align-items: center;
-  justify-content: center;
+  height: 50;
+  width: auto;
+  margin-left: 24px;
+  align-items: start;
+  justify-content: end;
   color: rgb(59, 190, 70);
   flex-direction: row;
   background-color: none;
-}
-#esperaPong{
-  display: grid;
-  justify-content: center;
 }
 li:hover {
   background-color: rgb(159, 140, 246);

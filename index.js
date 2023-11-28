@@ -205,6 +205,7 @@ app.get("/papelito", (req, res) => {
 });
 
 
+
 app.get("/tateti", (req, res) => {
   res.render("tatetiyo");
 });
@@ -212,6 +213,10 @@ app.get("/tateti", (req, res) => {
 
 app.get("/tatetipiola", (req, res) => {
     res.render("tateti");
+  });
+
+app.get("/pongpiola", (req, res) => {
+    res.render("pong");
   });
 
 app.get("/pong", (req, res) => {
